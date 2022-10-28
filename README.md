@@ -6,6 +6,8 @@ When cloning this repository, you'll need to do a few things to get things to wo
 ## External requirements
 Make sure you have CMake installed on your machine so you can use the **'cmake'** command. You can test if CMake is installed by running the command **'cmake --version'**. Using CMake to setup the project allows for easy setup on on any platform.
 
+You will also need a compiler. On Windows, you can use Visual Studio with C++ 17 or higher. On Linux, you can use the package '**g++**' (may also require **'build-essential'**) to compile using makefiles.
+
 For instance, on Windows, if Visual Studio is installed, CMake will create the .sln and .vcxproj files. On Linux, CMake will create the makefile project. You will find the generated project files in the folder **'bin/'**. This is also where the project will be compiled and where you will find the executables.
 
 ## Finding your session key
@@ -21,3 +23,8 @@ First, you have the **'GenerateSolution.sh'** script. It will generate the proje
 Second, you have the **'GenerateChallenge.sh'** script. It will create a new challenge file (and a new year file if required) for the desired challenge parameters passed in. The command is **'sh GenerateChallenge.sh [Year] [Day]'**.
 
 **Note:** When adding a new year, you need to edit **'source/challenges/ChallengeFactory.h'** and follow the instructions from the comment at the top of the file to be able to use the newly created year file from the script **'GenerateChallenge.sh'**.
+
+## Running the solution
+Once compiled, you can run the app in 2 ways. If on Windows in Visual Studio with the Debug profile, you can edit the parameters in Main.cpp. From Release (or if you disable the macro for Debug), you can run the .exe from the cmd and pass it arguments. On linux, you just need to run ./AdventOfCode from the terminal and pass it arguments.
+
+The program takes 2 arguments at minimum and can take a 3rd argument optionally. The first argument is the year, the second is the day, and the 3rd is the part. For instance: **'./AdventOfCode 2021 01 1'** will run Part 1 of Day 1 of Year 2021. Not passing a 3rd argument or passing an invalid argument (a.k.a not 1 and not 2) will run both parts by default.
