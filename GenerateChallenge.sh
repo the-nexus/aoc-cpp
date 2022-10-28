@@ -63,7 +63,7 @@ if [ ! -e $YEAR_FILE_PATH ]; then
 
     echo ""
     echo "Created new year file from template as $YEAR_FILE_PATH"
-    echo "IMPORTANT!  Remember to manually edit source/challenges/ChallengeFactory.h to add the new year"
+    echo "IMPORTANT!  Remember to manually edit source/challenges/ChallengeFactory.h to be able to use the challenges from this new year"
 fi
 
 CHALLENGE_TEMPLATE_NAME="ChallengeTemplate"
