@@ -396,4 +396,4 @@ MigrationBackup/
 
 ### Other Files ###
 ## Ignore all the listed files below for various reasons
-[Ii]nput/SessionKey.txt
+*/SessionKey.txt
