@@ -10,7 +10,7 @@
     #define USE_LOCAL_ARGS 1
 #endif
 
-bool ParseArgs(int argc, char* argv[], int& outYear, int& outDay, bool& runPartOne, bool& runPartTwo)
+bool ParseArgs(int argc, char* argv[], int& outYear, int& outDay, bool& outRunPartOne, bool& outRunPartTwo)
 {
 #ifdef USE_LOCAL_ARGS
 
@@ -23,18 +23,24 @@ bool ParseArgs(int argc, char* argv[], int& outYear, int& outDay, bool& runPartO
 #else
 
     outYear = outDay = 0;
-    runPartOne = runPartTwo = false;
+    outRunPartOne = outRunPartTwo = true;
 
-    if (argc > 0)
+    if (argc > 2)
     {
-        int const dayNumber = atoi(argv[0]);
-        int const partNumber = argc > 1 ? atoi(argv[1]) : -1;
+        outYear = atoi(argv[1]);
+        outDay = atoi(argv[2]);
 
-        bool const runPartOne = partNumber != 2;
-        bool const runPartTwo = partNumber != 1;
+        if (argc > 3)
+        {
+            int const partNumber = argc > 1 ? atoi(argv[3]) : -1;
+            outRunPartOne = partNumber != 2;
+            outRunPartTwo = partNumber != 1;
+        }
+
+        return true;
     }
 
-    return true;
+    return false;
 
 #endif // USE_LOCAL_ARGS
 }
