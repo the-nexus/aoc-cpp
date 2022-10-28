@@ -396,4 +396,4 @@ MigrationBackup/
 
 ### Other Files ###
 ## Ignore all the listed files below for various reasons
-AdventOfCode/session_key.txt
+SessionKey.txt

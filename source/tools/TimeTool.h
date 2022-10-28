@@ -23,7 +23,7 @@ namespace TimeTool
             m_start = Now();
         }
 
-        float GetElapsedTimeMicro() const
+        float GetElapsedTime() const
         {
             return std::chrono::duration_cast<std::chrono::microseconds>(Now() - m_start).count() * 0.000001f;
         }

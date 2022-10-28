@@ -1,12 +1,14 @@
-﻿#include "aoc-cpp.h"
-
-#include <iostream>
+﻿#include <iostream>
 #include <string>
 #include <vector>
 
 #include "challenges/ChallengeFactory.h"
 #include "tools/FileTool.h"
 #include "tools/TimeTool.h"
+
+#if defined(_DEBUG) && (defined(_WIN32) || defined(_WIN64))
+    #define USE_LOCAL_ARGS 1
+#endif
 
 bool ParseArgs(int argc, char* argv[], int& outYear, int& outDay, bool& runPartOne, bool& runPartTwo)
 {
@@ -44,7 +46,7 @@ int main(int argc, char* argv[])
 
     if (ParseArgs(argc, argv, year, day, runPartOne, runPartTwo))
     {
-        std::string const inputFilePath = "../../../input/" + std::to_string(year) + "/" + (day < 10 ? "0" : "") + std::to_string(day) + ".txt";
+        std::string const inputFilePath = "../input/" + std::to_string(year) + "/" + (day < 10 ? "0" : "") + std::to_string(day) + ".txt";
         std::vector<std::string> inputLines;
         if (FileTool::ReadAllLines(inputFilePath, inputLines))
         {
@@ -55,14 +57,14 @@ int main(int argc, char* argv[])
                 std::cout << "<==========>  Set Up  <==========>" << std::endl;
                 timer.Start();
                 challenge->SetUp(inputLines);
-                std::cout << "(" << timer.GetElapsedTimeMicro() << " s)" << std::endl << std::endl;
+                std::cout << "(" << timer.GetElapsedTime() << " s)" << std::endl << std::endl;
 
                 if (runPartOne)
                 {
                     std::cout << "<==========> Part One <==========>" << std::endl;
                     timer.Start();
                     challenge->Run_PartOne();
-                    std::cout << "(" << timer.GetElapsedTimeMicro() << " s)" << std::endl << std::endl;
+                    std::cout << "(" << timer.GetElapsedTime() << " s)" << std::endl << std::endl;
                 }
 
                 if (runPartTwo)
@@ -70,13 +72,13 @@ int main(int argc, char* argv[])
                     std::cout << "<==========> Part Two <==========>" << std::endl;
                     timer.Start();
                     challenge->Run_PartTwo();
-                    std::cout << "(" << timer.GetElapsedTimeMicro() << " s)" << std::endl << std::endl;
+                    std::cout << "(" << timer.GetElapsedTime() << " s)" << std::endl << std::endl;
                 }
 
                 std::cout << "<==========> Clean Up <==========>" << std::endl;
                 timer.Start();
                 challenge->CleanUp();
-                std::cout << "(" << timer.GetElapsedTimeMicro() << " s)" << std::endl << std::endl;
+                std::cout << "(" << timer.GetElapsedTime() << " s)" << std::endl << std::endl;
 
                 delete challenge;
                 return 0;
