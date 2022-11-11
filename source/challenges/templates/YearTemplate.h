@@ -175,41 +175,38 @@
     #define CHALLENGE_25 nullptr
 #endif
 
-namespace ChallengeFactory
+namespace YearTemplate
 {
-    namespace YearTemplate
+    ChallengeAbstract* MakeChallenge(int const day)
     {
-        ChallengeAbstract* MakeChallenge(int const day)
+        switch (day)
         {
-            switch (day)
-            {
-            case 1: return CHALLENGE_01;
-            case 2: return CHALLENGE_02;
-            case 3: return CHALLENGE_03;
-            case 4: return CHALLENGE_04;
-            case 5: return CHALLENGE_05;
-            case 6: return CHALLENGE_06;
-            case 7: return CHALLENGE_07;
-            case 8: return CHALLENGE_08;
-            case 9: return CHALLENGE_09;
-            case 10: return CHALLENGE_10;
-            case 11: return CHALLENGE_11;
-            case 12: return CHALLENGE_12;
-            case 13: return CHALLENGE_13;
-            case 14: return CHALLENGE_14;
-            case 15: return CHALLENGE_15;
-            case 16: return CHALLENGE_16;
-            case 17: return CHALLENGE_17;
-            case 18: return CHALLENGE_18;
-            case 19: return CHALLENGE_19;
-            case 20: return CHALLENGE_20;
-            case 21: return CHALLENGE_21;
-            case 22: return CHALLENGE_22;
-            case 23: return CHALLENGE_23;
-            case 24: return CHALLENGE_24;
-            case 25: return CHALLENGE_25;
-            default: return nullptr;
-            }
+        case 1: return CHALLENGE_01;
+        case 2: return CHALLENGE_02;
+        case 3: return CHALLENGE_03;
+        case 4: return CHALLENGE_04;
+        case 5: return CHALLENGE_05;
+        case 6: return CHALLENGE_06;
+        case 7: return CHALLENGE_07;
+        case 8: return CHALLENGE_08;
+        case 9: return CHALLENGE_09;
+        case 10: return CHALLENGE_10;
+        case 11: return CHALLENGE_11;
+        case 12: return CHALLENGE_12;
+        case 13: return CHALLENGE_13;
+        case 14: return CHALLENGE_14;
+        case 15: return CHALLENGE_15;
+        case 16: return CHALLENGE_16;
+        case 17: return CHALLENGE_17;
+        case 18: return CHALLENGE_18;
+        case 19: return CHALLENGE_19;
+        case 20: return CHALLENGE_20;
+        case 21: return CHALLENGE_21;
+        case 22: return CHALLENGE_22;
+        case 23: return CHALLENGE_23;
+        case 24: return CHALLENGE_24;
+        case 25: return CHALLENGE_25;
+        default: return nullptr;
         }
     }
 }

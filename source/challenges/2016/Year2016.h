@@ -1,4 +1,3 @@
-
 #include "../templates/ChallengeTemplate.h"
 
 #if __has_include("Challenge01.h")
@@ -176,7 +175,7 @@
     #define CHALLENGE_25 nullptr
 #endif
 
-namespace Year2021
+namespace Year2016
 {
     ChallengeAbstract* MakeChallenge(int const day)
     {

@@ -2,61 +2,64 @@
 
 #include "../ChallengeAbstract.h"
 
-class Challenge01 : public ChallengeAbstract
+namespace Year2021
 {
-public:
-    virtual void SetUp(std::vector<std::string> const& inputLines) override
+    class Challenge01 : public ChallengeAbstract
     {
-        m_measurements.resize(inputLines.size());
-        for (size_t idx = 0; idx < inputLines.size(); ++idx)
+    public:
+        virtual void SetUp(std::vector<std::string> const& inputLines) override
         {
-            m_measurements[idx] = atoi(inputLines[idx].c_str());
-        }
-    }
-
-    virtual void Run_PartOne() override
-    {
-        int largerMeasurementsCount = 0;
-        int lastMeasurement = m_measurements[0];
-
-        for (size_t idx = 1; idx < m_measurements.size(); ++idx)
-        {
-            int measurement = m_measurements[idx];
-            if (measurement > lastMeasurement)
+            m_measurements.resize(inputLines.size());
+            for (size_t idx = 0; idx < inputLines.size(); ++idx)
             {
-                ++largerMeasurementsCount;
+                m_measurements[idx] = atoi(inputLines[idx].c_str());
+            }
+        }
+
+        virtual void Run_PartOne() override
+        {
+            int largerMeasurementsCount = 0;
+            int lastMeasurement = m_measurements[0];
+
+            for (size_t idx = 1; idx < m_measurements.size(); ++idx)
+            {
+                int measurement = m_measurements[idx];
+                if (measurement > lastMeasurement)
+                {
+                    ++largerMeasurementsCount;
+                }
+
+                lastMeasurement = measurement;
             }
 
-            lastMeasurement = measurement;
+            std::cout << largerMeasurementsCount << std::endl;
         }
 
-        std::cout << largerMeasurementsCount << std::endl;
-    }
-
-    virtual void Run_PartTwo() override
-    {
-        int largerMeasurementWindowsCount = 0;
-        int lastMeasurementWindow = m_measurements[0] + m_measurements[1] + m_measurements[2];
-
-        for (size_t idx = 3; idx < m_measurements.size(); ++idx)
+        virtual void Run_PartTwo() override
         {
-            int measurementWindow = lastMeasurementWindow + m_measurements[idx] - m_measurements[idx - 3];
-            if (measurementWindow > lastMeasurementWindow)
+            int largerMeasurementWindowsCount = 0;
+            int lastMeasurementWindow = m_measurements[0] + m_measurements[1] + m_measurements[2];
+
+            for (size_t idx = 3; idx < m_measurements.size(); ++idx)
             {
-                ++largerMeasurementWindowsCount;
+                int measurementWindow = lastMeasurementWindow + m_measurements[idx] - m_measurements[idx - 3];
+                if (measurementWindow > lastMeasurementWindow)
+                {
+                    ++largerMeasurementWindowsCount;
+                }
+
+                lastMeasurementWindow = measurementWindow;
             }
 
-            lastMeasurementWindow = measurementWindow;
+            std::cout << largerMeasurementWindowsCount << std::endl;
         }
 
-        std::cout << largerMeasurementWindowsCount << std::endl;
-    }
+        virtual void CleanUp() override
+        {
 
-    virtual void CleanUp() override
-    {
+        }
 
-    }
-
-private:
-    std::vector<int> m_measurements;
-};
+    private:
+        std::vector<int> m_measurements;
+    };
+}

@@ -73,6 +73,7 @@ CHALLENGE_FILE_PATH="$YEAR_DIR/$CHALLENGE_NAME.h"
 
 if [ ! -e $CHALLENGE_FILE_PATH ]; then
     cp $CHALLENGE_TEMPLATE_FILE_PATH $CHALLENGE_FILE_PATH
+    sed -i -e "s/YearTemplate/Year$YEAR/g" "$CHALLENGE_FILE_PATH"
     sed -i -e "s/ChallengeTemplate/Challenge$DAY_ZEROED/g" "$CHALLENGE_FILE_PATH"
 
     echo ""
