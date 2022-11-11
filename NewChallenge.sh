@@ -4,7 +4,7 @@
 YEAR_ARG=${1}
 DAY_ARG=${2}
 
-if [[ (-z $YEAR_ARG) || (-z $DAY_ARG) ]]; then
+if [[ -z $YEAR_ARG || -z $DAY_ARG ]]; then
     echo "ERROR!  Invalid arguments."
     echo "        Command  ->  sh generate_challenge.sh [YEAR] [DAY_NO_ZERO]"
     echo "        Example  ->  sh generate_challenge.sh 2020 1"
@@ -22,8 +22,8 @@ fi
 
 
 # Fetch the session key
-SESSION_KEY_FILE_PATH="input/SessionKey.txt"
-SESSION_KEY=$(<$SESSION_KEY_FILE_PATH)
+SESSION_KEY_FILE_PATH="./input/SessionKey.txt"
+SESSION_KEY=$(cat $SESSION_KEY_FILE_PATH)
 
 if [[ -z "$SESSION_KEY" ]]; then
     echo "ERROR!  No session key specified. Check the README for project setup instructions."
@@ -40,7 +40,7 @@ if [ ! -d $INPUT_DIR ]; then
 fi
 
 URL="https://adventofcode.com/$YEAR/day/$DAY_NO_ZERO/input"
-echo "Downloading input file from $URL"
+echo "Downloading input file from $URL with $SESSION_KEY"
 curl $URL -H "cookie: session=$SESSION_KEY" -o $INPUT_FILE_PATH
 
 
