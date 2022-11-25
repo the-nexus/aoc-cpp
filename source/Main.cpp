@@ -5,6 +5,9 @@
 #include "challenges/ChallengeFactory.h"
 #include "tools/FileTool.h"
 #include "tools/TimeTool.h"
+#include "tests/Tests.h"
+
+//#define RUN_TOOLS_TESTS
 
 bool ParseArgs(int argc, char* argv[], int& outYear, int& outDay)
 {
@@ -13,7 +16,6 @@ bool ParseArgs(int argc, char* argv[], int& outYear, int& outDay)
     {
         std::string const absoluteExePath = argv[0];
         std::cout << absoluteExePath << std::endl;
-
 
         if (argc >= 3)
         {
@@ -39,6 +41,11 @@ bool ParseArgs(int argc, char* argv[], int& outYear, int& outDay)
 
 int main(int argc, char* argv[])
 {
+#ifdef RUN_TOOLS_TESTS
+    Tests::RunTests();
+    return 0;
+#endif // RUN_TOOLS_TESTS
+
     int year, day;
 
     if (ParseArgs(argc, argv, year, day))

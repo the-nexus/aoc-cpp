@@ -14,12 +14,12 @@ namespace YearTemplate
 
         virtual void Run_PartOne() override
         {
-            std::cout << "Part One Not Implemented" << std::endl;
+            std::cout << "WARNING: Part One Not Implemented" << std::endl;
         }
 
         virtual void Run_PartTwo() override
         {
-            std::cout << "Part One Not Implemented" << std::endl;
+            std::cout << "WARNING: Part Two Not Implemented" << std::endl;
         }
 
         virtual void CleanUp() override

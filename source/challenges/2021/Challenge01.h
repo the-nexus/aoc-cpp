@@ -6,6 +6,9 @@ namespace Year2021
 {
     class Challenge01 : public ChallengeAbstract
     {
+    private:
+        std::vector<int> m_measurements;
+
     public:
         virtual void SetUp(std::vector<std::string> const& inputLines) override
         {
@@ -58,8 +61,5 @@ namespace Year2021
         {
 
         }
-
-    private:
-        std::vector<int> m_measurements;
     };
 }

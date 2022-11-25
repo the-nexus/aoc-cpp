@@ -1,16 +1,28 @@
-﻿
-cmake_minimum_required (VERSION 3.8)
+﻿cmake_minimum_required (VERSION 3.8)
 
-project (AdventOfCode CXX)
-
-file (GLOB_RECURSE SOURCE_LIST *.h* *.c*
+file (GLOB_RECURSE SOURCE_LIST Main.cpp
+    challenges/*.h* challenges/*.c*
+    tests/*.h* tests/*.c*
 )
-
-# Add source to this project's executable.
-add_executable (AdventOfCode ${SOURCE_LIST})
-target_compile_features (AdventOfCode PRIVATE cxx_std_17)
-
-# Create the source groups for source tree with root at CMAKE_CURRENT_SOURCE_DIR
-# https://stackoverflow.com/questions/31422680/how-to-set-visual-studio-filters-for-nested-sub-directory-using-cmake
 source_group (TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCE_LIST})
 
+# Add source to this project's executable.
+project (AdventOfCode CXX)
+add_executable (${PROJECT_NAME} ${SOURCE_LIST})
+target_compile_features (${PROJECT_NAME} PRIVATE cxx_std_17)
+
+# Link children CMakeLists.txt files
+add_subdirectory (./tools)
+
+# Link dependencies
+target_include_directories (${PROJECT_NAME}
+    PUBLIC ./tools
+)
+
+target_link_directories (${PROJECT_NAME}
+    PUBLIC ./tools
+)
+
+target_link_libraries (${PROJECT_NAME}
+    AOC_Tools
+)
