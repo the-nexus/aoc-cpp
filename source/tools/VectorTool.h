@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cmath>
+
 namespace VectorTool
 {
     #define EXPR_SQUARE(_expr) (_expr) * (_expr)
