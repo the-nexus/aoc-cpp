@@ -57,9 +57,6 @@ namespace Year2021
             std::cout << largerMeasurementWindowsCount << std::endl;
         }
 
-        virtual void CleanUp() override
-        {
-
-        }
+        virtual void CleanUp() override {}
     };
 }

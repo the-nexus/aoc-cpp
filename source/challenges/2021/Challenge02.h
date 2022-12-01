@@ -102,9 +102,6 @@ namespace Year2021
             std::cout << position[0] * position[1] << std::endl;
         }
 
-        virtual void CleanUp() override
-        {
-
-        }
+        virtual void CleanUp() override {}
     };
 }
