@@ -8,6 +8,20 @@
 #include "tests/Tests.h"
 
 //#define RUN_TOOLS_TESTS
+//#define NO_TIMER
+
+#ifdef NO_TIMER
+    #define CHRONO_DECLARE(_name)
+    #define CHRONO_START(_name)
+    #define CHRONO_STOP(_name)
+    #define CHRONO_PRINT(_name, _description)
+#else
+    #define CHRONO_NAME(_name) timer_##_name
+    #define CHRONO_DECLARE(_name) TimeTool::ChronoTimer CHRONO_NAME(_name)
+    #define CHRONO_START(_name) CHRONO_NAME(_name).Start();
+    #define CHRONO_STOP(_name) CHRONO_NAME(_name).Stop();
+    #define CHRONO_PRINT(_name, _description) std::cout << _description << CHRONO_NAME(_name).GetElapsedTime() << " s" << std::endl << std::endl
+#endif // NO_TIMER
 
 bool ParseArgs(int argc, char* argv[], int& outYear, int& outDay)
 {
@@ -39,58 +53,74 @@ bool ParseArgs(int argc, char* argv[], int& outYear, int& outDay)
     return false;
 }
 
-int main(int argc, char* argv[])
+int RunAdventOfCode(int const year, int const day)
 {
-#ifdef RUN_TOOLS_TESTS
-    Tests::RunTests();
-    return 0;
-#endif // RUN_TOOLS_TESTS
-
-    int year, day;
-
-    if (ParseArgs(argc, argv, year, day))
+    std::string const inputFilePath = "../input/" + std::to_string(year) + "/" + (day < 10 ? "0" : "") + std::to_string(day) + ".txt";
+    std::vector<std::string> inputLines;
+    if (FileTool::ReadAllLines(inputFilePath, inputLines))
     {
-        std::string const inputFilePath = "../input/" + std::to_string(year) + "/" + (day < 10 ? "0" : "") + std::to_string(day) + ".txt";
-        std::vector<std::string> inputLines;
-        if (FileTool::ReadAllLines(inputFilePath, inputLines))
+        if (ChallengeAbstract* challenge = ChallengeFactory::MakeChallenge(year, day))
         {
-            if (ChallengeAbstract* challenge = ChallengeFactory::MakeChallenge(year, day))
-            {
-                TimeTool::PersistentTimer timer;
+            CHRONO_DECLARE(setUp);
+            CHRONO_START(setUp);
+            challenge->SetUp(inputLines);
+            CHRONO_STOP(setUp);
+            CHRONO_PRINT(setUp, "Setup       ");
 
-                timer.Start();
-                challenge->SetUp(inputLines);
-                std::cout << "Setup       " << timer.GetElapsedTime() << " s" << std::endl << std::endl;
+            CHRONO_DECLARE(partOne);
+            CHRONO_START(partOne);
+            challenge->Run_PartOne();
+            CHRONO_STOP(partOne);
+            CHRONO_PRINT(partOne, "Part One    ");
 
-                timer.Start();
-                challenge->Run_PartOne();
-                std::cout << "Part One    " << timer.GetElapsedTime() << " s" << std::endl << std::endl;
+            CHRONO_DECLARE(partTwo);
+            CHRONO_START(partTwo);
+            challenge->Run_PartTwo();
+            CHRONO_STOP(partTwo);
+            CHRONO_PRINT(partTwo, "Part Two    ");
 
-                timer.Start();
-                challenge->Run_PartTwo();
-                std::cout << "Part Two    " << timer.GetElapsedTime() << " s" << std::endl << std::endl;
+            CHRONO_DECLARE(cleanUp);
+            CHRONO_START(cleanUp);
+            challenge->CleanUp();
+            CHRONO_STOP(cleanUp);
+            CHRONO_PRINT(cleanUp, "Clean Up    ");
 
-                timer.Start();
-                challenge->CleanUp();
-                std::cout << "Clean Up    " << timer.GetElapsedTime() << " s" << std::endl << std::endl;
-
-                delete challenge;
-                return 0;
-            }
-            else
-            {
-                std::cout << "ERROR: Unsupported challenge [Year=" << year << " Day=" << day << "]" << std::endl;
-            }
+            delete challenge;
         }
         else
         {
-            std::cout << "ERROR: Could not read input file [" << inputFilePath << "]" << std::endl;
+            std::cout << "ERROR: Unsupported challenge [Year=" << year << " Day=" << day << "]" << std::endl;
+            return -1;
         }
     }
     else
     {
-        std::cout << "ERROR: Could not parse arguments" << std::endl;
+        std::cout << "ERROR: Could not read input file [" << inputFilePath << "]" << std::endl;
+        return -1;
     }
 
-    return -1;
+    return 0;
+}
+
+int main(int argc, char* argv[])
+{
+#ifdef RUN_TOOLS_TESTS
+
+    Tests::RunTests();
+    return 0;
+
+#else // RUN_TOOLS_TESTS
+
+    int year, day;
+    if (ParseArgs(argc, argv, year, day))
+    {
+        return RunAdventOfCode(year, day);
+    }
+    else
+    {
+        std::cout << "ERROR: Could not parse arguments" << std::endl;
+        return -1;
+    }
+
+#endif // RUN_TOOLS_TESTS
 }
