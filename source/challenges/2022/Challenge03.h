@@ -15,14 +15,6 @@ namespace Year2022
         virtual void SetUp(std::vector<std::string> const& inputLines) override
         {
             m_bags = inputLines;
-            // m_bags = std::vector<std::string> {
-            //     "vJrwpWtwJgWrhcsFMMfFFhFp",
-            //     "jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL",
-            //     "PmmdzqPrVvPwwTWBwg",
-            //     "wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn",
-            //     "ttgJtRGJQctTZtZT",
-            //     "CrZsJsPPZsGzwwsLwLmpwMDw"
-            // };
         }
 
         virtual void Run_PartOne() override
