@@ -71,7 +71,7 @@ namespace Year2022
             std::vector<std::deque<char>> stacks = m_stacks;
             for (StackingInstruction const& instruction : m_instructions)
             {
-                for (size_t crateCount = 0; crateCount < instruction.m_crateCount && stacks[instruction.m_stackSourceIndex].size() > 0; ++crateCount)
+                for (size_t crateCount = 0; crateCount < instruction.m_crateCount; ++crateCount)
                 {
                     stacks[instruction.m_stackDestinationIndex].push_back(stacks[instruction.m_stackSourceIndex].back());
                     stacks[instruction.m_stackSourceIndex].pop_back();
@@ -90,11 +90,12 @@ namespace Year2022
 
         virtual void Run_PartTwo() override
         {
+            std::deque<char> tempStack;
             std::vector<std::deque<char>> stacks = m_stacks;
+
             for (StackingInstruction const& instruction : m_instructions)
             {
-                std::deque<char> tempStack;
-                for (size_t crateCount = 0; crateCount < instruction.m_crateCount && stacks[instruction.m_stackSourceIndex].size() > 0; ++crateCount)
+                for (size_t crateCount = 0; crateCount < instruction.m_crateCount; ++crateCount)
                 {
                     tempStack.push_back(stacks[instruction.m_stackSourceIndex].back());
                     stacks[instruction.m_stackSourceIndex].pop_back();
