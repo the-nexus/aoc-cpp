@@ -30,7 +30,7 @@ namespace StringTool
         SplitString<char>(stringToSplit, delimiter, 1, outSubstrings);
     }
 
-    inline void SplitString(std::string const& stringToSplit, std::string& delimiter, std::vector<std::string>& outSubstrings)
+    inline void SplitString(std::string const& stringToSplit, std::string const& delimiter, std::vector<std::string>& outSubstrings)
     {
         SplitString<std::string>(stringToSplit, delimiter, delimiter.size(), outSubstrings);
     }
