@@ -12,8 +12,8 @@ namespace Year2022
     private:
         struct FileItem
         {
-            std::string m_name;
-            unsigned int m_size;
+            std::string m_name = "";
+            unsigned int m_size = 0;
         };
 
         struct DirectoryItem
