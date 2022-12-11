@@ -53,6 +53,23 @@ namespace Tests
         }
 #pragma endregion
 
+#pragma region Constructors
+        TEST_FUNC(EqualVector)
+        {
+            Vector2i const left(1, 2);
+            Vector2i const right(1, 2);
+            return left == right;
+        }
+
+        TEST_FUNC(NotEqualVector)
+        {
+            Vector2i const left(1, 2);
+            Vector2i const rightFirst(3, 2);
+            Vector2i const rightSecond(1, 3);
+            return left != rightFirst && left != rightSecond;
+        }
+#pragma endregion
+
 #pragma region Vector Operations (Self)
         TEST_FUNC(AddVectorSelf)
         {
@@ -255,6 +272,9 @@ namespace Tests
             RUN_TEST_FUNC(WriteAccessBracket);
             RUN_TEST_FUNC(WriteAccessParenthesis);
 
+            RUN_TEST_FUNC(EqualVector);
+            RUN_TEST_FUNC(NotEqualVector);
+
             RUN_TEST_FUNC(AddVectorSelf);
             RUN_TEST_FUNC(SubtractVectorSelf);
             RUN_TEST_FUNC(MultiplyVectorSelf);
@@ -334,6 +354,24 @@ namespace Tests
             vec(1) = 2;
             vec(2) = 3;
             return vec(0) == 1 && vec(1) == 2 && vec(2) == 3;
+        }
+#pragma endregion
+
+#pragma region Vector Conditionals
+        TEST_FUNC(EqualVector)
+        {
+            Vector3i const left(1, 2, 3);
+            Vector3i const right(1, 2, 3);
+            return left == right;
+        }
+
+        TEST_FUNC(NotEqualVector)
+        {
+            Vector3i const left(1, 2, 3);
+            Vector3i const rightFirst(4, 2, 3);
+            Vector3i const rightSecond(1, 4, 3);
+            Vector3i const rightThird(1, 2, 4);
+            return left != rightFirst && left != rightSecond && left != rightThird;
         }
 #pragma endregion
 
@@ -539,6 +577,9 @@ namespace Tests
 
             RUN_TEST_FUNC(WriteAccessBracket);
             RUN_TEST_FUNC(WriteAccessParenthesis);
+
+            RUN_TEST_FUNC(EqualVector);
+            RUN_TEST_FUNC(NotEqualVector);
 
             RUN_TEST_FUNC(AddVectorSelf);
             RUN_TEST_FUNC(SubtractVectorSelf);

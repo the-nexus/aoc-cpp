@@ -21,6 +21,9 @@ namespace VectorTool
         inline T const& operator()(size_t const index) const { return m_values[index]; }
         inline T& operator()(size_t const index) { return m_values[index]; }
 
+        inline bool operator==(Vector2<T> const& rhs) const { return m_values[0] == rhs[0] && m_values[1] == rhs[1]; }
+        inline bool operator!=(Vector2<T> const& rhs) const { return m_values[0] != rhs[0] || m_values[1] != rhs[1]; }
+
         Vector2<T>& operator+=(Vector2<T> const& rhs)
         {
             m_values[0] += rhs.m_values[0];
@@ -183,6 +186,9 @@ namespace VectorTool
         inline T& operator[](size_t const index) { return m_values[index]; }
         inline T const& operator()(size_t const index) const { return m_values[index]; }
         inline T& operator()(size_t const index) { return m_values[index]; }
+
+        inline bool operator==(Vector3<T> const& rhs) const { return m_values[0] == rhs[0] && m_values[1] == rhs[1] && m_values[2] == rhs[2]; }
+        inline bool operator!=(Vector3<T> const& rhs) const { return m_values[0] != rhs[0] || m_values[1] != rhs[1] || m_values[2] != rhs[2]; }
 
         Vector3<T>& operator+=(Vector3<T> const& rhs)
         {
