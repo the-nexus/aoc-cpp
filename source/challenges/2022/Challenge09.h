@@ -63,7 +63,6 @@ namespace Year2022
                 }
 
                 RegisterTailKnotPosition(rope.back(), uniqueTailPositions);
-                //DrawRope<41>(rope);
             }
 
             return uniqueTailPositions.size();
@@ -71,26 +70,20 @@ namespace Year2022
 
         void AdjustKnotPosition(Vector2i const& parentKnotPosition, Vector2i& knotPosition) const
         {
-            Vector2i const knotOffset = parentKnotPosition - knotPosition;
-            if (knotOffset[0] > 1) // Parent moved up
+            Vector2f const knotOffset(
+                static_cast<float>(parentKnotPosition[0] - knotPosition[0]),
+                static_cast<float>(parentKnotPosition[1] - knotPosition[1])
+            );
+
+            float const knotMagnitude = Vector2f::Magnitude(knotOffset);
+            if (knotMagnitude > 1.f)
             {
-                knotPosition[0] = parentKnotPosition[0] - 1;
-                knotPosition[1] = parentKnotPosition[1];
-            }
-            else if (knotOffset[0] < -1) // Parent moved down
-            {
-                knotPosition[0] = parentKnotPosition[0] + 1;
-                knotPosition[1] = parentKnotPosition[1];
-            }
-            else if (knotOffset[1] > 1) // Parent moved right
-            {
-                knotPosition[0] = parentKnotPosition[0];
-                knotPosition[1] = parentKnotPosition[1] - 1;
-            }
-            else if (knotOffset[1] < -1) // Parent moved left
-            {
-                knotPosition[0] = parentKnotPosition[0];
-                knotPosition[1] = parentKnotPosition[1] + 1;
+                Vector2i const knotAdjustment(
+                    static_cast<int>(round(knotOffset[0] / knotMagnitude)),
+                    static_cast<int>(round(knotOffset[1] / knotMagnitude))
+                );
+
+                knotPosition = parentKnotPosition - knotAdjustment;
             }
         }
 
@@ -100,53 +93,6 @@ namespace Year2022
             {
                 uniqueTailPositions.push_back(tailKnotPosition);
             }
-        }
-
-        template <int GRID_SIZE>
-        void DrawRope(std::vector<Vector2i> const& rope) const
-        {
-            Vector2i const anchor(GRID_SIZE / 2 - 1);
-
-            char grid[GRID_SIZE][GRID_SIZE];
-            for (int j = 0; j < GRID_SIZE; ++j)
-            {
-                for (int i = 0; i < GRID_SIZE; ++i)
-                {
-                    grid[j][i] = '.';
-                }
-            }
-
-            // Place the knot symbols
-            Vector2i invertedKnot = Vector2i(rope[0][0], -rope[0][1]);
-            Vector2i knotPos = anchor + invertedKnot;
-            grid[knotPos[1]][knotPos[0]] = 'H';
-
-            for (size_t knotIndex = 1; knotIndex < rope.size(); ++knotIndex)
-            {
-                invertedKnot = Vector2i(rope[knotIndex][0], -rope[knotIndex][1]);
-                knotPos = anchor + invertedKnot;
-                if (grid[knotPos[1]][knotPos[0]] == '.')
-                {
-                    grid[knotPos[1]][knotPos[0]] = '0' + static_cast<char>(knotIndex);
-                }
-            }
-
-            // Place the start symbol
-            if (grid[anchor[1]][anchor[0]] == '.')
-            {
-                grid[anchor[1]][anchor[0]] = 'S';
-            }
-
-            // Draw the grid
-            for (int j = 0; j < GRID_SIZE; ++j)
-            {
-                for (int i = 0; i < GRID_SIZE; ++i)
-                {
-                    std::cout << grid[j][i];
-                }
-                std::cout << std::endl;
-            }
-            std::cout << std::endl;
         }
     };
 }
