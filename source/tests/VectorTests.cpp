@@ -53,7 +53,7 @@ namespace Tests
         }
 #pragma endregion
 
-#pragma region Constructors
+#pragma region Vector Conditionals
         TEST_FUNC(EqualVector)
         {
             Vector2i const left(1, 2);
@@ -67,6 +67,22 @@ namespace Tests
             Vector2i const rightFirst(3, 2);
             Vector2i const rightSecond(1, 3);
             return left != rightFirst && left != rightSecond;
+        }
+
+        TEST_FUNC(LesserVector)
+        {
+            Vector2i const left(1, 2);
+            Vector2i const rightFirst(3, 2);
+            Vector2i const rightSecond(1, 3);
+            return left < rightFirst && left < rightSecond;
+        }
+
+        TEST_FUNC(GreaterVector)
+        {
+            Vector2i const left(1, 2);
+            Vector2i const rightFirst(0, 2);
+            Vector2i const rightSecond(1, 0);
+            return left > rightFirst && left > rightSecond;
         }
 #pragma endregion
 
@@ -274,6 +290,8 @@ namespace Tests
 
             RUN_TEST_FUNC(EqualVector);
             RUN_TEST_FUNC(NotEqualVector);
+            RUN_TEST_FUNC(LesserVector);
+            RUN_TEST_FUNC(GreaterVector);
 
             RUN_TEST_FUNC(AddVectorSelf);
             RUN_TEST_FUNC(SubtractVectorSelf);
@@ -372,6 +390,24 @@ namespace Tests
             Vector3i const rightSecond(1, 4, 3);
             Vector3i const rightThird(1, 2, 4);
             return left != rightFirst && left != rightSecond && left != rightThird;
+        }
+
+        TEST_FUNC(LesserVector)
+        {
+            Vector3i const left(1, 2, 3);
+            Vector3i const rightFirst(4, 2, 3);
+            Vector3i const rightSecond(1, 4, 3);
+            Vector3i const rightThird(1, 2, 4);
+            return left < rightFirst && left < rightSecond && left < rightThird;
+        }
+
+        TEST_FUNC(GreaterVector)
+        {
+            Vector3i const left(1, 2, 3);
+            Vector3i const rightFirst(0, 2, 3);
+            Vector3i const rightSecond(1, 0, 3);
+            Vector3i const rightThird(1, 2, 0);
+            return left > rightFirst && left > rightSecond && left > rightThird;
         }
 #pragma endregion
 
@@ -580,6 +616,8 @@ namespace Tests
 
             RUN_TEST_FUNC(EqualVector);
             RUN_TEST_FUNC(NotEqualVector);
+            RUN_TEST_FUNC(LesserVector);
+            RUN_TEST_FUNC(GreaterVector);
 
             RUN_TEST_FUNC(AddVectorSelf);
             RUN_TEST_FUNC(SubtractVectorSelf);

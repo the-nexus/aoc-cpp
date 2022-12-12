@@ -23,6 +23,8 @@ namespace VectorTool
 
         inline bool operator==(Vector2<T> const& rhs) const { return m_values[0] == rhs[0] && m_values[1] == rhs[1]; }
         inline bool operator!=(Vector2<T> const& rhs) const { return m_values[0] != rhs[0] || m_values[1] != rhs[1]; }
+        inline bool operator<(Vector2<T> const& rhs) const { return m_values[0] == rhs[0] ? (m_values[1] < rhs[1]) : (m_values[0] < rhs[0]); }
+        inline bool operator>(Vector2<T> const& rhs) const { return m_values[0] == rhs[0] ? (m_values[1] > rhs[1]) : (m_values[0] > rhs[0]); }
 
         Vector2<T>& operator+=(Vector2<T> const& rhs)
         {
@@ -189,6 +191,8 @@ namespace VectorTool
 
         inline bool operator==(Vector3<T> const& rhs) const { return m_values[0] == rhs[0] && m_values[1] == rhs[1] && m_values[2] == rhs[2]; }
         inline bool operator!=(Vector3<T> const& rhs) const { return m_values[0] != rhs[0] || m_values[1] != rhs[1] || m_values[2] != rhs[2]; }
+        inline bool operator<(Vector3<T> const& rhs) const { return m_values[0] == rhs[0] ? (m_values[1] == rhs[1] ? (m_values[2] < rhs[2]) : (m_values[1] < rhs[1])) : (m_values[0] < rhs[0]); }
+        inline bool operator>(Vector3<T> const& rhs) const { return m_values[0] == rhs[0] ? (m_values[1] == rhs[1] ? (m_values[2] > rhs[2]) : (m_values[1] > rhs[1])) : (m_values[0] > rhs[0]); }
 
         Vector3<T>& operator+=(Vector3<T> const& rhs)
         {
