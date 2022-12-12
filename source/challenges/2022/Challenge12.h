@@ -40,7 +40,7 @@ namespace Year2022
                     if (inputLines[y][x] == 'S')
                     {
                         m_startPosition = Vector2i(x, y);
-                        m_heightMap[x][y] = 0; // 'a' (but make it extremely high like 'z' to avoid coming back
+                        m_heightMap[x][y] = 0; // 'a'
                     }
                     else if (inputLines[y][x] == 'E')
                     {
