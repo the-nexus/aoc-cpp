@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../ChallengeAbstract.h"
+#include <algorithm>
 #include <iostream>
 
 namespace Year2022
@@ -15,33 +16,33 @@ namespace Year2022
             NotOrdered
         };
 
-        struct TreeNode
+        struct PacketNode
         {
             virtual void Destroy() { delete this; }
-            virtual EOrderResult CompareOrder(TreeNode const* rhs) const = 0;
+            virtual EOrderResult CompareOrder(PacketNode const* rhs) const = 0;
         };
 
-        struct TreeNode_Vector final : public TreeNode
+        struct PacketNode_Vector final : public PacketNode
         {
             virtual void Destroy() override
             {
-                for (TreeNode* childNode : m_childNodes)
+                for (PacketNode* childNode : m_childNodes)
                 {
                     childNode->Destroy();
                 }
 
-                TreeNode::Destroy();
+                PacketNode::Destroy();
             }
 
-            virtual EOrderResult CompareOrder(TreeNode const* rhs) const override
+            virtual EOrderResult CompareOrder(PacketNode const* rhs) const override
             {
-                if (TreeNode_Integer const* rhsInteger = dynamic_cast<TreeNode_Integer const*>(rhs))
+                if (PacketNode_Integer const* rhsInteger = dynamic_cast<PacketNode_Integer const*>(rhs))
                 {
-                    TreeNode_Vector rhsVector;
-                    rhsVector.m_childNodes.push_back(const_cast<TreeNode_Integer*>(rhsInteger));
+                    PacketNode_Vector rhsVector;
+                    rhsVector.m_childNodes.push_back(const_cast<PacketNode_Integer*>(rhsInteger));
                     return CompareOrder(&rhsVector);
                 }
-                else if (TreeNode_Vector const* rhsVector = dynamic_cast<TreeNode_Vector const*>(rhs))
+                else if (PacketNode_Vector const* rhsVector = dynamic_cast<PacketNode_Vector const*>(rhs))
                 {
                     return CompareOrder(rhsVector);
                 }
@@ -51,7 +52,7 @@ namespace Year2022
                 }
             }
 
-            EOrderResult CompareOrder(TreeNode_Vector const* rhs) const
+            EOrderResult CompareOrder(PacketNode_Vector const* rhs) const
             {
                 bool const isLhsSmaller = m_childNodes.size() < rhs->m_childNodes.size();
                 size_t const commonSize = isLhsSmaller ? m_childNodes.size() : rhs->m_childNodes.size();
@@ -65,7 +66,7 @@ namespace Year2022
                     }
                 }
                 
-                if (m_childNodes.size() < rhs->m_childNodes.size())
+                if (m_childNodes.size() == rhs->m_childNodes.size())
                 {
                     return EOrderResult::Unknown;
                 }
@@ -75,36 +76,21 @@ namespace Year2022
                 }
             }
 
-            std::vector<TreeNode*> m_childNodes;
-
-            std::ostream& operator<<(std::ostream& os)
-            {
-                os << "[";
-                for (size_t nodeIndex = 0; nodeIndex < m_childNodes.size(); ++nodeIndex)
-                {
-                    if (nodeIndex != 0)
-                    {
-                        os << ',';
-                    }
-                    os << m_childNodes[nodeIndex];
-                }
-                os << "]";
-                return os;
-            }
+            std::vector<PacketNode*> m_childNodes;
         };
 
-        struct TreeNode_Integer final : public TreeNode
+        struct PacketNode_Integer final : public PacketNode
         {
-            virtual EOrderResult CompareOrder(TreeNode const* rhs) const override
+            virtual EOrderResult CompareOrder(PacketNode const* rhs) const override
             {
-                if (TreeNode_Integer const* rhsInteger = dynamic_cast<TreeNode_Integer const*>(rhs))
+                if (PacketNode_Integer const* rhsInteger = dynamic_cast<PacketNode_Integer const*>(rhs))
                 {
                     return CompareOrder(rhsInteger);
                 }
-                else if (TreeNode_Vector const* rhsVector = dynamic_cast<TreeNode_Vector const*>(rhs))
+                else if (PacketNode_Vector const* rhsVector = dynamic_cast<PacketNode_Vector const*>(rhs))
                 {
-                    TreeNode_Vector lhsVector;
-                    lhsVector.m_childNodes.push_back(const_cast<TreeNode_Integer*>(this));
+                    PacketNode_Vector lhsVector;
+                    lhsVector.m_childNodes.push_back(const_cast<PacketNode_Integer*>(this));
                     return lhsVector.CompareOrder(rhsVector);
                 }
                 else
@@ -113,49 +99,42 @@ namespace Year2022
                 }
             }
 
-            EOrderResult CompareOrder(TreeNode_Integer const* rhs) const
+            EOrderResult CompareOrder(PacketNode_Integer const* rhs) const
             {
-                return m_value < rhs->m_value ? EOrderResult::Ordered : EOrderResult::Unknown;
+                if (m_value == rhs->m_value)
+                {
+                    return EOrderResult::Unknown;
+                }
+                else
+                {
+                    return m_value < rhs->m_value ? EOrderResult::Ordered : EOrderResult::NotOrdered;
+                }
             }
 
             int m_value = 0;
-
-            std::ostream& operator<<(std::ostream& os)
-            {
-                os << m_value;
-                return os;
-            }
         };
 
-        std::vector<std::pair<TreeNode*, TreeNode*>> m_nodePairs;
+        std::vector<PacketNode*> m_packets;
 
     public:
         virtual void SetUp(std::vector<std::string> const& inputLines) override
         {
-            m_nodePairs.reserve((inputLines.size() + 1) / 3);
-            for (size_t lineIndex = 0; lineIndex < 1/*inputLines.size()*/; ++lineIndex)
+            m_packets.reserve((inputLines.size() + 1) / 3);
+            for (size_t lineIndex = 0; lineIndex < inputLines.size(); lineIndex += 3)
             {
-                TreeNode* node = MakeTree(inputLines[lineIndex]);
-                std::cout << node << std::endl;
-                delete node;
-
-                // std::pair<TreeNode*, TreeNode*>& pair = m_nodePairs.emplace_back();
-                // pair.first = MakeTree(inputLines[lineIndex]);
-                // pair.second = MakeTree(inputLines[lineIndex + 1]);
-
-                // std::cout << pair.first << std::endl;
-                // std::cout << pair.second << std::endl << std::endl;
+                m_packets.push_back(MakePacket(inputLines[lineIndex]));
+                m_packets.push_back(MakePacket(inputLines[lineIndex + 1]));
             }
         }
 
         virtual void Run_PartOne() override
         {
             size_t orderedPairIndexSum = 0;
-            for (size_t pairIndex = 0; pairIndex < m_nodePairs.size(); ++pairIndex)
+            for (size_t pairIndex = 0; pairIndex < m_packets.size(); pairIndex += 2)
             {
-                if (m_nodePairs[pairIndex].first->CompareOrder(m_nodePairs[pairIndex].second) == EOrderResult::Ordered)
+                if (m_packets[pairIndex]->CompareOrder(m_packets[pairIndex + 1]) == EOrderResult::Ordered)
                 {
-                    orderedPairIndexSum += pairIndex + 1;
+                    orderedPairIndexSum += pairIndex / 2 + 1;
                 }
             }
             std::cout << orderedPairIndexSum << std::endl;
@@ -163,51 +142,74 @@ namespace Year2022
 
         virtual void Run_PartTwo() override
         {
-            std::cout << "WARNING: Part Two Not Implemented" << std::endl;
+            m_packets.push_back(MakePacket("[[2]]"));
+            PacketNode const* firstDivider = m_packets.back();
+
+            m_packets.push_back(MakePacket("[[6]]"));
+            PacketNode const* secondDivider = m_packets.back();
+
+            std::sort(m_packets.begin(), m_packets.end(), [](PacketNode const* lhs, PacketNode const* rhs) -> bool {
+                return lhs->CompareOrder(rhs) == EOrderResult::Ordered;
+            });
+
+            size_t firstDividerIndex = 0;
+            for (; firstDividerIndex < m_packets.size(); ++firstDividerIndex)
+            {
+                if (m_packets[firstDividerIndex] == firstDivider)
+                {
+                    break;
+                }
+            }
+
+            size_t secondDividerIndex = firstDividerIndex + 1;
+            for (; secondDividerIndex < m_packets.size(); ++secondDividerIndex)
+            {
+                if (m_packets[secondDividerIndex] == secondDivider)
+                {
+                    break;
+                }
+            }
+
+            std::cout << ((firstDividerIndex + 1) * (secondDividerIndex + 1)) << std::endl;
         }
 
         virtual void CleanUp() override
         {
-            for (std::pair<TreeNode*, TreeNode*>& nodePair : m_nodePairs)
+            for (PacketNode* packet : m_packets)
             {
-                nodePair.first->Destroy();
-                nodePair.second->Destroy();
+                packet->Destroy();
             }
         }
 
     private:
-        TreeNode* MakeTree(std::string const& inputLine) const
+        PacketNode* MakePacket(std::string const& inputLine) const
         {
             size_t inputCharIndex = 0;
             return MakeVectorNode(inputLine, inputCharIndex);
         }
 
-        TreeNode_Vector* MakeVectorNode(std::string const& inputLine, size_t& inputCharIndex) const
+        PacketNode_Vector* MakeVectorNode(std::string const& inputLine, size_t& inputCharIndex) const
         {
-            TreeNode_Vector* vectorNode = new TreeNode_Vector;
-            while (inputLine[++inputCharIndex] != ']')
+            PacketNode_Vector* vectorNode = new PacketNode_Vector;
+            while (inputLine[inputCharIndex] != ']')
             {
-                std::cout << inputLine[inputCharIndex];
-                if (inputLine[inputCharIndex] == '[')
+                if (inputLine[++inputCharIndex] == '[')
                 {
                     vectorNode->m_childNodes.push_back(MakeVectorNode(inputLine, inputCharIndex));
                 }
-                else if (inputLine[inputCharIndex] == ',')
-                {
-                    continue;
-                }
-                else
+                else if (inputLine[inputCharIndex] >= '0' && inputLine[inputCharIndex] <= '9')
                 {
                     vectorNode->m_childNodes.push_back(MakeIntegerNode(inputLine, inputCharIndex));
                 }
             }
+            ++inputCharIndex;
             return vectorNode;
 
         }
 
-        TreeNode_Integer* MakeIntegerNode(std::string const& inputLine, size_t& inputCharIndex) const
+        PacketNode_Integer* MakeIntegerNode(std::string const& inputLine, size_t& inputCharIndex) const
         {
-            TreeNode_Integer* integerNode = new TreeNode_Integer;
+            PacketNode_Integer* integerNode = new PacketNode_Integer;
             while (inputLine[inputCharIndex] != ',' && inputLine[inputCharIndex] != ']')
             {
                 int const charValue = static_cast<int>(inputLine[inputCharIndex++] - '0');
