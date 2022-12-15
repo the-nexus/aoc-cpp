@@ -7,6 +7,7 @@ namespace Year2022
 {
     class Challenge15 : public ChallengeAbstract
     {
+    private:
         typedef std::pair<int, int> Range;
 
         struct Sensor
