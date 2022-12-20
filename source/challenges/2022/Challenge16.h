@@ -5,6 +5,9 @@
 #include <map>
 #include <set>
 
+// TODO: Check out the Floyd-Warshall algorithm to maybe solve this faster
+// https://en.wikipedia.org/wiki/Floyd%E2%80%93Warshall_algorithm
+
 namespace Year2022
 {
     class Challenge16 : public ChallengeAbstract
