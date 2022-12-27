@@ -40,7 +40,7 @@ namespace Year2022
 
                     if (nextPoint[1] > m_infiniteFloorHeight)
                     {
-                        m_infiniteFloorHeight = nextPoint[1] + 2;
+                        m_infiniteFloorHeight = nextPoint[1] + 3;
                     }
 
                     lastPoint = nextPoint;
