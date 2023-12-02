@@ -7,58 +7,12 @@ namespace Year2023
     class Challenge01 : public ChallengeAbstract
     {
     private:
-
-        class LinearWordMatcher
-        {
-        private:
-            std::string m_word;
-            size_t m_position;
-
-        public:
-            LinearWordMatcher(std::string const& word)
-                : m_word(word)
-                , m_position(-1)
-            {}
-
-            bool Match(char const nextCharacter)
-            {
-                if (++m_position < m_word.size())
-                {
-                    if (m_word[m_position] == nextCharacter)
-                    {
-                        return m_position == m_word.size() - 1;
-                    }
-                }
-
-                m_position = -1;
-                return false;
-            }
-
-            void Reset()
-            {
-                m_position = -1;
-            }
-        };
-
         std::vector<std::string> m_lines;
-        mutable std::vector<LinearWordMatcher> m_matchers;
 
     public:
         virtual void SetUp(std::vector<std::string> const& inputLines) override
         {
             m_lines = inputLines;
-
-            m_matchers.reserve(10);
-            m_matchers.emplace_back("zero");
-            m_matchers.emplace_back("one");
-            m_matchers.emplace_back("two");
-            m_matchers.emplace_back("three");
-            m_matchers.emplace_back("four");
-            m_matchers.emplace_back("five");
-            m_matchers.emplace_back("six");
-            m_matchers.emplace_back("seven");
-            m_matchers.emplace_back("eight");
-            m_matchers.emplace_back("nine");
         }
 
         virtual void Run_PartOne() override
@@ -66,11 +20,7 @@ namespace Year2023
             int calibrationSum = 0;
             for (std::string const& line : m_lines)
             {
-                int const calibrationValue = GetCalibrationValue(line, false);
-                if (calibrationValue != -1)
-                {
-                    calibrationSum += calibrationValue;
-                }
+                calibrationSum += GetCalibrationValue(line, false);
             }
 
             std::cout << calibrationSum << std::endl;
@@ -81,11 +31,7 @@ namespace Year2023
             int calibrationSum = 0;
             for (std::string const& line : m_lines)
             {
-                int const calibrationValue = GetCalibrationValue(line, true);
-                if (calibrationValue != -1)
-                {
-                    calibrationSum += calibrationValue;
-                }
+                calibrationSum += GetCalibrationValue(line, true);
             }
 
             std::cout << calibrationSum << std::endl;
@@ -93,69 +39,77 @@ namespace Year2023
 
         virtual void CleanUp() override {}
 
-        int GetCalibrationValue(std::string const& line, bool shouldConsiderWords) const
+    private:
+        static int GetCalibrationValue(std::string const& line, bool const shouldConsiderWords)
         {
-            if (shouldConsiderWords)
-            {
-                for (LinearWordMatcher& matcher : m_matchers)
-                {
-                    matcher.Reset();
-                }
-            }
-
             int firstDigit = -1;
             int lastDigit = -1;
 
-            for (auto it = line.cbegin(); it < line.cend(); ++it)
+            for (size_t pos = 0; pos < line.size(); ++pos)
             {
-                bool wasMatched = false;
-                char const digitChar = *it;
-
-                if (digitChar >= '0' && digitChar <= '9')
+                int const matchedDigit = GetMatchingDigit(line, pos, shouldConsiderWords);
+                if (matchedDigit != -1)
                 {
-                    wasMatched = true;
-                    lastDigit = static_cast<int>(digitChar - '0');
+                    lastDigit = matchedDigit;
                     if (firstDigit == -1)
                     {
-                        firstDigit = lastDigit;
+                        firstDigit = matchedDigit;
                     }
                 }
+            }
 
-                if (shouldConsiderWords)
+            return firstDigit * 10 + lastDigit;
+        }
+
+        static int GetMatchingDigit(std::string const& line, size_t const pos, bool const shouldConsiderWords)
+        {
+            if (line[pos] > '0' && line[pos] <= '9')
+            {
+                return static_cast<int>(line[pos] - '0');
+            }
+
+            if (shouldConsiderWords)
+            {
+                static std::string const one = "one";
+                static std::string const two = "two";
+                static std::string const three = "three";
+                static std::string const four = "four";
+                static std::string const five = "five";
+                static std::string const six = "six";
+                static std::string const seven = "seven";
+                static std::string const eight = "eight";
+                static std::string const nine = "nine";
+
+                if (MatchesWord(one, line, pos)) return 1;
+                if (MatchesWord(two, line, pos)) return 2;
+                if (MatchesWord(three, line, pos)) return 3;
+                if (MatchesWord(four, line, pos)) return 4;
+                if (MatchesWord(five, line, pos)) return 5;
+                if (MatchesWord(six, line, pos)) return 6;
+                if (MatchesWord(seven, line, pos)) return 7;
+                if (MatchesWord(eight, line, pos)) return 8;
+                if (MatchesWord(nine, line, pos)) return 9;
+            }
+
+            return -1;
+        }
+
+        static bool MatchesWord(std::string const& word, std::string const& line, size_t const pos)
+        {
+            if (pos + word.size() > line.size())
+            {
+                return false;
+            }
+
+            for (size_t wordPos = 0; wordPos < word.size(); ++wordPos)
+            {
+                if (word[wordPos] != line[pos + wordPos])
                 {
-                    for (int digit = 0; digit < m_matchers.size(); ++digit)
-                    {
-                        if (m_matchers[digit].Match(digitChar))
-                        {
-                            wasMatched = true;
-                            lastDigit = digit;
-                            if (firstDigit == -1)
-                            {
-                                firstDigit = lastDigit;
-                            }
-
-                            break;
-                        }
-                    }
-
-                    if (wasMatched)
-                    {
-                        for (LinearWordMatcher& matcher : m_matchers)
-                        {
-                            matcher.Reset();
-                        }
-                    }
+                    return false;
                 }
             }
 
-            if (firstDigit == -1 || lastDigit == -1)
-            {
-                return -1;
-            }
-            else
-            {
-                return firstDigit * 10 + lastDigit;
-            }
+            return true;
         }
     };
 }
