@@ -13,6 +13,7 @@
 #include "2020/Year2020.h"
 #include "2021/Year2021.h"
 #include "2022/Year2022.h"
+#include "2023/Year2023.h"
 #include "ChallengeAbstract.h"
 
 namespace ChallengeFactory
@@ -30,6 +31,7 @@ namespace ChallengeFactory
         case 2020: return Year2020::MakeChallenge(day);
         case 2021: return Year2021::MakeChallenge(day);
         case 2022: return Year2022::MakeChallenge(day);
+        case 2023: return Year2023::MakeChallenge(day);
         default: return nullptr;
         }
     }
