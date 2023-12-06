@@ -112,7 +112,7 @@ namespace Year2023
             }
             else
             {
-                return static_cast<int>(powf(2.f, card.m_matchCount - 1));
+                return static_cast<int>(powf(2.f, static_cast<float>(card.m_matchCount - 1)));
             }
         }
     };
