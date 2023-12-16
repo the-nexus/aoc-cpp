@@ -1,8 +1,8 @@
 ﻿cmake_minimum_required (VERSION 3.8)
 
 file (GLOB_RECURSE SOURCE_LIST Main.cpp
-    challenges/*.h* challenges/*.c*
-    tests/*.h* tests/*.c*
+    challenges/*.h* challenges/*.c* challenges/*.inl
+    tests/*.h* tests/*.c* tests/*.inl
 )
 source_group (TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCE_LIST})
 
