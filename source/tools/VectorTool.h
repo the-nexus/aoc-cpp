@@ -369,3 +369,4 @@ DECLARE_VECTOR_TYPE(long long, ll);
 DECLARE_VECTOR_TYPE(unsigned long, ull);
 DECLARE_VECTOR_TYPE(float, f);
 DECLARE_VECTOR_TYPE(double, d);
+DECLARE_VECTOR_TYPE(size_t, sz);
