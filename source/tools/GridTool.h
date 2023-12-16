@@ -3,15 +3,15 @@
 #include <functional>
 #include <vector>
 
-namespace MatrixTool
+namespace GridTool
 {
     template <typename T>
-    struct Matrix2D
+    struct Grid
     {
         std::vector<std::vector<T>> m_data;
 
-        Matrix2D() {}
-        Matrix2D(size_t const lineCount, size_t const columnCount) { Resize(lineCount, columnCount); }
+        Grid() {}
+        Grid(size_t const lineCount, size_t const columnCount) { Resize(lineCount, columnCount); }
 
         inline size_t GetLineCount() const { return m_data.size(); }
         inline size_t GetColumnCount() const { return m_data.size() > 0 ? m_data[0].size() : 0; }
@@ -30,25 +30,25 @@ namespace MatrixTool
     };
 
     template <typename T>
-    void ForEach(Matrix2D<T>& matrix, std::function<void(T&, size_t const, size_t const)> func)
+    void ForEach(Grid<T>& grid, std::function<void(T&, size_t const, size_t const)> func)
     {
-        for (size_t line = 0; line < matrix.GetLineCount(); ++line)
+        for (size_t line = 0; line < grid.GetLineCount(); ++line)
         {
-            for (size_t column = 0; column < matrix.GetColumnCount(); ++column)
+            for (size_t column = 0; column < grid.GetColumnCount(); ++column)
             {
-                func(matrix.m_data[line][column], line, column);
+                func(grid.m_data[line][column], line, column);
             }
         }
     }
 
     template <typename T>
-    void ForEach(Matrix2D<T> const& matrix, std::function<void(T const&, size_t const, size_t const)> func)
+    void ForEach(Grid<T> const& grid, std::function<void(T const&, size_t const, size_t const)> func)
     {
-        for (size_t line = 0; line < matrix.GetLineCount(); ++line)
+        for (size_t line = 0; line < grid.GetLineCount(); ++line)
         {
-            for (size_t column = 0; column < matrix.GetColumnCount(); ++column)
+            for (size_t column = 0; column < grid.GetColumnCount(); ++column)
             {
-                func(matrix.m_data[line][column], line, column);
+                func(grid.m_data[line][column], line, column);
             }
         }
     }
