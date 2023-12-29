@@ -1,3 +1,4 @@
+#pragma once
 
 // ================================================================================================
 // Edit this file when starting a new year to add a copy of the commented include and case line

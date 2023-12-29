@@ -1,3 +1,5 @@
+#pragma once
+
 #include "../templates/ChallengeTemplate.h"
 
 #if __has_include("Challenge01.h")

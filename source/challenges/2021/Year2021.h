@@ -1,3 +1,4 @@
+#pragma once
 
 #include "../templates/ChallengeTemplate.h"
 
