@@ -1,4 +1,5 @@
 ﻿#include <iostream>
+#include <memory>
 #include <string>
 #include <vector>
 
@@ -56,48 +57,45 @@ bool ParseArgs(int argc, char* argv[], int& outYear, int& outDay)
 int RunAdventOfCode(int const year, int const day)
 {
     std::string const inputFilePath = "../input/" + std::to_string(year) + "/" + (day < 10 ? "0" : "") + std::to_string(day) + ".txt";
-    std::vector<std::string> inputLines;
-    if (FileTool::ReadAllLines(inputFilePath, inputLines))
-    {
-        if (ChallengeAbstract* challenge = ChallengeFactory::MakeChallenge(year, day))
-        {
-            CHRONO_DECLARE(setUp);
-            CHRONO_START(setUp);
-            challenge->SetUp(inputLines);
-            CHRONO_STOP(setUp);
-            CHRONO_PRINT(setUp, "Setup       ");
 
-            CHRONO_DECLARE(partOne);
-            CHRONO_START(partOne);
-            challenge->Run_PartOne();
-            CHRONO_STOP(partOne);
-            CHRONO_PRINT(partOne, "Part One    ");
-
-            CHRONO_DECLARE(partTwo);
-            CHRONO_START(partTwo);
-            challenge->Run_PartTwo();
-            CHRONO_STOP(partTwo);
-            CHRONO_PRINT(partTwo, "Part Two    ");
-
-            CHRONO_DECLARE(cleanUp);
-            CHRONO_START(cleanUp);
-            challenge->CleanUp();
-            CHRONO_STOP(cleanUp);
-            CHRONO_PRINT(cleanUp, "Clean Up    ");
-
-            delete challenge;
-        }
-        else
-        {
-            std::cout << "ERROR: Unsupported challenge [Year=" << year << " Day=" << day << "]" << std::endl;
-            return -1;
-        }
-    }
-    else
+    std::shared_ptr<std::vector<std::string>> inputLines = std::make_shared<std::vector<std::string>>();
+    if (!FileTool::ReadAllLines(inputFilePath, *inputLines))
     {
         std::cout << "ERROR: Could not read input file [" << inputFilePath << "]" << std::endl;
         return -1;
     }
+
+    std::unique_ptr<ChallengeAbstract> challenge = std::unique_ptr<ChallengeAbstract>(ChallengeFactory::MakeChallenge(year, day));
+    if (!challenge)
+    {
+        std::cout << "ERROR: Unsupported challenge [Year=" << year << " Day=" << day << "]" << std::endl;
+        return -1;
+    }
+
+    CHRONO_DECLARE(setUp);
+    CHRONO_START(setUp);
+    challenge->SetUp(*inputLines);
+    CHRONO_STOP(setUp);
+    CHRONO_PRINT(setUp, "Setup       ");
+
+    CHRONO_DECLARE(partOne);
+    CHRONO_START(partOne);
+    challenge->Run_PartOne();
+    CHRONO_STOP(partOne);
+    CHRONO_PRINT(partOne, "Part One    ");
+
+    CHRONO_DECLARE(partTwo);
+    CHRONO_START(partTwo);
+    challenge->Run_PartTwo();
+    CHRONO_STOP(partTwo);
+    CHRONO_PRINT(partTwo, "Part Two    ");
+
+    CHRONO_DECLARE(cleanUp);
+    CHRONO_START(cleanUp);
+    challenge->CleanUp();
+    challenge.reset();
+    CHRONO_STOP(cleanUp);
+    CHRONO_PRINT(cleanUp, "Clean Up    ");
 
     return 0;
 }
