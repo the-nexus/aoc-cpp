@@ -7,24 +7,18 @@ namespace YearTemplate
     class ChallengeTemplate : public ChallengeAbstract
     {
     public:
-        virtual void SetUp(std::vector<std::string> const& inputLines) override
-        {
-
-        }
+        ChallengeTemplate(std::shared_ptr<std::vector<std::string>> const& inputLines)
+            : ChallengeAbstract(inputLines)
+        {}
 
         virtual void Run_PartOne() override
         {
-            std::cout << "WARNING: Part One Not Implemented" << std::endl;
+            ChallengeAbstract::Run_PartOne();
         }
 
         virtual void Run_PartTwo() override
         {
-            std::cout << "WARNING: Part Two Not Implemented" << std::endl;
-        }
-
-        virtual void CleanUp() override
-        {
-
+            ChallengeAbstract::Run_PartTwo();
         }
     };
 }

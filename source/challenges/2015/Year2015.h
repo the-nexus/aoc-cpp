@@ -1,187 +1,189 @@
 #pragma once
 
 #include <memory>
+#include <string>
+#include <vector>
 
 #include "../templates/ChallengeTemplate.h"
 
 #if __has_include("Challenge01.h")
     #include "Challenge01.h"
-    #define CHALLENGE_01 std::make_unique<Challenge01>()
+    #define CHALLENGE_01 std::make_unique<Challenge01>(inputLines)
 #else
     #define CHALLENGE_01 nullptr
 #endif
 
 #if __has_include("Challenge02.h")
     #include "Challenge02.h"
-    #define CHALLENGE_02 std::make_unique<Challenge02>()
+    #define CHALLENGE_02 std::make_unique<Challenge02>(inputLines)
 #else
     #define CHALLENGE_02 nullptr
 #endif
 
 #if __has_include("Challenge03.h")
     #include "Challenge03.h"
-    #define CHALLENGE_03 std::make_unique<Challenge03>()
+    #define CHALLENGE_03 std::make_unique<Challenge03>(inputLines)
 #else
     #define CHALLENGE_03 nullptr
 #endif
 
 #if __has_include("Challenge04.h")
     #include "Challenge04.h"
-    #define CHALLENGE_04 std::make_unique<Challenge04>()
+    #define CHALLENGE_04 std::make_unique<Challenge04>(inputLines)
 #else
     #define CHALLENGE_04 nullptr
 #endif
 
 #if __has_include("Challenge05.h")
     #include "Challenge05.h"
-    #define CHALLENGE_05 std::make_unique<Challenge05>()
+    #define CHALLENGE_05 std::make_unique<Challenge05>(inputLines)
 #else
     #define CHALLENGE_05 nullptr
 #endif
 
 #if __has_include("Challenge06.h")
     #include "Challenge06.h"
-    #define CHALLENGE_06 std::make_unique<Challenge06>()
+    #define CHALLENGE_06 std::make_unique<Challenge06>(inputLines)
 #else
     #define CHALLENGE_06 nullptr
 #endif
 
 #if __has_include("Challenge07.h")
     #include "Challenge07.h"
-    #define CHALLENGE_07 std::make_unique<Challenge07>()
+    #define CHALLENGE_07 std::make_unique<Challenge07>(inputLines)
 #else
     #define CHALLENGE_07 nullptr
 #endif
 
 #if __has_include("Challenge08.h")
     #include "Challenge08.h"
-    #define CHALLENGE_08 std::make_unique<Challenge08>()
+    #define CHALLENGE_08 std::make_unique<Challenge08>(inputLines)
 #else
     #define CHALLENGE_08 nullptr
 #endif
 
 #if __has_include("Challenge09.h")
     #include "Challenge09.h"
-    #define CHALLENGE_09 std::make_unique<Challenge09>()
+    #define CHALLENGE_09 std::make_unique<Challenge09>(inputLines)
 #else
     #define CHALLENGE_09 nullptr
 #endif
 
 #if __has_include("Challenge10.h")
     #include "Challenge10.h"
-    #define CHALLENGE_10 std::make_unique<Challenge10>()
+    #define CHALLENGE_10 std::make_unique<Challenge10>(inputLines)
 #else
     #define CHALLENGE_10 nullptr
 #endif
 
 #if __has_include("Challenge11.h")
     #include "Challenge11.h"
-    #define CHALLENGE_11 std::make_unique<Challenge11>()
+    #define CHALLENGE_11 std::make_unique<Challenge11>(inputLines)
 #else
     #define CHALLENGE_11 nullptr
 #endif
 
 #if __has_include("Challenge12.h")
     #include "Challenge12.h"
-    #define CHALLENGE_12 std::make_unique<Challenge12>()
+    #define CHALLENGE_12 std::make_unique<Challenge12>(inputLines)
 #else
     #define CHALLENGE_12 nullptr
 #endif
 
 #if __has_include("Challenge13.h")
     #include "Challenge13.h"
-    #define CHALLENGE_13 std::make_unique<Challenge13>()
+    #define CHALLENGE_13 std::make_unique<Challenge13>(inputLines)
 #else
     #define CHALLENGE_13 nullptr
 #endif
 
 #if __has_include("Challenge14.h")
     #include "Challenge14.h"
-    #define CHALLENGE_14 std::make_unique<Challenge14>()
+    #define CHALLENGE_14 std::make_unique<Challenge14>(inputLines)
 #else
     #define CHALLENGE_14 nullptr
 #endif
 
 #if __has_include("Challenge15.h")
     #include "Challenge15.h"
-    #define CHALLENGE_15 std::make_unique<Challenge15>()
+    #define CHALLENGE_15 std::make_unique<Challenge15>(inputLines)
 #else
     #define CHALLENGE_15 nullptr
 #endif
 
 #if __has_include("Challenge16.h")
     #include "Challenge16.h"
-    #define CHALLENGE_16 std::make_unique<Challenge16>()
+    #define CHALLENGE_16 std::make_unique<Challenge16>(inputLines)
 #else
     #define CHALLENGE_16 nullptr
 #endif
 
 #if __has_include("Challenge17.h")
     #include "Challenge17.h"
-    #define CHALLENGE_17 std::make_unique<Challenge17>()
+    #define CHALLENGE_17 std::make_unique<Challenge17>(inputLines)
 #else
     #define CHALLENGE_17 nullptr
 #endif
 
 #if __has_include("Challenge18.h")
     #include "Challenge18.h"
-    #define CHALLENGE_18 std::make_unique<Challenge18>()
+    #define CHALLENGE_18 std::make_unique<Challenge18>(inputLines)
 #else
     #define CHALLENGE_18 nullptr
 #endif
 
 #if __has_include("Challenge19.h")
     #include "Challenge19.h"
-    #define CHALLENGE_19 std::make_unique<Challenge19>()
+    #define CHALLENGE_19 std::make_unique<Challenge19>(inputLines)
 #else
     #define CHALLENGE_19 nullptr
 #endif
 
 #if __has_include("Challenge20.h")
     #include "Challenge20.h"
-    #define CHALLENGE_20 std::make_unique<Challenge20>()
+    #define CHALLENGE_20 std::make_unique<Challenge20>(inputLines)
 #else
     #define CHALLENGE_20 nullptr
 #endif
 
 #if __has_include("Challenge21.h")
     #include "Challenge21.h"
-    #define CHALLENGE_21 std::make_unique<Challenge21>()
+    #define CHALLENGE_21 std::make_unique<Challenge21>(inputLines)
 #else
     #define CHALLENGE_21 nullptr
 #endif
 
 #if __has_include("Challenge22.h")
     #include "Challenge22.h"
-    #define CHALLENGE_22 std::make_unique<Challenge22>()
+    #define CHALLENGE_22 std::make_unique<Challenge22>(inputLines)
 #else
     #define CHALLENGE_22 nullptr
 #endif
 
 #if __has_include("Challenge23.h")
     #include "Challenge23.h"
-    #define CHALLENGE_23 std::make_unique<Challenge23>()
+    #define CHALLENGE_23 std::make_unique<Challenge23>(inputLines)
 #else
     #define CHALLENGE_23 nullptr
 #endif
 
 #if __has_include("Challenge24.h")
     #include "Challenge24.h"
-    #define CHALLENGE_24 std::make_unique<Challenge24>()
+    #define CHALLENGE_24 std::make_unique<Challenge24>(inputLines)
 #else
     #define CHALLENGE_24 nullptr
 #endif
 
 #if __has_include("Challenge25.h")
     #include "Challenge25.h"
-    #define CHALLENGE_25 std::make_unique<Challenge25>()
+    #define CHALLENGE_25 std::make_unique<Challenge25>(inputLines)
 #else
     #define CHALLENGE_25 nullptr
 #endif
 
 namespace Year2015
 {
-    std::unique_ptr<ChallengeAbstract> MakeChallenge(int const day)
+    std::unique_ptr<ChallengeAbstract> MakeChallenge(int const day, std::shared_ptr<std::vector<std::string>> const& inputLines)
     {
         switch (day)
         {

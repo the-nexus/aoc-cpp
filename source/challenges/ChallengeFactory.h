@@ -1,6 +1,8 @@
 #pragma once
 
 #include <memory>
+#include <string>
+#include <vector>
 
 // ================================================================================================
 // Edit this file when starting a new year to add a copy of the commented include and case line
@@ -21,20 +23,20 @@
 
 namespace ChallengeFactory
 {
-    std::unique_ptr<ChallengeAbstract> MakeChallenge(int const year, int const day)
+    std::unique_ptr<ChallengeAbstract> MakeChallenge(int const year, int const day, std::shared_ptr<std::vector<std::string>> const& inputLines)
     {
         switch (year)
         {
-        //case XXXX: return YearXXXX::MakeChallenge(day);
-        case 2015: return Year2015::MakeChallenge(day);
-        case 2016: return Year2016::MakeChallenge(day);
-        case 2017: return Year2017::MakeChallenge(day);
-        case 2018: return Year2018::MakeChallenge(day);
-        case 2019: return Year2019::MakeChallenge(day);
-        case 2020: return Year2020::MakeChallenge(day);
-        case 2021: return Year2021::MakeChallenge(day);
-        case 2022: return Year2022::MakeChallenge(day);
-        case 2023: return Year2023::MakeChallenge(day);
+        //case XXXX: return YearXXXX::MakeChallenge(day, inputLines);
+        case 2015: return Year2015::MakeChallenge(day, inputLines);
+        case 2016: return Year2016::MakeChallenge(day, inputLines);
+        case 2017: return Year2017::MakeChallenge(day, inputLines);
+        case 2018: return Year2018::MakeChallenge(day, inputLines);
+        case 2019: return Year2019::MakeChallenge(day, inputLines);
+        case 2020: return Year2020::MakeChallenge(day, inputLines);
+        case 2021: return Year2021::MakeChallenge(day, inputLines);
+        case 2022: return Year2022::MakeChallenge(day, inputLines);
+        case 2023: return Year2023::MakeChallenge(day, inputLines);
         default: return nullptr;
         }
     }

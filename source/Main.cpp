@@ -12,16 +12,15 @@
 //#define NO_TIMER
 
 #ifdef NO_TIMER
-    #define CHRONO_DECLARE(_name)
     #define CHRONO_START(_name)
     #define CHRONO_STOP(_name)
     #define CHRONO_PRINT(_name, _description)
 #else
     #define CHRONO_NAME(_name) timer_##_name
-    #define CHRONO_DECLARE(_name) TimeTool::ChronoTimer CHRONO_NAME(_name)
-    #define CHRONO_START(_name) CHRONO_NAME(_name).Start();
-    #define CHRONO_STOP(_name) CHRONO_NAME(_name).Stop();
-    #define CHRONO_PRINT(_name, _description) std::cout << _description << CHRONO_NAME(_name).GetElapsedTime() << " s" << std::endl << std::endl
+    #define CHRONO_START(_name) TimeTool::ChronoTimer CHRONO_NAME(_name);\
+        CHRONO_NAME(_name).Start();
+    #define CHRONO_STOP(_name, _description) CHRONO_NAME(_name).Stop(); \
+        std::cout << _description << CHRONO_NAME(_name).GetElapsedTime() << " s" << std::endl << std::endl;
 #endif // NO_TIMER
 
 bool ParseArgs(int argc, char* argv[], int& outYear, int& outDay)
@@ -57,7 +56,6 @@ bool ParseArgs(int argc, char* argv[], int& outYear, int& outDay)
 int RunAdventOfCode(int const year, int const day)
 {
     std::string const inputFilePath = "../input/" + std::to_string(year) + "/" + (day < 10 ? "0" : "") + std::to_string(day) + ".txt";
-
     std::shared_ptr<std::vector<std::string>> inputLines = std::make_shared<std::vector<std::string>>();
     if (!FileTool::ReadAllLines(inputFilePath, *inputLines))
     {
@@ -65,37 +63,28 @@ int RunAdventOfCode(int const year, int const day)
         return -1;
     }
 
-    std::unique_ptr<ChallengeAbstract> challenge = ChallengeFactory::MakeChallenge(year, day);
+    CHRONO_START(inputParsing);
+    std::unique_ptr<ChallengeAbstract> challenge = ChallengeFactory::MakeChallenge(year, day, inputLines);
+    CHRONO_STOP(inputParsing, "Input Parsing   ");
+
     if (!challenge)
     {
         std::cout << "ERROR: Unsupported challenge [Year=" << year << " Day=" << day << "]" << std::endl;
         return -1;
     }
 
-    CHRONO_DECLARE(setUp);
-    CHRONO_START(setUp);
-    challenge->SetUp(*inputLines);
-    CHRONO_STOP(setUp);
-    CHRONO_PRINT(setUp, "Setup       ");
-
-    CHRONO_DECLARE(partOne);
     CHRONO_START(partOne);
     challenge->Run_PartOne();
-    CHRONO_STOP(partOne);
-    CHRONO_PRINT(partOne, "Part One    ");
+    CHRONO_STOP(partOne, "Part One        ");
 
-    CHRONO_DECLARE(partTwo);
     CHRONO_START(partTwo);
     challenge->Run_PartTwo();
-    CHRONO_STOP(partTwo);
-    CHRONO_PRINT(partTwo, "Part Two    ");
+    CHRONO_STOP(partTwo, "Part Two        ");
 
-    CHRONO_DECLARE(cleanUp);
     CHRONO_START(cleanUp);
     challenge->CleanUp();
     challenge.reset();
-    CHRONO_STOP(cleanUp);
-    CHRONO_PRINT(cleanUp, "Clean Up    ");
+    CHRONO_STOP(cleanUp, "Clean Up        ");
 
     return 0;
 }
