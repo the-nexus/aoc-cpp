@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 // ================================================================================================
 // Edit this file when starting a new year to add a copy of the commented include and case line
 // Replace 'XXXX' in those lines with the year of the challenges
@@ -19,7 +21,7 @@
 
 namespace ChallengeFactory
 {
-    ChallengeAbstract* MakeChallenge(int const year, int const day)
+    std::unique_ptr<ChallengeAbstract> MakeChallenge(int const year, int const day)
     {
         switch (year)
         {

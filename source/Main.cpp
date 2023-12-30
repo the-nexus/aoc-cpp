@@ -65,7 +65,7 @@ int RunAdventOfCode(int const year, int const day)
         return -1;
     }
 
-    std::unique_ptr<ChallengeAbstract> challenge = std::unique_ptr<ChallengeAbstract>(ChallengeFactory::MakeChallenge(year, day));
+    std::unique_ptr<ChallengeAbstract> challenge = ChallengeFactory::MakeChallenge(year, day);
     if (!challenge)
     {
         std::cout << "ERROR: Unsupported challenge [Year=" << year << " Day=" << day << "]" << std::endl;
