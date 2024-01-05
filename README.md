@@ -15,14 +15,16 @@ If you need a visual example, please follow [this link](https://github.com/wimgl
 
 You'll need to set up your session key when you first pull this project, or if any of the input files shows an error message. To find your session key, open up a webpage containing your input data for any of the days. Then inspect the page and go to the network section to view your cookies (if none of your cookies are visible in that page, reload the webpage by pressing the F5 key).
 
-The session cookie will look something like "cookie: session=9u312097re453490237ty5t4537274h3097a40270" (this is an example key, not a real one). You want to pick what comes after "session=" and place it in the file **input/SessionKey.txt** that is provided.
+The session cookie will look something like "cookie: session=9u312097re453490237ty5t4537274h3097a40270" (this is an example key, not a real one). You want to pick what comes after "session=" and place it in a file named **SessionKey.txt**, situated in the root of the project (besides this **README.md** file).
 
 ## Using the scripts
-First, you have the **GenerateSolution.sh** script. It will generate the project solution (or regenerate if it already exists) using CMake into the folder **bin/**. The command is **sh GenerateSolution.sh**.
+First, you have the **DownloadInputFiles.sh** script. It will download input data for all challenges of a specified year.
 
-Second, you have the **GenerateChallenge.sh** script. It will create a new challenge file (and a new year file if required) for the desired challenge parameters passed in. The command is **sh GenerateChallenge.sh [Year] [Day]**.
+Second, you have the **Build.sh** script. It will generate the project solution (or regenerate if it already exists) using CMake into the folder **bin/**.
 
-**Note:** When adding a new year, you need to edit **source/challenges/ChallengeFactory.h** and follow the instructions from the comment at the top of the file to be able to use the newly created year file from the script **GenerateChallenge.sh**.
+Lastly, you have the **NewChallenge.sh** script. It will create a new challenge file (and a new year file if required) for the desired challenge parameters passed in. The command is **sh NewChallenge.sh [Year] [Day]**.
+
+**Note:** When adding a new year, you need to edit **source/challenges/ChallengeFactory.h** and follow the instructions from the comment at the top of the file to be able to use the newly created year file from the script **NewChallenge.sh**.
 
 ## Running the solution
 ### Windows

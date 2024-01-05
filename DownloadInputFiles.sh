@@ -38,14 +38,10 @@ do
     fi
 
     INPUT_FILE_PATH="$INPUT_DIR/$DAY_ZEROED.txt"
+    URL="https://adventofcode.com/$YEAR/day/$DAY_NO_ZERO/input"
 
-    if [ -e $INPUT_FILE_PATH ]; then
-        echo "$INPUT_FILE_PATH already exists"
-    else
-        URL="https://adventofcode.com/$YEAR/day/$DAY_NO_ZERO/input"
-        echo "Downloading input file from $URL"
-        curl $URL -H "cookie: session=$SESSION_KEY" -o $INPUT_FILE_PATH
-    fi
+    echo "Downloading input file from $URL"
+    curl $URL -H "cookie: session=$SESSION_KEY" -o $INPUT_FILE_PATH
 
     ((DAY_NO_ZERO++))
 done
