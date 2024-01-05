@@ -5,13 +5,13 @@
 
 namespace Year2022
 {
-    class Challenge01 : public ChallengeAbstract
+    class Challenge01 final : public ChallengeAbstract
     {
     private:
         std::vector<int> m_elves;
 
     public:
-        virtual void SetUp(std::vector<std::string> const& inputLines) override
+        Challenge01(std::vector<std::string> const& inputLines)
         {
             m_elves.reserve(inputLines.size());
             m_elves.push_back(0);
@@ -40,7 +40,5 @@ namespace Year2022
         {
             std::cout << (m_elves[0] + m_elves[1] + m_elves[2]) << std::endl;
         }
-
-        virtual void CleanUp() override {}
     };
 }

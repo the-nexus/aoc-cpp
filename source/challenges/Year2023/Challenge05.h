@@ -4,7 +4,7 @@
 
 namespace Year2023
 {
-    class Challenge05 : public ChallengeAbstract
+    class Challenge05 final : public ChallengeAbstract
     {
     private:
         typedef long long SEED_TYPE;
@@ -25,9 +25,8 @@ namespace Year2023
         std::vector<SEED_TYPE> m_seeds;
 
     public:
-        virtual void SetUp(std::vector<std::string> const& inputLines) override
+        Challenge05(std::vector<std::string> const& inputLines)
         {
-
             auto it = inputLines.cbegin();
 
             if (it != inputLines.cend())
@@ -104,8 +103,6 @@ namespace Year2023
 
             std::cout << lowestLocation << std::endl;
         }
-
-        virtual void CleanUp() override {}
 
     private:
         SEED_TYPE FindLocation(SEED_TYPE seed) const

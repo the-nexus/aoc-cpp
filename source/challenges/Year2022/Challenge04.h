@@ -4,14 +4,14 @@
 
 namespace Year2022
 {
-    class Challenge04 : public ChallengeAbstract
+    class Challenge04 final : public ChallengeAbstract
     {
     private:
         typedef std::pair<int, int> SectionRange;
         std::vector<std::pair<SectionRange, SectionRange>> m_elfPairs;
 
     public:
-        virtual void SetUp(std::vector<std::string> const& inputLines) override
+        Challenge04(std::vector<std::string> const& inputLines)
         {
             m_elfPairs.resize(inputLines.size());
             for (size_t lineIndex = 0; lineIndex < inputLines.size(); ++lineIndex)
@@ -58,8 +58,6 @@ namespace Year2022
             }
             std::cout << intersectingRangeCount << std::endl;
         }
-
-        virtual void CleanUp() override {}
 
     private:
         bool IsRangeFullyContained(SectionRange const& testRange, SectionRange const& otherRange) const

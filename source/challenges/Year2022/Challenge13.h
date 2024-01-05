@@ -6,7 +6,7 @@
 
 namespace Year2022
 {
-    class Challenge13 : public ChallengeAbstract
+    class Challenge13 final : public ChallengeAbstract
     {
     private:
         enum class EOrderResult
@@ -117,13 +117,21 @@ namespace Year2022
         std::vector<PacketNode*> m_packets;
 
     public:
-        virtual void SetUp(std::vector<std::string> const& inputLines) override
+        Challenge13(std::vector<std::string> const& inputLines)
         {
             m_packets.reserve((inputLines.size() + 1) / 3);
             for (size_t lineIndex = 0; lineIndex < inputLines.size(); lineIndex += 3)
             {
                 m_packets.push_back(MakePacket(inputLines[lineIndex]));
                 m_packets.push_back(MakePacket(inputLines[lineIndex + 1]));
+            }
+        }
+
+        ~Challenge13()
+        {
+            for (PacketNode* packet : m_packets)
+            {
+                packet->Destroy();
             }
         }
 
@@ -171,14 +179,6 @@ namespace Year2022
             }
 
             std::cout << ((firstDividerIndex + 1) * (secondDividerIndex + 1)) << std::endl;
-        }
-
-        virtual void CleanUp() override
-        {
-            for (PacketNode* packet : m_packets)
-            {
-                packet->Destroy();
-            }
         }
 
     private:

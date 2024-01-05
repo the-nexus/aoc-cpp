@@ -56,8 +56,8 @@ bool ParseArgs(int argc, char* argv[], int& outYear, int& outDay)
 int RunAdventOfCode(int const year, int const day)
 {
     std::string const inputFilePath = "../input/" + std::to_string(year) + "/" + (day < 10 ? "0" : "") + std::to_string(day) + ".txt";
-    std::shared_ptr<std::vector<std::string>> inputLines = std::make_shared<std::vector<std::string>>();
-    if (!FileTool::ReadAllLines(inputFilePath, *inputLines))
+    std::vector<std::string> inputLines;
+    if (!FileTool::ReadAllLines(inputFilePath, inputLines))
     {
         std::cout << "ERROR: Could not read input file [" << inputFilePath << "]" << std::endl;
         return -1;

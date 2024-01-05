@@ -7,7 +7,7 @@
 
 namespace Year2022
 {
-    class Challenge11 : public ChallengeAbstract
+    class Challenge11 final : public ChallengeAbstract
     {
         typedef unsigned long long worry_t;
 
@@ -32,7 +32,7 @@ namespace Year2022
         worry_t m_smallestCommonMultiple = 1;
 
     public:
-        virtual void SetUp(std::vector<std::string> const& inputLines) override
+        Challenge11(std::vector<std::string> const& inputLines)
         {
             std::vector<std::string> lineArgs;
 
@@ -74,8 +74,6 @@ namespace Year2022
         {
             std::cout << SimulateMonkeyBusiness(10000, false) << std::endl;
         }
-
-        virtual void CleanUp() override {}
 
     private:
         worry_t SimulateMonkeyBusiness(int const roundCount, bool const doesItemWorryReduce) const

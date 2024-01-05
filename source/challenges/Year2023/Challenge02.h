@@ -4,7 +4,7 @@
 
 namespace Year2023
 {
-    class Challenge02 : public ChallengeAbstract
+    class Challenge02 final : public ChallengeAbstract
     {
     private:
         struct Hand
@@ -23,7 +23,7 @@ namespace Year2023
         std::vector<Game> m_games;
 
     public:
-        virtual void SetUp(std::vector<std::string> const& inputLines) override
+        Challenge02(std::vector<std::string> const& inputLines)
         {
             m_games.reserve(inputLines.size());
             for (std::string const& line : inputLines)
@@ -94,8 +94,6 @@ namespace Year2023
 
             std::cout << powerSum << std::endl;
         }
-
-        virtual void CleanUp() override {}
 
     private:
         static bool IsValidGame(Game const& game, int const red, int const green, int const blue)

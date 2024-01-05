@@ -4,7 +4,7 @@
 
 namespace Year2022
 {
-    class Challenge08 : public ChallengeAbstract
+    class Challenge08 final : public ChallengeAbstract
     {
     private:
         enum class EGridEdge
@@ -20,7 +20,7 @@ namespace Year2022
         int m_treeGridColumnCount = 0;
 
     public:
-        virtual void SetUp(std::vector<std::string> const& inputLines) override
+        Challenge08(std::vector<std::string> const& inputLines)
         {
             m_treeGridLineCount = static_cast<int>(inputLines.size());
             m_treeGridColumnCount = static_cast<int>(inputLines[0].size());
@@ -34,6 +34,15 @@ namespace Year2022
                     m_treeGrid[lineIndex][columnIndex] = static_cast<int>(inputLines[lineIndex][columnIndex] - '0');
                 }
             }
+        }
+
+        ~Challenge08()
+        {
+            for (int gridLine = 0; gridLine < m_treeGridLineCount; ++gridLine)
+            {
+                delete m_treeGrid[gridLine];
+            }
+            delete m_treeGrid;
         }
 
         virtual void Run_PartOne() override
@@ -87,15 +96,6 @@ namespace Year2022
             }
 
             std::cout << bestScore << std::endl;
-        }
-
-        virtual void CleanUp() override
-        {
-            for (int gridLine = 0; gridLine < m_treeGridLineCount; ++gridLine)
-            {
-                delete m_treeGrid[gridLine];
-            }
-            delete m_treeGrid;
         }
 
     private:

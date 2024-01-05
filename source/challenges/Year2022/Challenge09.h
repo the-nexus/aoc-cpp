@@ -5,12 +5,12 @@
 
 namespace Year2022
 {
-    class Challenge09 : public ChallengeAbstract
+    class Challenge09 final : public ChallengeAbstract
     {
     public:
         std::vector<Vector2i> m_steps;
 
-        virtual void SetUp(std::vector<std::string> const& inputLines) override
+        Challenge09(std::vector<std::string> const& inputLines)
         {
             m_steps.reserve(inputLines.size() * 10);
             for (std::string const& line : inputLines)
@@ -42,8 +42,6 @@ namespace Year2022
         {
             std::cout << SimulateRope(10) << std::endl;
         }
-
-        virtual void CleanUp() override {}
 
     private:
         size_t SimulateRope(size_t const knotCount) const

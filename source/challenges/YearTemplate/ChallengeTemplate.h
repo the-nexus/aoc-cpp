@@ -4,12 +4,13 @@
 
 namespace YearTemplate
 {
-    class ChallengeTemplate : public ChallengeAbstract
+    class ChallengeTemplate final : public ChallengeAbstract
     {
     public:
         ChallengeTemplate(std::shared_ptr<std::vector<std::string>> const& inputLines)
-            : ChallengeAbstract(inputLines)
-        {}
+        {
+
+        }
 
         virtual void Run_PartOne() override
         {

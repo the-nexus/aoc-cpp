@@ -5,7 +5,7 @@
 
 namespace Year2022
 {
-    class Challenge15 : public ChallengeAbstract
+    class Challenge15 final : public ChallengeAbstract
     {
     private:
         typedef std::pair<int, int> Range;
@@ -20,7 +20,7 @@ namespace Year2022
         std::vector<Sensor> m_sensors;
 
     public:
-        virtual void SetUp(std::vector<std::string> const& inputLines) override
+        Challenge15(std::vector<std::string> const& inputLines)
         {
             m_sensors.resize(inputLines.size());
             for (size_t lineIndex = 0; lineIndex < inputLines.size(); ++lineIndex)
@@ -113,8 +113,6 @@ namespace Year2022
 
             std::cout << frequency << std::endl;
         }
-
-        virtual void CleanUp() override {}
 
     private:
         void FindCoverageRangesOnRow(int const y, std::vector<Range>& outCoverageRanges) const

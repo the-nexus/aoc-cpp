@@ -6,13 +6,13 @@
 
 namespace Year2018
 {
-    class Challenge02 : public ChallengeAbstract
+    class Challenge02 final : public ChallengeAbstract
     {
     private:
         std::vector<std::string> m_ids;
 
     public:
-        virtual void SetUp(std::vector<std::string> const& inputLines) override
+        Challenge02(std::vector<std::string> const& inputLines)
         {
             m_ids = inputLines;
             std::sort(m_ids.begin(), m_ids.end());
@@ -114,7 +114,5 @@ namespace Year2018
                 }
             }
         }
-
-        virtual void CleanUp() override {}
     };
 }

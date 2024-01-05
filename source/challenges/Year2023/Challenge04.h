@@ -4,7 +4,7 @@
 
 namespace Year2023
 {
-    class Challenge04 : public ChallengeAbstract
+    class Challenge04 final : public ChallengeAbstract
     {
     private:
         struct Card
@@ -19,7 +19,7 @@ namespace Year2023
         std::vector<Card> m_cards;
 
     public:
-        virtual void SetUp(std::vector<std::string> const& inputLines) override
+        Challenge04(std::vector<std::string> const& inputLines)
         {
             m_cards.reserve(inputLines.size());
             for (std::string const& line : inputLines)
@@ -81,8 +81,6 @@ namespace Year2023
 
             std::cout << totalCardCount << std::endl;
         }
-
-        virtual void CleanUp() override {}
 
     private:
         static void ParseNumberSet(std::string const& numberStr, std::set<int>& numberSet)

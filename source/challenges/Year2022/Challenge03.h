@@ -6,13 +6,13 @@
 
 namespace Year2022
 {
-    class Challenge03 : public ChallengeAbstract
+    class Challenge03 final : public ChallengeAbstract
     {
     private:
         std::vector<std::string> m_bags;
 
     public:
-        virtual void SetUp(std::vector<std::string> const& inputLines) override
+        Challenge03(std::vector<std::string> const& inputLines)
         {
             m_bags = inputLines;
         }
@@ -55,8 +55,6 @@ namespace Year2022
 
             std::cout << priorities << std::endl;
         }
-
-        virtual void CleanUp() override {}
 
     private:
         char GetFirstCommonItem(std::vector<std::string const*> const& containers) const

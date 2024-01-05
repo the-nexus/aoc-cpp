@@ -5,12 +5,12 @@
 
 namespace Year2018
 {
-    class Challenge01 : public ChallengeAbstract
+    class Challenge01 final : public ChallengeAbstract
     {
         std::vector<int> m_changes;
 
     public:
-        virtual void SetUp(std::vector<std::string> const& inputLines) override
+        Challenge01(std::vector<std::string> const& inputLines)
         {
             m_changes.resize(inputLines.size());
             for (size_t lineIndex = 0; lineIndex < inputLines.size(); ++lineIndex)
@@ -45,7 +45,5 @@ namespace Year2018
 
             std::cout << frequency << std::endl;
         }
-
-        virtual void CleanUp() override {}
     };
 }

@@ -5,12 +5,12 @@
 
 namespace Year2022
 {
-    class Challenge06 : public ChallengeAbstract
+    class Challenge06 final : public ChallengeAbstract
     {
         std::string m_packet;
 
     public:
-        virtual void SetUp(std::vector<std::string> const& inputLines) override
+        Challenge06(std::vector<std::string> const& inputLines)
         {
             m_packet = inputLines[0];
         }
@@ -24,8 +24,6 @@ namespace Year2022
         {
             std::cout << GetFirstMarkerIndex(14) << std::endl;
         }
-
-        virtual void CleanUp() override {}
 
     private:
         size_t GetFirstMarkerIndex(size_t const sequenceSize) const

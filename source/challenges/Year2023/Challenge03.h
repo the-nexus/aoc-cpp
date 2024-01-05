@@ -4,12 +4,12 @@
 
 namespace Year2023
 {
-    class Challenge03 : public ChallengeAbstract
+    class Challenge03 final : public ChallengeAbstract
     {
         std::vector<std::string> m_lines;
 
     public:
-        virtual void SetUp(std::vector<std::string> const& inputLines) override
+        Challenge03(std::vector<std::string> const& inputLines)
         {
             m_lines = inputLines;
         }
@@ -56,8 +56,6 @@ namespace Year2023
         {
             std::cout << "WARNING: Part Two Not Implemented" << std::endl;
         }
-
-        virtual void CleanUp() override {}
 
     private:
         static bool IsNumberSymbol(char const symbol)

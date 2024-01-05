@@ -4,7 +4,7 @@
 
 namespace Year2023
 {
-    class Challenge07 : public ChallengeAbstract
+    class Challenge07 final : public ChallengeAbstract
     {
     private:
 
@@ -29,7 +29,7 @@ namespace Year2023
         std::vector<Hand> m_hands;
 
     public:
-        virtual void SetUp(std::vector<std::string> const& inputLines) override
+        Challenge07(std::vector<std::string> const& inputLines)
         {
             m_hands.reserve(inputLines.size());
             for (std::string const& line : inputLines)
@@ -59,8 +59,6 @@ namespace Year2023
 
             std::cout << GetWinnings(improvedHands, true) << std::endl;
         }
-
-        virtual void CleanUp() override {}
 
     private:
         static unsigned long long GetWinnings(std::vector<Hand>& hands, bool const useJokers)

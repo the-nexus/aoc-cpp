@@ -6,7 +6,7 @@
 
 namespace Year2021
 {
-    class Challenge02 : public ChallengeAbstract
+    class Challenge02 final : public ChallengeAbstract
     {
     private:
         enum EDirectionType
@@ -19,7 +19,7 @@ namespace Year2021
         std::vector<Vector2i> m_instructions;
 
     public:
-        virtual void SetUp(std::vector<std::string> const& inputLines) override
+        Challenge02(std::vector<std::string> const& inputLines)
         {
             m_instructions.resize(inputLines.size());
 
@@ -101,7 +101,5 @@ namespace Year2021
 
             std::cout << position[0] * position[1] << std::endl;
         }
-
-        virtual void CleanUp() override {}
     };
 }

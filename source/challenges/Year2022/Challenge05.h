@@ -6,7 +6,7 @@
 
 namespace Year2022
 {
-    class Challenge05 : public ChallengeAbstract
+    class Challenge05 final : public ChallengeAbstract
     {
     private:
         struct StackingInstruction
@@ -20,7 +20,7 @@ namespace Year2022
         std::vector<StackingInstruction> m_instructions;
 
     public:
-        virtual void SetUp(std::vector<std::string> const& inputLines) override
+        Challenge05(std::vector<std::string> const& inputLines)
         {
             // Find the separation between the stacks' initial state and the stacking instructions
             size_t inputDelimiterIndex = 0;
@@ -60,8 +60,8 @@ namespace Year2022
                 StringTool::SplitString(inputLines[lineIndex], ' ', lineArgs);
 
                 size_t const instructionIndex = lineIndex - firstInstructionLineIndex;
-                m_instructions[instructionIndex].m_stackSourceIndex = atoi(lineArgs[3].c_str()) - 1;
-                m_instructions[instructionIndex].m_stackDestinationIndex = atoi(lineArgs[5].c_str()) - 1;
+                m_instructions[instructionIndex].m_stackSourceIndex = static_cast<size_t>(atoi(lineArgs[3].c_str()) - 1);
+                m_instructions[instructionIndex].m_stackDestinationIndex = static_cast<size_t>(atoi(lineArgs[5].c_str()) - 1);
                 m_instructions[instructionIndex].m_crateCount = atoi(lineArgs[1].c_str());
             }
         }
@@ -117,7 +117,5 @@ namespace Year2022
             }
             std::cout << std::endl;
         }
-
-        virtual void CleanUp() override {}
     };
 }

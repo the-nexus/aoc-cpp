@@ -5,7 +5,7 @@
 
 namespace Year2023
 {
-    class Challenge08 : public ChallengeAbstract
+    class Challenge08 final : public ChallengeAbstract
     {
     private:
         typedef unsigned int NodeId;
@@ -21,7 +21,7 @@ namespace Year2023
         std::string m_path;
 
     public:
-        virtual void SetUp(std::vector<std::string> const& inputLines) override
+        Challenge08(std::vector<std::string> const& inputLines)
         {
             auto it = inputLines.begin();
             m_path = *it;
@@ -82,8 +82,6 @@ namespace Year2023
 
             std::cout << stepCount << std::endl;
         }
-
-        virtual void CleanUp() override {}
 
     private:
         static NodeId GetNodeId(std::string const& nodeLabel)

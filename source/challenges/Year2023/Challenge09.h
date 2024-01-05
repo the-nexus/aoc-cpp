@@ -4,13 +4,13 @@
 
 namespace Year2023
 {
-    class Challenge09 : public ChallengeAbstract
+    class Challenge09 final : public ChallengeAbstract
     {
     private:
         std::vector<std::vector<int>> m_histories;
 
     public:
-        virtual void SetUp(std::vector<std::string> const& inputLines) override
+        Challenge09(std::vector<std::string> const& inputLines)
         {
             m_histories.reserve(inputLines.size());
 
@@ -52,8 +52,6 @@ namespace Year2023
 
             std::cout << extrapolationSum << std::endl;
         }
-
-        virtual void CleanUp() override {}
 
     private:
         static int ExtrapolateValue(std::vector<int> const& history, bool isBackExtrapolation)

@@ -4,7 +4,7 @@
 
 namespace Year2022
 {
-    class Challenge02 : public ChallengeAbstract
+    class Challenge02 final : public ChallengeAbstract
     {
     private:
         enum class EGameShapeType : int
@@ -24,7 +24,7 @@ namespace Year2022
         std::vector<std::pair<EGameShapeType, int>> m_tournamentData;
 
     public:
-        virtual void SetUp(std::vector<std::string> const& inputLines) override
+        Challenge02(std::vector<std::string> const& inputLines)
         {
             m_tournamentData.resize(inputLines.size());
             for (size_t lineIndex = 0; lineIndex < inputLines.size(); ++lineIndex)
@@ -71,8 +71,6 @@ namespace Year2022
 
             std::cout << score << std::endl;
         }
-
-        virtual void CleanUp() override {}
 
     private:
         EGameResultType GetGameResult(EGameShapeType const firstPlayerShape, EGameShapeType const secondPlayerShape) const

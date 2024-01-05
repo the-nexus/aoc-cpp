@@ -6,7 +6,7 @@
 
 namespace Year2023
 {
-    class Challenge16 : public ChallengeAbstract
+    class Challenge16 final : public ChallengeAbstract
     {
     private:
 
@@ -28,7 +28,7 @@ namespace Year2023
         GridTool::Grid<char> m_caveGrid;
 
     public:
-        virtual void SetUp(std::vector<std::string> const& inputLines) override
+        Challenge16(std::vector<std::string> const& inputLines)
         {
             m_caveGrid.Resize(inputLines.size() + 2, inputLines[0].size() + 2);
             m_caveGrid.ForEach([this, &inputLines](char& item, size_t const line, size_t const column)
@@ -122,8 +122,6 @@ namespace Year2023
         {
             std::cout << "WARNING: Part Two Not Implemented" << std::endl;
         }
-
-        virtual void CleanUp() override {}
 
     private:
         static void MoveHead(BeamHead& head)

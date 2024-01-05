@@ -4,7 +4,7 @@
 
 namespace Year2023
 {
-    class Challenge06 : public ChallengeAbstract
+    class Challenge06 final : public ChallengeAbstract
     {
     private:
         struct Race
@@ -16,7 +16,7 @@ namespace Year2023
         std::vector<Race> m_races;
 
     public:
-        virtual void SetUp(std::vector<std::string> const& inputLines) override
+        Challenge06(std::vector<std::string> const& inputLines)
         {
             int value = 0;
             for (char const token : inputLines[0])
@@ -84,8 +84,6 @@ namespace Year2023
 
             std::cout << CountWinners(newRace) << std::endl;
         }
-
-        virtual void CleanUp() override {}
 
     private:
         static int CountWinners(Race const& race)

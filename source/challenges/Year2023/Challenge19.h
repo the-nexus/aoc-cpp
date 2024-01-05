@@ -6,7 +6,7 @@
 
 namespace Year2023
 {
-    class Challenge19 : public ChallengeAbstract
+    class Challenge19 final : public ChallengeAbstract
     {
         typedef unsigned int WorkflowIdType;
 
@@ -50,7 +50,7 @@ namespace Year2023
         std::vector<Part> m_parts;
 
     public:
-        virtual void SetUp(std::vector<std::string> const& inputLines) override
+        Challenge19(std::vector<std::string> const& inputLines)
         {
             m_parts.reserve(inputLines.size());
 
@@ -130,8 +130,6 @@ namespace Year2023
         {
             std::cout << "WARNING: Part Two Not Implemented" << std::endl;
         }
-
-        virtual void CleanUp() override {}
 
     private:
         static EAttributeType GetAttributeType(char const token)

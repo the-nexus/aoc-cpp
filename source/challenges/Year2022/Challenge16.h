@@ -10,7 +10,7 @@
 
 namespace Year2022
 {
-    class Challenge16 : public ChallengeAbstract
+    class Challenge16 final : public ChallengeAbstract
     {
     private:
         struct Worker
@@ -34,7 +34,7 @@ namespace Year2022
         std::map<int, std::map<int, int>> m_directPaths;
 
     public:
-        virtual void SetUp(std::vector<std::string> const& inputLines) override
+        Challenge16(std::vector<std::string> const& inputLines)
         {
             m_startingValveId = GetValveId('A', 'A');
 
@@ -105,8 +105,6 @@ namespace Year2022
 
             std::cout << FindBestPressureRelease(26, workers, closedValves) << std::endl;
         }
-
-        virtual void CleanUp() override {}
 
     private:
         int GetValveId(char const firstValveLabelChar, char const secondValveLabelChar) const

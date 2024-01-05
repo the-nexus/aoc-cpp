@@ -7,7 +7,7 @@
 
 namespace Year2022
 {
-    class Challenge07 : public ChallengeAbstract
+    class Challenge07 final : public ChallengeAbstract
     {
     private:
         struct FileItem
@@ -28,7 +28,7 @@ namespace Year2022
         DirectoryItem m_rootDirectory;
 
     public:
-        virtual void SetUp(std::vector<std::string> const& inputLines) override
+        Challenge07(std::vector<std::string> const& inputLines)
         {
             m_rootDirectory.m_name = "/";
             DirectoryItem* currentDirectory = &m_rootDirectory;
@@ -106,8 +106,6 @@ namespace Year2022
 
             std::cout << foundDirectories[0]->m_contentSize << std::endl;
         }
-
-        virtual void CleanUp() override {}
 
     private:
 

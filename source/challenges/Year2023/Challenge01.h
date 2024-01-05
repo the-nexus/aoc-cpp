@@ -4,13 +4,13 @@
 
 namespace Year2023
 {
-    class Challenge01 : public ChallengeAbstract
+    class Challenge01 final : public ChallengeAbstract
     {
     private:
         std::vector<std::string> m_lines;
 
     public:
-        virtual void SetUp(std::vector<std::string> const& inputLines) override
+        Challenge01(std::vector<std::string> const& inputLines)
         {
             m_lines = inputLines;
         }
@@ -36,8 +36,6 @@ namespace Year2023
 
             std::cout << calibrationSum << std::endl;
         }
-
-        virtual void CleanUp() override {}
 
     private:
         static int GetCalibrationValue(std::string const& line, bool const shouldConsiderWords)

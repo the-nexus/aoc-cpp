@@ -4,7 +4,7 @@
 
 namespace Year2022
 {
-    class Challenge10 : public ChallengeAbstract
+    class Challenge10 final : public ChallengeAbstract
     {
     private:
         enum class EOperationType : int
@@ -16,7 +16,7 @@ namespace Year2022
         std::vector<std::pair<EOperationType, int>> m_instructions;
 
     public:
-        virtual void SetUp(std::vector<std::string> const& inputLines) override
+        Challenge10(std::vector<std::string> const& inputLines)
         {
             m_instructions.resize(inputLines.size() + 1); // Everything initializes to defaults (NOOP, 0), so push back an extra default instruction to simplify execution
             for (size_t lineIndex = 0; lineIndex < inputLines.size(); ++lineIndex)
@@ -83,7 +83,5 @@ namespace Year2022
                 }
             }
         }
-
-        virtual void CleanUp() override {}
     };
 }

@@ -7,7 +7,7 @@
 
 namespace Year2023
 {
-    class Challenge18 : public ChallengeAbstract
+    class Challenge18 final : public ChallengeAbstract
     {
         typedef VectorTool::Vector3<uint8_t> Color;
 
@@ -32,7 +32,7 @@ namespace Year2023
         Vector2sz m_startPosition;
 
     public:
-        virtual void SetUp(std::vector<std::string> const& inputLines) override
+        Challenge18(std::vector<std::string> const& inputLines)
         {
             m_instructions.reserve(inputLines.size());
             for (std::string const& line : inputLines)
@@ -108,8 +108,6 @@ namespace Year2023
         {
             std::cout << "WARNING: Part Two Not Implemented" << std::endl;
         }
-
-        virtual void CleanUp() override {}
 
     private:
         static EDirection GetDirectionFromChar(char const token)

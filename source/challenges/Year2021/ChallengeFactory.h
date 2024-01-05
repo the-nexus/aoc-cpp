@@ -32,7 +32,7 @@
 
 namespace Year2021
 {
-    std::unique_ptr<ChallengeAbstract> MakeChallenge(int const day, std::shared_ptr<std::vector<std::string>> const& inputLines)
+    std::unique_ptr<ChallengeAbstract> MakeChallenge(int const day, std::vector<std::string> const& inputLines)
     {
         switch (day)
         {

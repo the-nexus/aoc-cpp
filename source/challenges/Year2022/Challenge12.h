@@ -8,7 +8,7 @@
 
 namespace Year2022
 {
-    class Challenge12 : public ChallengeAbstract
+    class Challenge12 final : public ChallengeAbstract
     {
     private:
         struct PathNode
@@ -27,7 +27,7 @@ namespace Year2022
         Vector2i m_endPosition = Vector2i();
 
     public:
-        virtual void SetUp(std::vector<std::string> const& inputLines) override
+        Challenge12(std::vector<std::string> const& inputLines)
         {
             m_heightMapSize = Vector2i(static_cast<int>(inputLines[0].size()), static_cast<int>(inputLines.size()));
             m_heightMap = new int*[m_heightMapSize[0]];
@@ -53,6 +53,15 @@ namespace Year2022
                     }
                 }
             }
+        }
+
+        ~Challenge12()
+        {
+            for (int x = 0; x < m_heightMapSize[0]; ++x)
+            {
+                delete m_heightMap[x];
+            }
+            delete m_heightMap;
         }
 
         virtual void Run_PartOne() override
@@ -84,15 +93,6 @@ namespace Year2022
             }
 
             std::cout << shortestPathSize - 1 << std::endl;
-        }
-
-        virtual void CleanUp() override
-        {
-            for (int x = 0; x < m_heightMapSize[0]; ++x)
-            {
-                delete m_heightMap[x];
-            }
-            delete m_heightMap;
         }
 
     private:

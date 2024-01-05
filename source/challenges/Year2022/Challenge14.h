@@ -7,7 +7,7 @@
 
 namespace Year2022
 {
-    class Challenge14 : public ChallengeAbstract
+    class Challenge14 final : public ChallengeAbstract
     {
     private:
         std::set<Vector2i> m_colliders;
@@ -15,7 +15,7 @@ namespace Year2022
         int m_infiniteFloorHeight = 0;
 
     public:
-        virtual void SetUp(std::vector<std::string> const& inputLines) override
+        Challenge14(std::vector<std::string> const& inputLines)
         {
             std::vector<std::string> args;
             for (std::string const& inputLine : inputLines)
@@ -71,8 +71,6 @@ namespace Year2022
 
             std::cout << sandUnits.size() << std::endl;
         }
-
-        virtual void CleanUp() override {}
 
     private:
         void AddLineAsPoints(Vector2i const& lineStart, Vector2i const& lineEnd, std::set<Vector2i>& uniquePoints)

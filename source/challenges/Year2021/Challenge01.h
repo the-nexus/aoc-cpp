@@ -4,13 +4,13 @@
 
 namespace Year2021
 {
-    class Challenge01 : public ChallengeAbstract
+    class Challenge01 final : public ChallengeAbstract
     {
     private:
         std::vector<int> m_measurements;
 
     public:
-        virtual void SetUp(std::vector<std::string> const& inputLines) override
+        Challenge01(std::vector<std::string> const& inputLines)
         {
             m_measurements.resize(inputLines.size());
             for (size_t idx = 0; idx < inputLines.size(); ++idx)
@@ -56,7 +56,5 @@ namespace Year2021
 
             std::cout << largerMeasurementWindowsCount << std::endl;
         }
-
-        virtual void CleanUp() override {}
     };
 }

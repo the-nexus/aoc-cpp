@@ -4,7 +4,7 @@
 
 namespace Year2023
 {
-    class Challenge10 : public ChallengeAbstract
+    class Challenge10 final : public ChallengeAbstract
     {
     private:
         enum PipeType : unsigned int
@@ -30,7 +30,7 @@ namespace Year2023
         size_t m_startColumn = 0;
 
     public:
-        virtual void SetUp(std::vector<std::string> const& inputLines) override
+        Challenge10(std::vector<std::string> const& inputLines)
         {
             m_pipeGrid.resize(inputLines.size());
             for (size_t line = 0; line < m_pipeGrid.size(); ++line)
@@ -67,11 +67,6 @@ namespace Year2023
         virtual void Run_PartTwo() override
         {
             std::cout << "WARNING: Part Two Not Implemented" << std::endl;
-        }
-
-        virtual void CleanUp() override
-        {
-
         }
 
     private:
