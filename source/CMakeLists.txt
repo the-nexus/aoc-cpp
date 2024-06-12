@@ -9,7 +9,7 @@ source_group (TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCE_LIST})
 # Add source to this project's executable.
 project (AdventOfCode CXX)
 add_executable (${PROJECT_NAME} ${SOURCE_LIST})
-target_compile_features (${PROJECT_NAME} PRIVATE cxx_std_17)
+target_compile_features (${PROJECT_NAME} PRIVATE cxx_std_20)
 
 # Link children CMakeLists.txt files
 add_subdirectory (./tools)

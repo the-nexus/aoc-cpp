@@ -22,7 +22,7 @@ namespace GridTool
         inline const T& ReadAt(size_t const line, size_t const column) const { return m_data[line][column]; }
 
         inline T& WriteAt(Vector2sz const& position) { return m_data[position[0]][position[1]]; }
-        inline T& WriteAt(size_t const x, size_t const y) { return m_data[line][column]; }
+        inline T& WriteAt(size_t const x, size_t const y) { return m_data[x][y]; }
 
         inline void Resize(Vector2sz const& dimensions) { Resize(dimensions[0], dimensions[1]); }
         void Resize(size_t const lineCount, size_t const columnCount)
