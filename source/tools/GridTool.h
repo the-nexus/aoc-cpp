@@ -53,7 +53,7 @@ namespace GridTool
             for (size_t line = 0; line < lineCount; ++line)
             {
                 size_t const columnCount = GetColumnCount();
-                for (size_t column = 0; column < columnCount(); ++column)
+                for (size_t column = 0; column < columnCount; ++column)
                 {
                     func(m_data[line][column], line, column);
                 }
