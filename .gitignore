@@ -398,3 +398,11 @@ MigrationBackup/
 ## Ignore all the listed files below for various reasons
 SessionKey.txt
 [Ii]nput/
+
+[Bb]uild/
+CMakeFiles/
+*.cmake
+*.marks
+[Mm]akefile
+CMakeCache.txt
+compile_commands.json
