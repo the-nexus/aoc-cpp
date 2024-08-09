@@ -24,7 +24,7 @@ namespace AOC::Challenges::Year2022
             for (std::string const& inputLine : inputLines)
             {
                 args.clear();
-                StringTool::SplitString(inputLine, " -> ", args);
+                Tools::StringSplitter::SplitString(inputLine, " -> ", args);
 
                 Vector2i lastPoint;
                 for (size_t argIndex = 0; argIndex < args.size(); ++argIndex)

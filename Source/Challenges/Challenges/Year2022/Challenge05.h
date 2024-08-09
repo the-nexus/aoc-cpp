@@ -38,7 +38,7 @@ namespace AOC::Challenges::Year2022
             // Setup the stacks
             size_t const lastStackLineIndex = inputDelimiterIndex - 1;
             std::vector<std::string> stackIds;
-            StringTool::SplitString(inputLines[lastStackLineIndex], "   ", stackIds);
+            Tools::StringSplitter::SplitString(inputLines[lastStackLineIndex], "   ", stackIds);
             m_stacks.resize(stackIds.size());
 
             for (size_t lineIndex = 0; lineIndex < lastStackLineIndex; ++lineIndex)
@@ -60,7 +60,7 @@ namespace AOC::Challenges::Year2022
             for (size_t lineIndex = firstInstructionLineIndex; lineIndex < inputLines.size(); ++lineIndex)
             {
                 std::vector<std::string> lineArgs;
-                StringTool::SplitString(inputLines[lineIndex], ' ', lineArgs);
+                Tools::StringSplitter::SplitString(inputLines[lineIndex], ' ', lineArgs);
 
                 size_t const instructionIndex = lineIndex - firstInstructionLineIndex;
                 m_instructions[instructionIndex].m_stackSourceIndex = static_cast<size_t>(atoi(lineArgs[3].c_str()) - 1);

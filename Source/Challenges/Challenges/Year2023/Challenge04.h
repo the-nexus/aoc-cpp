@@ -26,10 +26,10 @@ namespace AOC::Challenges::Year2023
             for (std::string const& line : inputLines)
             {
                 std::vector<std::string> lineSplit;
-                StringTool::SplitString(line, ": ", lineSplit);
+                Tools::StringSplitter::SplitString(line, ": ", lineSplit);
 
                 std::vector<std::string> numbersSplit;
-                StringTool::SplitString(lineSplit[1], " | ", numbersSplit);
+                Tools::StringSplitter::SplitString(lineSplit[1], " | ", numbersSplit);
 
                 Card& card = m_cards.emplace_back();
 

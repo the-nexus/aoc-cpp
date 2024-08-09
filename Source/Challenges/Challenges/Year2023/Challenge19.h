@@ -71,7 +71,7 @@ namespace AOC::Challenges::Year2023
                     size_t const bracketTokenPos = line.find('{');
 
                     std::vector<std::string> ruleSplit;
-                    StringTool::SplitString(line.substr(bracketTokenPos + 1, line.size() - bracketTokenPos - 2), ',', ruleSplit);
+                    Tools::StringSplitter::SplitString(line.substr(bracketTokenPos + 1, line.size() - bracketTokenPos - 2), ',', ruleSplit);
 
                     Workflow workflow;
                     workflow.m_id = GetWorkflowId(line.substr(0, bracketTokenPos));
@@ -100,7 +100,7 @@ namespace AOC::Challenges::Year2023
                 else
                 {
                     std::vector<std::string> attributeSplit;
-                    StringTool::SplitString(line.substr(1, line.size() - 2), ',', attributeSplit);
+                    Tools::StringSplitter::SplitString(line.substr(1, line.size() - 2), ',', attributeSplit);
 
                     Part& part = m_parts.emplace_back();
                     for (std::string const& attributeStr : attributeSplit)

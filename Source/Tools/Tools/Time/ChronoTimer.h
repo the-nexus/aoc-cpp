@@ -11,7 +11,7 @@ namespace AOC::Tools
         ChronoTimer();
 
         void Start();
-        void Stop() { m_stopTime = GetTimeNow(); }
+        void Stop();
 
         float GetElapsedTime() const override;
 

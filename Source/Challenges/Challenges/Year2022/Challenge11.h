@@ -44,7 +44,7 @@ namespace AOC::Challenges::Year2022
                 MonkeyData& monkey = m_monkeys.emplace_back();
 
                 // Starting items
-                StringTool::SplitString(inputLines[lineIndex + 1].substr(18), ", ", lineArgs);
+                Tools::StringSplitter::SplitString(inputLines[lineIndex + 1].substr(18), ", ", lineArgs);
                 monkey.m_items.resize(lineArgs.size());
                 for (size_t argIndex = 0; argIndex < lineArgs.size(); ++argIndex)
                 {
@@ -53,7 +53,7 @@ namespace AOC::Challenges::Year2022
                 lineArgs.clear();
 
                 // Operation
-                StringTool::SplitString(inputLines[lineIndex + 2].substr(19), " ", lineArgs);
+                Tools::StringSplitter::SplitString(inputLines[lineIndex + 2].substr(19), " ", lineArgs);
                 monkey.m_operationLhs = lineArgs[0][0] == 'o' ? 0 : atoi(lineArgs[0].c_str());
                 monkey.m_operationRhs = lineArgs[2][0] == 'o' ? 0 : atoi(lineArgs[2].c_str());
                 monkey.m_operationType = lineArgs[1][0];

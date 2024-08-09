@@ -11,7 +11,7 @@ namespace AOC::Challenges::Year2023
 {
     class Challenge18 final : public ChallengeAbstract
     {
-        typedef VectorTool::Vector3<uint8_t> Color;
+        typedef Tools::Vector3<uint8_t> Color;
 
         enum class EDirection
         {
@@ -40,7 +40,7 @@ namespace AOC::Challenges::Year2023
             for (std::string const& line : inputLines)
             {
                 std::vector<std::string> lineSplit;
-                StringTool::SplitString(line, ' ', lineSplit);
+                Tools::StringSplitter::SplitString(line, ' ', lineSplit);
 
                 DiggingInstriction& instruction = m_instructions.emplace_back();
                 instruction.m_direction = GetDirectionFromChar(lineSplit[0][0]);
@@ -85,7 +85,7 @@ namespace AOC::Challenges::Year2023
 
         virtual void Run_PartOne() override
         {
-            GridTool::Grid<Color const*> filledColorGrid = m_colorGrid;
+            Tools::Grid<Color const*> filledColorGrid = m_colorGrid;
             std::unique_ptr<Color> fillColor = std::make_unique<Color>(UINT8_MAX);
 
             Vector2sz startPos = Vector2sz(0, 0);
@@ -149,7 +149,7 @@ namespace AOC::Challenges::Year2023
         }
 
         template<typename T>
-        static void AdvanceDigger(EDirection const direction, unsigned int const steps, VectorTool::Vector2<T>& diggerPosition)
+        static void AdvanceDigger(EDirection const direction, unsigned int const steps, Tools::Vector2<T>& diggerPosition)
         {
             switch (direction)
             {
@@ -161,7 +161,7 @@ namespace AOC::Challenges::Year2023
             }
         }
 
-        static void Flood(GridTool::Grid<Color const*>& gridToFlood, Color const* floodColor, Vector2sz const floodPos)
+        static void Flood(Tools::Grid<Color const*>& gridToFlood, Color const* floodColor, Vector2sz const floodPos)
         {
             if (gridToFlood.ReadAt(floodPos) != nullptr)
             {

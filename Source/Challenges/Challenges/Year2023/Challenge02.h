@@ -32,13 +32,13 @@ namespace AOC::Challenges::Year2023
                 Game& game = m_games.emplace_back();
 
                 std::vector<std::string> lineSplit;
-                StringTool::SplitString(line, ": ", lineSplit);
+                Tools::StringSplitter::SplitString(line, ": ", lineSplit);
 
                 size_t const idPos = lineSplit[0].find_first_of(' ') + 1;
                 game.m_id = atoi(lineSplit[0].substr(idPos).c_str());
 
                 std::vector<std::string> handsSplit;
-                StringTool::SplitString(lineSplit[1], "; ", handsSplit);
+                Tools::StringSplitter::SplitString(lineSplit[1], "; ", handsSplit);
 
                 game.m_hands.reserve(handsSplit.size());
                 for (std::string const& handStr : handsSplit)
@@ -46,7 +46,7 @@ namespace AOC::Challenges::Year2023
                     Hand& hand = game.m_hands.emplace_back();
 
                     std::vector<std::string> cubesSplit;
-                    StringTool::SplitString(handStr, ", ", cubesSplit);
+                    Tools::StringSplitter::SplitString(handStr, ", ", cubesSplit);
 
                     for (std::string const& cubesStr : cubesSplit)
                     {

@@ -34,7 +34,7 @@ namespace AOC::Challenges::Year2023
             {
                 size_t const seedPos = it->find_first_of(' ') + 1;
                 std::vector<std::string> seedSplit;
-                StringTool::SplitString(it->substr(seedPos), ' ', seedSplit);
+                Tools::StringSplitter::SplitString(it->substr(seedPos), ' ', seedSplit);
 
                 m_seeds.reserve(seedSplit.size());
                 for (std::string const& seedStr : seedSplit)
@@ -61,7 +61,7 @@ namespace AOC::Challenges::Year2023
                     break;
 
                 std::vector<std::string> rangeSplit;
-                StringTool::SplitString(*it, ' ', rangeSplit);
+                Tools::StringSplitter::SplitString(*it, ' ', rangeSplit);
 
                 Range& range = map->m_ranges.emplace_back();
                 range.m_dstStart = atoll(rangeSplit[0].c_str());

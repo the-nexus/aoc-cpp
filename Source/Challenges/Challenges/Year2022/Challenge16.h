@@ -49,7 +49,7 @@ namespace AOC::Challenges::Year2022
                 size_t const dstLabelsIndex = inputLine.find_first_of(' ', inputLine.find_last_of("valve")) + 1;
 
                 std::vector<std::string> dstLabels;
-                StringTool::SplitString(inputLine.substr(dstLabelsIndex), ", ", dstLabels);
+                Tools::StringSplitter::SplitString(inputLine.substr(dstLabelsIndex), ", ", dstLabels);
 
                 // Parse the info of the current valve
                 int const srcId = GetValveId(inputLine[srcLabelIndex], inputLine[srcLabelIndex + 1]);

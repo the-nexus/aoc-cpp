@@ -3,7 +3,7 @@
 
 #include "Challenges/ChallengeAbstract.h"
 
-namespace AOC::Challenges::AOC::Challenges::Year2021
+namespace AOC::Challenges::Year2021
 {
     class Challenge01 final : public ChallengeAbstract
     {

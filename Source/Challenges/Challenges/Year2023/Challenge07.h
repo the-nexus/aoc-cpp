@@ -36,7 +36,7 @@ namespace AOC::Challenges::Year2023
             for (std::string const& line : inputLines)
             {
                 std::vector<std::string> handSplit;
-                StringTool::SplitString(line, ' ', handSplit);
+                Tools::StringSplitter::SplitString(line, ' ', handSplit);
 
                 Hand& hand = m_hands.emplace_back();
                 hand.m_cards = handSplit[0];

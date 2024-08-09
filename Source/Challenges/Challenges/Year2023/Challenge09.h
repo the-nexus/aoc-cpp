@@ -18,7 +18,7 @@ namespace AOC::Challenges::Year2023
             for (std::string const& line : inputLines)
             {
                 std::vector<std::string> lineSplit;
-                StringTool::SplitString(line, ' ', lineSplit);
+                Tools::StringSplitter::SplitString(line, ' ', lineSplit);
 
                 std::vector<int>& history = m_histories.emplace_back();
                 history.reserve(lineSplit.size());

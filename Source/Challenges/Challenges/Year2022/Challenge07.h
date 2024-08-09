@@ -40,7 +40,7 @@ namespace AOC::Challenges::Year2022
             for (std::string const& inputLine : inputLines)
             {
                 inputArgs.clear();
-                StringTool::SplitString(inputLine, ' ', inputArgs);
+                Tools::StringSplitter::SplitString(inputLine, ' ', inputArgs);
 
                 if (inputArgs[0][0] == '$') // New command
                 {
