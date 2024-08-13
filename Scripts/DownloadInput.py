@@ -1,50 +1,45 @@
 
 import argparse
+import datetime
 import logging
 import pathlib
 import requests
 
 # =================================================================================================
 
+today = datetime.datetime.now()
+day_first = 1
+day_last = 25
+month_december = 12
+
 project_dir_path = pathlib.Path(__file__).parents[1].resolve()
 session_key_file_path = project_dir_path / "SessionKey.txt"
 input_dir_path = project_dir_path / "Input"
 
-url_template= "https://adventofcode.com/{year}/day/{day}/input"
+url_template = "https://adventofcode.com/{0}/day/{1}/input"
+input_file_name_template = "Input_{0}_{1}.txt"
 
 # =================================================================================================
 
-def get_arguments():
-    parser = argparse.ArgumentParser(description = "AOC input downloader")
-    parser.add_argument("-v", "--verbose", action = "store_true", help = "Display debug message from logging")
-    parser.add_argument("year", type = int, help = "Year of the input to download")
-    parser.add_argument("day", type = int, help = "Day of the input to download")
-    args = parser.parse_args()
-
-    if args.verbose:
+def set_verbose(verbose):
+    if verbose:
         logging.basicConfig(level = logging.DEBUG)
     else:
         logging.basicConfig(level = logging.INFO)
 
-    if not args.year or not args.day:
-        logging.error("Invalid date. Make sure you specify a year and a day in the month of december.")
-        quit()
-
-    return args.year, args.day
-
 # =================================================================================================
 
-def get_session_key(file_path):
-    if not file_path.exists():
-        logging.error(f"Session key file not found [file_path={file_path}]")
+def get_session_key():
+    if not session_key_file_path.exists():
+        logging.error(f"Session key file not found [path={session_key_file_path}]")
         quit()
 
     session_key = ""
-    with file_path.open(mode = "r") as f:
+    with session_key_file_path.open(mode = "r") as f:
         session_key = f.readline()
 
     if not session_key:
-        logging.error(f"Session key file is empty [file_path={file_path}]")
+        logging.error(f"Session key file is empty [path={session_key_file_path}]")
         quit()
 
     return session_key
@@ -52,29 +47,87 @@ def get_session_key(file_path):
 # =================================================================================================
 
 def download_input(year, day, session_key):
-    response = requests.get(url_template.format(year, day), cookies = dict(session = session_key))
+    if day < day_first or day > day_last:
+        logging.error(f"Day {day} is invalid.")
+        quit()
+
+    if year == today.year and day > today.day:
+        logging.error(f"Day {day} is not available yet.")
+        quit()
+
+    if year > today.year or (year == today.year and today.month != month_december):
+        logging.error(f"Year {year} is not available yet.")
+        quit()
+
+    url = url_template.format(year, day)
+    response = requests.get(url, cookies = dict(session = session_key))
 
     if not response.ok:
-        logging.error(f"Failed to download input text [status_code={response.status_code}] [url={file_path}]")
+        logging.error(f"Failed to download input text [status_code={response.status_code}] [url={url}]")
         quit()
 
     input_dir_path.mkdir(parents = True, exist_ok = True)
-    input_file_path = input_dir_path / f"Input_{year}_{day}.txt"
 
-    if input_file_path.exists:
-        input_file_path.remove()
-        
-    with input_file_path.open(mode = "w") as f:
+    file_name = input_file_name_template.format(year, day)
+    file_path = input_dir_path / file_name
+
+    with file_path.open(mode = "w") as f:
         f.write(response.text)
 
+    logging.info(f"Downloaded input file \"{file_name}\"")
 
 # =================================================================================================
 
-year, day = get_arguments()
-logging.debug(f"year={year}")
-logging.debug(f"day={day}")
+parser = argparse.ArgumentParser(description = "AOC input downloader")
+parser.add_argument(
+    "-v",
+    "--verbose",
+    action = "store_true",
+    help = "Display debug message from logging"
+)
+parser.add_argument(
+    "-y",
+    "--year",
+    type = int,
+    help = "Year of the input to download"
+)
+parser.add_argument(
+    "-d",
+    "--day",
+    type = int,
+    help = "Day of the input to download"
+)
+args = parser.parse_args()
 
-session_key = get_session_key(session_key_file_path)
+set_verbose(args.verbose)
+
+session_key = get_session_key()
 logging.debug(f"session_key={session_key}")
 
-download_input(year, day, session_key)
+if args.year and args.day:
+    # Download the challenge for the specified year and day
+    logging.debug(f"year={args.year}, day={args.day}")
+    download_input(args.year, args.day, session_key)
+    quit()
+
+if args.year:
+    # Download all challenges for the specified year
+    start_day = day_first
+    end_day = day_last
+
+    if args.year == today.year and today.day < day_last:
+        end_day = today.day
+
+    logging.debug(f"year={args.year}, day={start_day}...{end_day}")
+    for day in range(start_day, end_day + 1):
+        download_input(args.year, day, session_key)
+    quit()
+
+if today.month == month_december:
+    # Download the challenge for the current year and day
+    logging.debug(f"year={today.year}, day={today.day}")
+    download_input(today.year, today.day, session_key)
+    quit()
+
+logging.error("Can't download a challenge for today. Please specify a valid year and/or day.")
+parser.print_usage()
