@@ -109,8 +109,8 @@
 //     }
 // }
 
-#include <Tools/Challenges/ChallengeTests.hpp>
+#include <Tools/TEMP_2/Tests.hpp>
 int main()
 {
-    AOC::Tools::ChallengeTests::Run();
+    AOC::Tools::Tests::Run();
 }
