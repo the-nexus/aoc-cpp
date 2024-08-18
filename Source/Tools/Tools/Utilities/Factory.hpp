@@ -8,25 +8,22 @@
 
 namespace AOC::Tools
 {
-    template <typename ProductT>
-    class FactoryBlueprint : public std::function<std::unique_ptr<ProductT>()> {};
-
-    template <typename IdentifierT, typename ProductT>
+    template <typename IdentifierT, typename ProductT, typename... Args>
     class Factory
     {
     private:
-        static std::map<IdentifierT, FactoryBlueprint<ProductT>> sm_blueprints;
+        static std::map<IdentifierT, std::function<std::unique_ptr<ProductT>(Args...)>> sm_blueprints;
 
     public:
-        static bool Register(IdentifierT const& identifier, FactoryBlueprint<ProductT>&& blueprint)
+        static bool Register(IdentifierT const& identifier, std::function<std::unique_ptr<ProductT>(Args...)>& blueprint)
         {
             sm_blueprints.emplace(identifier, blueprint);
             return true;
         }
 
-        static std::unique_ptr<ProductT> Produce(IdentifierT const& identifier) 
+        static std::unique_ptr<ProductT> Produce(IdentifierT const& identifier, Args&&... args) 
         {
-            auto blueprintIt = std::find_if(std::cbegin(sm_blueprints), std::cend(sm_blueprints), [&identifier](std::pair<IdentifierT, FactoryBlueprint<ProductT>> const& blueprint)
+            auto blueprintIt = std::find_if(std::cbegin(sm_blueprints), std::cend(sm_blueprints), [&identifier](std::pair<IdentifierT, std::function<std::unique_ptr<ProductT>(Args...)>> const& blueprint)
             {
                 return blueprint.first == identifier;
             });
@@ -36,10 +33,10 @@ namespace AOC::Tools
                 return nullptr;
             }
 
-            return blueprintIt->second();
+            return blueprintIt->second(std::forward<Args>(args)...);
         }
     };
 
-    template <typename IdentifierT, typename ProductT>
-    std::map<IdentifierT, FactoryBlueprint<ProductT>> Factory<IdentifierT, ProductT>::sm_blueprints = {};
+    template <typename IdentifierT, typename ProductT, typename... Args>
+    std::map<IdentifierT, std::function<std::unique_ptr<ProductT>(Args...)>> Factory<IdentifierT, ProductT, Args...>::sm_blueprints = {};
 }
