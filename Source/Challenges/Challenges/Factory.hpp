@@ -8,6 +8,7 @@ namespace AOC::Challenges
 {
     class Factory : public Tools::Factory<Tools::ChallengeID, Tools::IChallenge, std::vector<std::string>>
     {
+    public:
         static void RegisterAllChallenges();
     };
 }

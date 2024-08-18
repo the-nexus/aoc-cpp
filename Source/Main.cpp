@@ -10,6 +10,7 @@ int main(int argc, char* argv[])
 
     std::vector<std::string> inputLines;
 
+    AOC::Challenges::Factory::RegisterAllChallenges();
     auto challenge = AOC::Challenges::Factory::Produce({year, day}, std::move(inputLines));
     if (!challenge)
     {
