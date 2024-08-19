@@ -9,6 +9,7 @@ int main(int argc, char* argv[])
     bool const shouldRunPartTwo = true;
 
     std::vector<std::string> inputLines;
+    // Read file op
 
     AOC::Challenges::Factory::RegisterAllChallenges();
     auto challenge = AOC::Challenges::Factory::Produce({year, day}, std::move(inputLines));

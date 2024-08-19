@@ -52,7 +52,7 @@ namespace AOC::Tools
     public:
         static constexpr ChallengeID GetID() { return { YearN, DayN }; }
 
-        Challenge(std::vector<std::string>&& inputLines) : m_inputLines(inputLines) {}
+        Challenge(std::vector<std::string>&& inputLines) : m_inputLines(std::move(inputLines)) { inputLines = {}; }
 
         const std::vector<std::string> GetInputLines() const { return m_inputLines; }
 
