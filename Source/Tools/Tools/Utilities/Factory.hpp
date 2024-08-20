@@ -15,7 +15,7 @@ namespace AOC::Tools
         static std::map<IdentifierT, std::function<std::unique_ptr<ProductT>(Args&&...)>> sm_blueprints;
 
     public:
-        static bool Register(IdentifierT const& identifier, std::function<std::unique_ptr<ProductT>(Args&&...)>&& blueprint)
+        static bool RegisterProduct(IdentifierT const& identifier, std::function<std::unique_ptr<ProductT>(Args&&...)>&& blueprint)
         {
             sm_blueprints.emplace(identifier, std::move(blueprint));
             return true;

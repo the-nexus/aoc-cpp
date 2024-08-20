@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -49,12 +50,22 @@ namespace AOC::Tools
     template <int YearN, int DayN>
     class Challenge : public IChallenge
     {
+    protected:
+        static void __PART_NOT_IMPLEMENTED__(std::string const& name)
+        {
+            std::cout << "PART " << name << " NOT IMPLEMENTED" << std::endl;
+        }
+
     public:
         static constexpr ChallengeID GetID() { return { YearN, DayN }; }
 
-        Challenge(std::vector<std::string>&& inputLines) : m_inputLines(std::move(inputLines)) { inputLines = {}; }
+        Challenge(std::vector<std::string>&& inputLines)
+            : m_inputLines(std::move(inputLines))
+        {
+            inputLines = {};
+        }
 
-        const std::vector<std::string> GetInputLines() const { return m_inputLines; }
+        const std::vector<std::string>& GetInputLines() const { return m_inputLines; }
 
     private:
         std::vector<std::string> m_inputLines;

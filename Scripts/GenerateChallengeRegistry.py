@@ -18,7 +18,7 @@ autogen_header = """
 """
 
 includes_format = "#include \"{path}\""
-registry_format = "    Register<{name}>();"
+registry_format = "    RegisterChallenge<{name}>();"
 registry_define_format = "#define AUTOGEN_CHALLENGE_REGISTRY \\\n{registry}"
 
 # =================================================================================================

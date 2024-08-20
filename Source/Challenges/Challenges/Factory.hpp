@@ -13,9 +13,9 @@ namespace AOC::Challenges
 
     private:
         template <typename ChallengeT>
-        static void Register()
+        static void RegisterChallenge()
         {
-            Factory::Register(ChallengeT::GetID(), [](std::vector<std::string>&& input) { return std::make_unique<ChallengeT>(std::move(input)); });
+            RegisterProduct(ChallengeT::GetID(), [](std::vector<std::string>&& input) { return std::make_unique<ChallengeT>(std::move(input)); });
         }
     };
 }
