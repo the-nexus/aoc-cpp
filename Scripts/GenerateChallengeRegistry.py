@@ -5,15 +5,21 @@ import pathlib
 
 # =================================================================================================
 
-file_glob_filter = "**/Challenge*.hpp"
+glob_filter = "**/Challenge*.hpp"
 
-includes_file_name = "ChallengeIncludes.inl"
-includes_format = "{0}\n"
-includes_item_format = "\n#include \"{0}\""
+autogen_file_name = "Factory.autogen.inl"
+autogen_format = "{header}\n{includes}\n{registry}\n"
 
-registration_file_name = "ChallengeRegistration.inl"
-registration_format = "\n#define AUTO_GENERATED_CHALLENGE_REGISTRATION{0}\n"
-registration_item_format = " \\\n    REGISTER_CHALLENGE({0})"
+autogen_header = """
+// ======================================================================
+// THIS FILE WAS AUTOMATICALLY GENERATED WHEN BUILDING THE CMAKE PROJECT.
+// PLEASE REBUILD THE CMAKE PROJECT IF YOU INTEND TO ADD NEW ITEMS.
+// ======================================================================
+"""
+
+includes_format = "#include \"{path}\""
+registry_format = "    Register<{name}>();"
+registry_define_format = "#define AUTOGEN_CHALLENGE_REGISTRY \\\n{registry}"
 
 # =================================================================================================
 
@@ -25,31 +31,27 @@ def set_verbose(verbose):
 
 # =================================================================================================
 
-def generate_includes_file(output_dir, root_dir, source_files):
-    challenge_paths = [file.relative_to(root_dir) for file in source_files]
-    logging.debug(f"{challenge_paths}")
-
-    items = "".join([
-        includes_item_format.format(item) for item in challenge_paths
+def make_includes(source_files):
+    includes = "\n".join([
+        includes_format.format(path = path) for path in source_files
     ])
 
-    output_file_path = output_dir / includes_file_name
-    with output_file_path.open(mode = "w") as f:
-        f.write(includes_format.format(items))
+    return includes
 
 # =================================================================================================
 
-def generate_registration_file(output_dir, source_files):
+def make_registry(source_files):
+    if len(source_files) == 0:
+        return ""
+
     challenge_names = [file.stem for file in source_files]
     logging.debug(f"{challenge_names}")
 
-    items = "".join([
-        registration_item_format.format(item) for item in challenge_names
+    registry = " \\\n".join([
+        registry_format.format(name = name) for name in challenge_names
     ])
 
-    output_file_path = output_dir / registration_file_name
-    with output_file_path.open(mode = "w") as f:
-        f.write(registration_format.format(items))
+    return registry_define_format.format(registry = registry)
 
 # =================================================================================================
 
@@ -75,10 +77,18 @@ set_verbose(args.verbose)
 source_dir = pathlib.Path(args.source_dir).resolve()
 output_dir = pathlib.Path(args.output_dir).resolve()
 
-source_files = list(source_dir.rglob(file_glob_filter))
+source_files_glob = list(source_dir.rglob(glob_filter))
+source_files = [file.relative_to(source_dir) for file in source_files_glob]
+source_files.sort()
+
 output_dir.mkdir(parents = True, exist_ok = True)
+output_file_path = output_dir / autogen_file_name
 
-generate_includes_file(output_dir, source_dir, source_files)
-generate_registration_file(output_dir, source_files)
+with output_file_path.open(mode = "w") as f:
+    f.write(autogen_format.format(
+        header = autogen_header,
+        includes = make_includes(source_files),
+        registry = make_registry(source_files)
+    ))
 
-logging.info(f"Generated challenge registry files to {output_dir}")
+logging.info(f"Generated challenge registry files to {output_file_path}")

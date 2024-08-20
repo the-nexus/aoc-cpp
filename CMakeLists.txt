@@ -8,8 +8,10 @@ set (CMAKE_CXX_STANDARD 20)
 
 set (SCRIPT_COMMAND python3)
 set (SCRIPT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/Scripts)
-set (SCRIPT_GENERATE_CHALLENGE_REGISTRY GenerateChallengeRegistry.py)
-set (SCRIPT_OPT_DEBUG -v)
+set (SCRIPT_AUTOGEN_CHALLENGE_REGISTRY GenerateChallengeRegistry.py)
+#set (SCRIPT_OPT_DEBUG -v)
+
+set (AUTOGEN_SUB_PATH /Autogen)
 
 #############
 ## PROJECT ##

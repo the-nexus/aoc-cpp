@@ -9,6 +9,13 @@ namespace AOC::Challenges
     class Factory : public Tools::Factory<Tools::ChallengeID, Tools::IChallenge, std::vector<std::string>>
     {
     public:
-        static void RegisterAllChallenges();
+        static void RegisterAll();
+
+    private:
+        template <typename ChallengeT>
+        static void Register()
+        {
+            Factory::Register(ChallengeT::GetID(), [](std::vector<std::string>&& input) { return std::make_unique<ChallengeT>(std::move(input)); });
+        }
     };
 }

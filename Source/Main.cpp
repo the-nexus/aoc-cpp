@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
         return -1;
     }
 
-    AOC::Challenges::Factory::RegisterAllChallenges();
+    AOC::Challenges::Factory::RegisterAll();
     auto challenge = AOC::Challenges::Factory::Produce({year, day}, std::move(inputLines));
     if (!challenge)
     {
