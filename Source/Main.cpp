@@ -11,10 +11,13 @@ int main(int argc, char* argv[])
     bool const shouldRunPartOne = true;
     bool const shouldRunPartTwo = true;
 
+    std::string filePath = "";
+
     std::vector<std::string> inputLines;
-    if (!AOC::Tools::FileReader::GetLines("", inputLines))
+    if (!AOC::Tools::FileReader::GetLines(filePath, inputLines))
     {
         std::cerr << "Could not read input file for [year=" << year << ", day=" << day << "]" << std::endl;
+        return -1;
     }
 
     AOC::Challenges::Factory::RegisterAllChallenges();
