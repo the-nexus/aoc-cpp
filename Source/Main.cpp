@@ -1,5 +1,8 @@
 
+#include <iostream>
+
 #include <Challenges/Factory.hpp>
+#include <Tools/FileReader.h>
 
 int main(int argc, char* argv[])
 {
@@ -9,12 +12,16 @@ int main(int argc, char* argv[])
     bool const shouldRunPartTwo = true;
 
     std::vector<std::string> inputLines;
-    // Read file op
+    if (!AOC::Tools::FileReader::GetLines("", inputLines))
+    {
+        std::cerr << "Could not read input file for [year=" << year << ", day=" << day << "]" << std::endl;
+    }
 
     AOC::Challenges::Factory::RegisterAllChallenges();
     auto challenge = AOC::Challenges::Factory::Produce({year, day}, std::move(inputLines));
     if (!challenge)
     {
+        std::cerr << "Could not find challenge for [year=" << year << ", day=" << day << "]" << std::endl;
         return -1;
     }
 
