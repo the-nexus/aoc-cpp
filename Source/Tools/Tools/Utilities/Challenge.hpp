@@ -43,19 +43,13 @@ namespace AOC::Tools
     {
     public:
         virtual ~IChallenge() = default;
-        virtual void RunPartOne() = 0;
-        virtual void RunPartTwo() = 0;
+        virtual void RunPartOne(std::ostream& outAnswer) = 0;
+        virtual void RunPartTwo(std::ostream& outAnswer) = 0;
     };
 
     template <int YearN, int DayN>
     class Challenge : public IChallenge
     {
-    protected:
-        static void __PART_NOT_IMPLEMENTED__(std::string const& name)
-        {
-            std::cout << "PART " << name << " NOT IMPLEMENTED" << std::endl;
-        }
-
     public:
         static constexpr ChallengeID GetID() { return { YearN, DayN }; }
 
@@ -64,6 +58,9 @@ namespace AOC::Tools
         {
             inputLines = {};
         }
+
+        void RunPartOne(std::ostream& outAnswer) override { outAnswer << "PART ONE NOT IMPLEMENTED"; }
+        void RunPartTwo(std::ostream& outAnswer) override { outAnswer << "PART TWO NOT IMPLEMENTED"; }
 
         const std::vector<std::string>& GetInputLines() const { return m_inputLines; }
 

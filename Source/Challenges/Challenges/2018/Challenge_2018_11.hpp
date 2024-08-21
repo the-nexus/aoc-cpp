@@ -5,25 +5,25 @@
 
 namespace AOC::Challenges
 {
-    class Challenge_##__YEAR__##_##__DAY__## final : public Tools::Challenge<##__YEAR__##, ##__DAY__##>
+    class Challenge_2018_11 final : public Tools::Challenge<2018, 11>
     {
     public:
-        Challenge_##__YEAR__##_##__DAY__##(std::vector<std::string>&& inputLines)
-            : Tools::Challenge<##__YEAR__##, ##__DAY__##>(std::move(inputLines)) 
+        Challenge_2018_11(std::vector<std::string>&& inputLines)
+            : Tools::Challenge<2018, 11>(std::move(inputLines)) 
         {}
 
         // ========================================================================================
 
         void RunPartOne(std::ostream& outAnswer) override
         {
-            Tools::Challenge<##__YEAR__##, ##__DAY__##>::RunPartOne(outAnswer);
+            Tools::Challenge<2018, 11>::RunPartOne(outAnswer);
         }
 
         // ========================================================================================
 
         void RunPartTwo(std::ostream& outAnswer) override 
         {
-            Tools::Challenge<##__YEAR__##, ##__DAY__##>::RunPartTwo(outAnswer);
+            Tools::Challenge<2018, 11>::RunPartTwo(outAnswer);
         }
     };
 }

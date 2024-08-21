@@ -1,13 +1,14 @@
 
 #include <iostream>
+#include <sstream>
 
 #include <Challenges/Factory.hpp>
 #include <Tools/FileReader.h>
 
 int main(int argc, char* argv[])
 {
-    int const year = 2020;
-    int const day = 11;
+    int const year = 2018;
+    int const day = 1;
     bool const shouldRunPartOne = true;
     bool const shouldRunPartTwo = true;
 
@@ -28,6 +29,15 @@ int main(int argc, char* argv[])
         return -1;
     }
 
-    if (shouldRunPartOne) challenge->RunPartOne();
-    if (shouldRunPartTwo) challenge->RunPartTwo();
+    if (shouldRunPartOne)
+    {
+        challenge->RunPartOne(std::cout);
+        std::cout << std::endl;
+    }
+
+    if (shouldRunPartTwo)
+    {
+        challenge->RunPartTwo(std::cout);
+        std::cout << std::endl;
+    }
 }

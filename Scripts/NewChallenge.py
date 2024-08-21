@@ -43,13 +43,16 @@ def instantiate_template(year, day, force):
     file_dir_path = challenges_dir_path / f"{year}"
     file_dir_path.mkdir(parents = True, exist_ok = True)
 
-    file_path = file_dir_path / challenge_file_name_format.format(year = year, day = day)
+    file_name = challenge_file_name_format.format(year = year, day = day);
+    file_path = file_dir_path / file_name
     if file_path.exists() and not force:
         logging.error(f"Challenge file already exists [path={file_path}]")
         quit()
 
     with file_path.open(mode = "w") as f:
         f.write(file_content)
+
+    logging.info(f"Created challenge file \"{file_name}\"")
 
 # =================================================================================================
 
