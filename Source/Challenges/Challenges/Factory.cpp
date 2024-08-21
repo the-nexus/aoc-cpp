@@ -3,14 +3,6 @@
 
 using namespace AOC::Challenges;
 
-#if __has_include("Challenges/Autogen/Factory.autogen.inl") && __has_include("Challenges/Autogen/Factory.autogen.inl")
-#include "Challenges/Autogen/Factory.autogen.inl"
-#endif
-
-void Factory::RegisterAll()
-{
-#ifdef AUTOGEN_CHALLENGE_REGISTRY
-    AUTOGEN_CHALLENGE_REGISTRY
-#undef AUTOGEN_CHALLENGE_REGISTRY
-#endif
-}
+// This file is mostly just a hack for MSVC
+// Its presence will force the .lib file generation
+// The .lib file is used to link "AdventOfCodeChallenges" to "AdventOfCode"

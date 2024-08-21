@@ -4,18 +4,28 @@
 #include <Tools/Utilities/Challenge.hpp>
 #include <Tools/Utilities/Factory.hpp>
 
+#if __has_include("Challenges/Autogen/Factory.autogen.inl")
+#include "Challenges/Autogen/Factory.autogen.inl"
+#endif
+
 namespace AOC::Challenges
 {
     class Factory : public Tools::Factory<Tools::ChallengeID, Tools::IChallenge, std::vector<std::string>>
     {
-    public:
-        static void RegisterAll();
-
     private:
         template <typename ChallengeT>
         static void RegisterChallenge()
         {
             RegisterProduct(ChallengeT::GetID(), [](std::vector<std::string>&& input) { return std::make_unique<ChallengeT>(std::move(input)); });
+        }
+
+    public:
+        static void RegisterAll()
+        {
+#ifdef AUTOGEN_CHALLENGE_REGISTRY
+            AUTOGEN_CHALLENGE_REGISTRY
+#undef AUTOGEN_CHALLENGE_REGISTRY
+#endif
         }
     };
 }
