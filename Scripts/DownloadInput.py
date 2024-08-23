@@ -66,10 +66,11 @@ def download_input(year, day, session_key):
         logging.error(f"Failed to download input text [status_code={response.status_code}] [url={url}]")
         quit()
 
-    input_dir_path.mkdir(parents = True, exist_ok = True)
+    file_dir = input_dir_path / f"{year}"
+    file_dir.mkdir(parents = True, exist_ok = True)
 
     file_name = input_file_name_template.format(year, day)
-    file_path = input_dir_path / file_name
+    file_path = file_dir / file_name
 
     with file_path.open(mode = "w") as f:
         f.write(response.text)

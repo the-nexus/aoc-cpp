@@ -1,8 +1,9 @@
 
 #pragma once
 
-#include <Tools/Utilities/Challenge.hpp>
 #include <Tools/Utilities/Factory.hpp>
+
+#include "Challenges/Challenge.hpp"
 
 #if __has_include("Challenges/Autogen/Factory.autogen.inl")
 #include "Challenges/Autogen/Factory.autogen.inl"
@@ -10,13 +11,16 @@
 
 namespace AOC::Challenges
 {
-    class Factory : public Tools::Factory<Tools::ChallengeID, Tools::IChallenge, std::vector<std::string>>
+    class Factory : public Tools::Factory<ChallengeIdentifier, IChallenge, std::vector<std::string>>
     {
     private:
         template <typename ChallengeT>
         static void RegisterChallenge()
         {
-            RegisterProduct(ChallengeT::GetID(), [](std::vector<std::string>&& input) { return std::make_unique<ChallengeT>(std::move(input)); });
+            RegisterProduct(ChallengeT::GetIdentifier(), [](std::vector<std::string>&& input)
+            {
+                return std::make_unique<ChallengeT>(std::move(input));
+            });
         }
 
     public:
@@ -24,8 +28,7 @@ namespace AOC::Challenges
         {
 #ifdef AUTOGEN_CHALLENGE_REGISTRY
             AUTOGEN_CHALLENGE_REGISTRY
-#undef AUTOGEN_CHALLENGE_REGISTRY
-#endif
+#endif // AUTOGEN_CHALLENGE_REGISTRY
         }
     };
 }

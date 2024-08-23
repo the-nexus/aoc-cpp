@@ -5,7 +5,7 @@ import pathlib
 
 # =================================================================================================
 
-glob_filter = "**/Challenge*.hpp"
+glob_filter = "**/Challenge_*_*.hpp"
 
 autogen_file_name = "Factory.autogen.inl"
 autogen_format = "{header}\n{includes}\n{registry}\n"

@@ -11,7 +11,6 @@ namespace AOC::Tools
     template <typename IdentifierT, typename ProductT, typename... Args>
     class Factory
     {
-    private:
         static std::map<IdentifierT, std::function<std::unique_ptr<ProductT>(Args&&...)>> sm_blueprints;
 
     public:

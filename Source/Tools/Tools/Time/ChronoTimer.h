@@ -7,16 +7,13 @@ namespace AOC::Tools
 {
     class ChronoTimer final : public ATimer
     {
-    public:
-        ChronoTimer();
-
-        void Start();
-        void Stop();
-
-        float GetElapsedTime() const override;
-
-    private:
         TimeHandle m_startTime;
         TimeHandle m_stopTime;
+
+    public:
+        ChronoTimer();
+        void Start();
+        void Stop();
+        float GetElapsedTime() const override;
     };
 }
