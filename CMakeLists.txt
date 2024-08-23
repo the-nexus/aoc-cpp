@@ -14,11 +14,13 @@ set (CMAKE_CXX_STANDARD 20)
 
 # SCRIPTING
 set (SCRIPT_COMMAND ${Python_EXECUTABLE})
-set (SCRIPT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/Scripts)
+set (SCRIPT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/scripts)
 set (SCRIPT_AUTOGEN_CHALLENGE_REGISTRY GenerateChallengeRegistry.py)
 #set (SCRIPT_OPT_DEBUG -v)
 
-set (AUTOGEN_SUB_PATH /Autogen)
+set (AUTOGEN_SUB_PATH /autogen)
+
+set (INPUT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/res/input)
 
 #############
 ## PROJECT ##
@@ -29,4 +31,4 @@ project (AdventOfCode
     LANGUAGES CXX
 )
 
-add_subdirectory(./Source)
+add_subdirectory(./src)
