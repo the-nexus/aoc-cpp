@@ -1,9 +1,9 @@
 
 #pragma once
 
-#include "Challenges/Challenge.hpp"
+#include "challenges/Challenge.hpp"
 
-namespace AOC::Challenges
+namespace aoc::challenges
 {
     class Challenge_##__YEAR__##_##__DAY__## final : public Challenge<##__YEAR__##, ##__DAY__##>
     {
@@ -14,14 +14,10 @@ namespace AOC::Challenges
             : Super(std::move(inputLines)) 
         {}
 
-        // ========================================================================================
-
         void RunPartOne(std::ostream& outAnswer) override
         {
             Super::RunPartOne(outAnswer);
         }
-
-        // ========================================================================================
 
         void RunPartTwo(std::ostream& outAnswer) override 
         {

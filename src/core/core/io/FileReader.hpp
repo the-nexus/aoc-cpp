@@ -12,6 +12,11 @@ namespace aoc::core
     {
         static bool GetLines(std::filesystem::path const& filePath, std::vector<std::string>& fileLines)
         {
+            if (!std::filesystem::exists(filePath))
+            {
+                return false;
+            }
+
             std::ifstream file { filePath };
             if (!file.is_open())
             {
