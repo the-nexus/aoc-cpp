@@ -11,9 +11,8 @@
 
 namespace aoc::challenges
 {
-    class Factory : public core::Factory<ChallengeIdentifier, IChallenge, std::vector<std::string>>
+    class Factory final : public core::Factory<ChallengeIdentifier, IChallenge, std::vector<std::string>>
     {
-    private:
         template <typename ChallengeT>
         static void RegisterChallenge()
         {

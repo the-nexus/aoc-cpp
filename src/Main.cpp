@@ -11,6 +11,5 @@ int main(int argc, char* argv[])
         args.emplace_back(argv[index]);
     }
 
-    aoc::runtime::Program program;
-    return program.Launch(args);
+    return aoc::runtime::Program::Launch(args);
 }

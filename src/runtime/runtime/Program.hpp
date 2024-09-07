@@ -10,20 +10,24 @@ namespace aoc::runtime
 {
     class Program
     {
-        std::filesystem::path m_exePath = {};
-        std::optional<std::filesystem::path> m_inputFilePath = std::nullopt;
-        std::optional<int> m_year = std::nullopt;
-        std::optional<int> m_day = std::nullopt;
-        std::optional<bool> m_shouldRunPartOne = std::nullopt;
-        std::optional<bool> m_shouldRunPartTwo = std::nullopt;
+        struct Config
+        {
+            std::filesystem::path m_inputFilePath;
+            int m_year = 0;
+            int m_day = 0;
+            bool m_runPartOne = false;
+            bool m_runPartTwo = false;
+            bool m_displayExecutionTime = false;
+        };
 
     public:
-        int Launch(std::vector<std::string_view> const& args);
+        static int Launch(std::vector<std::string_view> const& args);
 
     private:
-        void FixArguments();
-        void ParseArguments(std::vector<std::string_view> const& args);
-        void PrintArgumentsHelp() const;
-        std::filesystem::path GetInputFilePath(int const year, int const day) const;
+        static std::optional<Config> MakeConfig(std::vector<std::string_view> const& args);
+        static std::filesystem::path GetInputFilePath(std::filesystem::path const& executionPath, int const year, int const day);
+        static int QueryYear();
+        static int QueryDay();
+        static void DisplayHelp();
     };
 }

@@ -6,166 +6,156 @@
 
 #include <challenges/Factory.hpp>
 #include <core/io/FileReader.hpp>
+#include <core/time/PersistentTimer.hpp>
 
 using namespace aoc::runtime;
 
 int Program::Launch(std::vector<std::string_view> const& args)
 {
-    ParseArguments(args);
-    FixArguments();
+    core::PersistentTimer executionTimer;
 
-    if (!std::filesystem::exists(m_inputFilePath.value()))
+    std::optional<Config> const config = MakeConfig(args);
+    if (!config)
     {
-        std::cerr << std::format("Could not find input file [path={}]", m_inputFilePath->string()) << std::endl;
-        return -1;
+        DisplayHelp();
+        return 0;
+    }
+
+    if (!std::filesystem::exists(config->m_inputFilePath))
+    {
+        std::cerr << std::format("Could not find input file [path={}]", config->m_inputFilePath.string()) << std::endl;
+        return 1;
     }
 
     std::vector<std::string> inputLines;
-    if (!aoc::core::FileReader::GetLines(m_inputFilePath.value(), inputLines))
+    if (!core::FileReader::GetLines(config->m_inputFilePath, inputLines))
     {
-        std::cerr << std::format("Could not read input file [path={}]", m_year.value(), m_day.value()) << std::endl;
-        return -1;
+        std::cerr << std::format("Could not read input file [path={}]",config->m_year, config->m_day) << std::endl;
+        return 1;
     }
 
-    aoc::challenges::Factory::RegisterAll();
-    auto challenge = aoc::challenges::Factory::Produce({m_year.value(), m_day.value()}, std::move(inputLines));
+    challenges::Factory::RegisterAll();
+    auto challenge = challenges::Factory::Produce({config->m_year, config->m_day}, std::move(inputLines));
     if (!challenge)
     {
-        std::cerr << std::format("Could not find challenge implementation [year={}, day={}]", m_year.value(), m_day.value()) << std::endl;
-        return -1;
+        std::cerr << std::format("Could not find challenge implementation [year={}, day={}]", config->m_year, config->m_day) << std::endl;
+        return 1;
     }
 
-    if (m_shouldRunPartOne.value())
+    if (config->m_runPartOne)
     {
         challenge->RunPartOne(std::cout);
         std::cout << std::endl;
     }
 
-    if (m_shouldRunPartTwo.value())
+    if (config->m_runPartTwo)
     {
         challenge->RunPartTwo(std::cout);
         std::cout << std::endl;
     }
 
+    if (config->m_displayExecutionTime)
+    {
+        std::cout << std::format("Completed in {} seconds", executionTimer.GetElapsedTime()) << std::endl;
+    }
+
     return 0;
 }
 
-void Program::FixArguments()
+std::optional<Program::Config> Program::MakeConfig(std::vector<std::string_view> const& args)
 {
-    if (!m_year)
-    {
-        int year;
-        std::cout << "Year: ";
-        std::cin >> year;
-        m_year = std::make_optional(year);
-    }
+    std::optional<std::filesystem::path> inputFilePath = std::nullopt;
+    std::optional<int> year = std::nullopt;
+    std::optional<int> day = std::nullopt;
+    bool hasPartOneFlag = false;
+    bool hasPartTwoFlag = false;
+    bool hasTimerFlag = false;
 
-    if (!m_day)
+    for (size_t argIndex = 1; argIndex < args.size(); ++argIndex)
     {
-        int day;
-        std::cout << "Day: ";
-        std::cin >> day;
-        m_day = std::make_optional(day);
-    }
-
-    if (!m_shouldRunPartOne && !m_shouldRunPartTwo)
-    {
-        m_shouldRunPartOne = std::make_optional(true);
-        m_shouldRunPartTwo = std::make_optional(true);
-    }
-    else if (m_shouldRunPartOne)
-    {
-        m_shouldRunPartTwo = std::make_optional(false);
-    }
-    else if (m_shouldRunPartTwo)
-    {
-        m_shouldRunPartOne = std::make_optional(false);
-    }
-
-    if (!m_inputFilePath)
-    {
-        m_inputFilePath = std::make_optional(GetInputFilePath(m_year.value(), m_day.value()));
-    }
-}
-
-void Program::ParseArguments(std::vector<std::string_view> const& args)
-{
-    m_exePath = std::filesystem::path(args[0]);
-
-    for (size_t index = 1; index < args.size(); ++index)
-    {
-        std::string_view arg = args[index];
-        if (arg.size() <= 1)
+        std::string_view const& arg = args[argIndex];
+        if (arg[0] != '-')
         {
+            // We don't have any mandatory arg, everything should start by '-'
+            return std::nullopt;
+        }
+
+        // Check for flag arguments
+        if (arg.compare("-p1") == 0)
+        {
+            hasPartOneFlag = true;
             continue;
         }
 
-        if (arg[0] != '-')
+        if (arg.compare("-p2") == 0)
         {
+            hasPartTwoFlag = true;
             continue;
+        }
+
+        if (arg.compare("-t") == 0)
+        {
+            hasTimerFlag = true;
+            continue;
+        }
+
+        if (arg.compare("-h") == 0)
+        {
+            return std::nullopt;
+        }
+
+        // Check for param arguments
+        size_t paramIndex = argIndex + 1;
+        if (paramIndex >= args.size())
+        {
+            // Missing param value, not enough arguments specified
+            return std::nullopt;
+        }
+
+        std::string_view const& param = args[paramIndex];
+        if (param[0] == '-')
+        {
+            // Missing param value before next argument
+            return std::nullopt;
         }
 
         if (arg.compare("-i") == 0)
         {
-            if (index + 1 < args.size())
-            {
-                std::filesystem::path const path = std::filesystem::path(args[index + 1]);
-                m_inputFilePath = std::make_optional(path);
-                ++index;
-            }
+            std::filesystem::path const path = { param };
+            inputFilePath = std::make_optional(path);
+            ++argIndex;
+            continue;
         }
-        else if (arg.compare("-y") == 0)
+
+        if (arg.compare("-y") == 0)
         {
-            if (index + 1 < args.size())
-            {
-                int const value = core::StringViewConverter::ToInteger<int>(args[index + 1]);
-                m_year = std::make_optional(value);
-                ++index;
-            }
+            year = std::make_optional(core::StringViewConverter::ToInteger<int>(param));
+            ++argIndex;
+            continue;
         }
-        else if (arg.compare("-d") == 0)
+
+        if (arg.compare("-d") == 0)
         {
-            if (index + 1 < args.size())
-            {
-                int const value = core::StringViewConverter::ToInteger<int>(args[index + 1]);
-                m_day = std::make_optional(value);
-                ++index;
-            }
-        }
-        else if (arg.compare("-p1") == 0)
-        {
-            m_shouldRunPartOne = std::make_optional(true);
-        }
-        else if (arg.compare("-p2") == 0)
-        {
-            m_shouldRunPartTwo = std::make_optional(true);
-        }
-        else if (arg.compare("-t") == 0)
-        {
-            // TODO: Run timer
-        }
-        else if (arg.compare("-h") == 0)
-        {
-            PrintArgumentsHelp();
+            day = std::make_optional(core::StringViewConverter::ToInteger<int>(param));
+            ++argIndex;
+            continue;
         }
     }
+
+    Config config;
+    config.m_year = year.has_value() ? year.value() : QueryYear();
+    config.m_day = day.has_value() ? day.value() : QueryDay();
+    config.m_runPartOne = hasPartOneFlag || !hasPartTwoFlag;
+    config.m_runPartTwo = hasPartTwoFlag || !hasPartOneFlag;
+    config.m_inputFilePath = inputFilePath.has_value() ? inputFilePath.value() : GetInputFilePath({ args[0] }, config.m_year, config.m_day);
+    config.m_displayExecutionTime = hasTimerFlag;
+
+    return std::make_optional(config);
 }
 
-void Program::PrintArgumentsHelp() const
+std::filesystem::path Program::GetInputFilePath(std::filesystem::path const& executionPath, int const year, int const day)
 {
-    std::cout << "AdventOfCode [-h] [-i] PATH [-y] YEAR [-d] DAY [-p1] [-p2] [-t]\n"
-        "[-i ]  PATH  Path to a specific input file to use with the challenge program.\n"
-        "[-y ]  YEAR  Year of the challenge program to execute.\n"
-        "[-d ]  DAY   Day of the challenge program to execute.\n"
-        "[-p1]        If specified without --part2 being specified, will only run the first part of the challenge program.\n"
-        "[-p2]        If specified without --part1 being specified, will only run the second part of the challenge program.\n"
-        "[-t ]        Will measure the execution time of the program, excluding argument parsing.\n"
-        "[-h ]        Prints this message.\n";
-}
-
-std::filesystem::path Program::GetInputFilePath(int const year, int const day) const
-{
-    std::filesystem::path filePath = m_exePath;
+    std::filesystem::path filePath = executionPath;
     std::string directoryName = "";
     do
     {
@@ -180,4 +170,34 @@ std::filesystem::path Program::GetInputFilePath(int const year, int const day) c
     }
 
     return std::filesystem::path {};
+}
+
+int Program::QueryYear()
+{
+    int year = 0;
+    std::cout << "Enter challenge year: ";
+    std::cin >> year;
+    return year;
+}
+
+int Program::QueryDay()
+{
+    int day = 0;
+    std::cout << "Enter challenge day: ";
+    std::cin >> day;
+    return day;
+}
+
+void Program::DisplayHelp()
+{
+    std::cout <<
+        "AdventOfCode [-h] [-i] PATH [-y] YEAR [-d] DAY [-p1] [-p2] [-t]\n"
+        "  -i   PATH  Path to a specific input file to use with the challenge program.\n"
+        "  -y   YEAR  Year of the challenge program to execute.\n"
+        "  -d   DAY   Day of the challenge program to execute.\n"
+        "  -p1        If specified without --part2 being specified, will only run the first part of the challenge program.\n"
+        "  -p2        If specified without --part1 being specified, will only run the second part of the challenge program.\n"
+        "  -t         Will measure the execution time of the program, excluding argument parsing.\n"
+        "  -h         Displays this message.\n"
+        << std::endl;
 }
