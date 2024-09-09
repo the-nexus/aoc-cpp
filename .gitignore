@@ -398,6 +398,7 @@ MigrationBackup/
 ## Ignore all the listed files below for various reasons
 SessionKey.txt
 [Ii]nput/
+[Tt]emp/
 [Aa]utogen/
 
 [Bb]uild/
