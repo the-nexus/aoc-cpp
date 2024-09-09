@@ -6,13 +6,15 @@
 
 #include <challenges/Factory.hpp>
 #include <core/io/FileReader.hpp>
-#include <core/time/PersistentTimer.hpp>
+#include <core/time/ChronoTimer.hpp>
 
 using namespace aoc::runtime;
 
 int Program::Launch(std::vector<std::string_view> const& args)
 {
-    core::PersistentTimer executionTimer;
+    core::ChronoTimer configTimer, programTimer, totalTimer;
+    totalTimer.Start();
+    configTimer.Start();
 
     std::optional<Config> const config = MakeConfig(args);
     if (!config)
@@ -34,6 +36,9 @@ int Program::Launch(std::vector<std::string_view> const& args)
         return 1;
     }
 
+    configTimer.Stop();
+    programTimer.Start();
+
     challenges::Factory::RegisterAll();
     auto challenge = challenges::Factory::Produce({config->m_year, config->m_day}, std::move(inputLines));
     if (!challenge)
@@ -54,9 +59,19 @@ int Program::Launch(std::vector<std::string_view> const& args)
         std::cout << std::endl;
     }
 
+    programTimer.Stop();
+    totalTimer.Stop();
+
     if (config->m_displayExecutionTime)
     {
-        std::cout << std::format("Completed in {} seconds", executionTimer.GetElapsedTime()) << std::endl;
+        std::cout << std::format(
+            "\nConfig  {} seconds"
+            "\nProgram {} seconds"
+            "\nTotal   {} seconds", 
+            configTimer.GetElapsedTime(),
+            programTimer.GetElapsedTime(),
+            totalTimer.GetElapsedTime())
+            << std::endl;
     }
 
     return 0;
@@ -159,7 +174,7 @@ std::filesystem::path Program::GetInputFilePath(std::filesystem::path const& exe
     std::string directoryName = "";
     do
     {
-        directoryName = filePath.filename();
+        directoryName = filePath.filename().string();
         filePath = filePath.parent_path();
     }
     while (directoryName.size() > 0 && directoryName != "build");

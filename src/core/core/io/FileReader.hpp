@@ -27,6 +27,7 @@ namespace aoc::core
             while (std::getline(file, line))
             {
                 fileLines.emplace_back(std::move(line));
+                line = ""; // Reset variable to suppress warning on MSVC
             }
 
             file.close();
