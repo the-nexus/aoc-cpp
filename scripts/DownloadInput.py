@@ -13,8 +13,9 @@ day_last = 25
 month_december = 12
 
 project_dir_path = pathlib.Path(__file__).parents[1].resolve()
-session_key_file_path = project_dir_path / "SessionKey.txt"
-input_dir_path = project_dir_path / "res/input"
+resource_dir_path = project_dir_path / "res"
+input_dir_path = resource_dir_path / "input"
+session_key_file_path = resource_dir_path / "SessionKey.txt"
 
 url_template = "https://adventofcode.com/{0}/day/{1}/input"
 input_file_name_template = "Input_{0}_{1}.txt"

@@ -206,13 +206,13 @@ int Program::QueryDay()
 void Program::DisplayHelp()
 {
     std::cout <<
-        "AdventOfCode [-h] [-i] PATH [-y] YEAR [-d] DAY [-p1] [-p2] [-t]\n"
-        "  -i   PATH  Path to a specific input file to use with the challenge program.\n"
-        "  -y   YEAR  Year of the challenge program to execute.\n"
-        "  -d   DAY   Day of the challenge program to execute.\n"
-        "  -p1        If specified without --part2 being specified, will only run the first part of the challenge program.\n"
-        "  -p2        If specified without --part1 being specified, will only run the second part of the challenge program.\n"
-        "  -t         Will measure the execution time of the program, excluding argument parsing.\n"
-        "  -h         Displays this message.\n"
+        "\nAdventOfCode [-h] [-i] PATH [-y] YEAR [-d] DAY [-p1] [-p2] [-t]"
+        "\n  -i   PATH  Path to a specific input file to use with the challenge program."
+        "\n  -y   YEAR  Year of the challenge program to execute."
+        "\n  -d   DAY   Day of the challenge program to execute."
+        "\n  -p1        If specified without -p2 being specified, will only run the first part of the challenge program."
+        "\n  -p2        If specified without -p1 being specified, will only run the second part of the challenge program."
+        "\n  -t         Will measure the execution time of the program, excluding argument parsing."
+        "\n  -h         Displays this message and ends the execution instantly."
         << std::endl;
 }
