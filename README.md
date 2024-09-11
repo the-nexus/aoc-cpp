@@ -43,7 +43,7 @@ Alternatively, if you want to build and run the solution using other text editor
 
 3) Run the executable
 
-    ```./build/src/AdventOfCode```
+    ```./build/AdventOfCode```
 
 
 ## Session Key
@@ -99,5 +99,4 @@ You should re-run the CMake project generation anytime you add/remove/generate f
 The framework is devided in a few modules:
 1) **Core:** Contains all reusable code that could be ported in other projects. This code is not specifically tied to the Advent of Code event but improves the quality of life for the user.
 2) **Challenges:** Contains all implemented programs for the daily challenges of the event. Those programs are then automatically registered to a factory so that they can be instantiated using a pair of values representing the Year and Day of a challenge.
-3) **Runtime:** Encapsulate the program to run. It receives arguments, parses them into a config, generates a challenge instance from a factory using the config, reads the appropriate input text file, then runs the challenge's code against the input text to obtain the challenge's answer.
-4) **Main:** Main point of entry of the project. It makes the comand line arguments into an ```std::vector<string_view>``` so that they can more easily be parsed by the program, and then launches the program.
+3) **Runtime:** Defines the program to run from ```Main.cpp```. It receives arguments, parses them into a config, generates a challenge instance from a factory using the config, reads the appropriate input text file, then runs the challenge's code against the input text to obtain the challenge's answer.

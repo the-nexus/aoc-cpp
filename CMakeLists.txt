@@ -22,6 +22,8 @@ set (AUTOGEN_SUB_PATH /autogen)
 
 set (INPUT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/res/input)
 
+add_subdirectory(src)
+
 #############
 ## PROJECT ##
 
@@ -31,4 +33,11 @@ project (AdventOfCode
     LANGUAGES CXX
 )
 
-add_subdirectory(./src)
+#######################
+## Create executable ##
+
+add_executable (${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/src/Main.cpp)
+
+target_link_libraries (${PROJECT_NAME}
+    PRIVATE aoc::runtime
+)
