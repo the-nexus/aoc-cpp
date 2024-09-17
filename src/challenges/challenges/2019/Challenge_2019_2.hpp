@@ -2,7 +2,7 @@
 #pragma once
 
 #include "challenges/Challenge.hpp"
-#include "challenges/2019/intcode/IntcodeProgram.hpp"
+#include "challenges/2019/intcode/Computer.hpp"
 
 namespace aoc::challenges
 {
@@ -17,36 +17,46 @@ namespace aoc::challenges
 
         void RunPartOne(std::ostream& outAnswer) override
         {
-            IntcodeProgram program { GetInputLines()[0] };
-            program.SetAt(1, 12);
-            program.SetAt(2, 2);
+            intcode2019::Computer computer = { GetInputLine(0) };
+            computer.WriteData(1, 12);
+            computer.WriteData(2, 2);
 
-            while (program.Step()) {}
+            while (!computer.HasHalted())
+            {
+                computer.Step();
+            }
 
-            outAnswer << program.GetAt(0);
+            int result;
+            computer.ReadData(0, result);
+            outAnswer << result;
         }
 
         void RunPartTwo(std::ostream& outAnswer) override 
         {
-            IntcodeProgram program { GetInputLines()[0] };
-            for (intcode_t noun = 0; noun <= 99; ++noun)
+            intcode2019::Computer computer = { GetInputLine(0) };
+            for (int noun = 0; noun <= 99; ++noun)
             {
-                for (intcode_t verb = 0; verb <= 99; ++verb)
+                for (int verb = 0; verb <= 99; ++verb)
                 {
-                    program.Reset();
-                    program.SetAt(1, noun);
-                    program.SetAt(2, verb);
+                    computer.Reset();
+                    computer.WriteData(1, noun);
+                    computer.WriteData(2, verb);
 
-                    while (program.Step()) {}
+                    while (!computer.HasHalted())
+                    {
+                        computer.Step();
+                    }
 
-                    if (program.GetAt(0) == 19690720)
+                    int result;
+                    computer.ReadData(0, result);
+
+                    if (result == 19690720)
                     {
                         outAnswer << (noun * 100 + verb);
                         return;
                     }
                 }
             }
-
         }
     };
 }

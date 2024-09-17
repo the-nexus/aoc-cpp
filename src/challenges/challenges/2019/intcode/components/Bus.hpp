@@ -3,17 +3,19 @@
 
 #include <vector>
 
-#include "challenges/2019/intcode/components/SerialPort.hpp"
+#include "challenges/2019/intcode/components/ISerialPort.hpp"
 
 namespace aoc::challenges::intcode2019
 {
-    template <typename address_t, typename data_t>
-    class Bus : public SerialPort<address_t, data_t>
+    class Bus final : public ISerialPort
     {
-        std::vector<SerialPort<address_t, data_t>*> m_connectedSerialDevices;
+        std::vector<ISerialPort*> m_connectedSerialDevices;
 
     public:
-        void ConnectSerialDevice(SerialPort<address_t, data_t>* serialDevice);
-        void DisconnectSerialDevice(SerialPort<address_t, data_t>* serialDevice)
+        void ReadData(int const address, int& outData) override;
+        void WriteData(int const address, int const data) override;
+
+        void ConnectSerialDevice(ISerialPort* serialDevice);
+        void DisconnectSerialDevice(ISerialPort* serialDevice);
     };
 }

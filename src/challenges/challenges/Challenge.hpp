@@ -35,5 +35,6 @@ namespace aoc::challenges
         void RunPartTwo(std::ostream& outAnswer) override { outAnswer << "PART TWO NOT IMPLEMENTED"; }
 
         const std::vector<std::string>& GetInputLines() const { return m_inputLines; }
+        const std::string& GetInputLine(size_t const lineIndex) const { return m_inputLines[lineIndex]; }
     };
 }
