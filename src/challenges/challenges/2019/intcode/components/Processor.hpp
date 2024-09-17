@@ -9,7 +9,7 @@ namespace aoc::challenges::intcode2019
     {
         ISerialPort* m_serialDevice = nullptr;
         int m_ioAddress = 0;
-        int m_programCounter = 0;
+        int m_instructionPointer = 0;
         int m_instruction = 0;
         bool m_hasHalted = false;
 
@@ -27,6 +27,10 @@ namespace aoc::challenges::intcode2019
         void Multiply();
         void Input();
         void Output();
+        void JumpIfNotZero();
+        void JumpIfZero();
+        void CompareLess();
+        void CompareEqual();
         void Halt();
 
         int GetOpcode() const;

@@ -36,7 +36,21 @@ namespace aoc::challenges
 
         void RunPartTwo(std::ostream& outAnswer) override 
         {
-            Super::RunPartTwo(outAnswer);
+            intcode2019::Computer computer { GetInputLine(0) };
+            computer.PushInputData(5);
+
+            while (!computer.HasHalted())
+            {
+                computer.Step();
+            }
+
+            int diagnosticCode = 0;
+            if (std::optional<int> const outputData = computer.PopOutputData())
+            {
+                diagnosticCode = outputData.value();
+            }
+
+            outAnswer << diagnosticCode;
         }
     };
 }
