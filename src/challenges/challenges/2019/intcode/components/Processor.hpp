@@ -1,21 +1,21 @@
 
 #pragma once
 
-#include "challenges/2019/intcode/components/ISerialPort.hpp"
+#include "challenges/2019/intcode/components/Bus.hpp"
 
 namespace aoc::challenges::intcode2019
 {
     class Processor
     {
-        ISerialPort* m_serialDevice = nullptr;
-        int m_ioAddress = 0;
-        int m_instructionPointer = 0;
-        int m_instruction = 0;
+        Bus* m_dataBus = nullptr;
+        address_t m_ioAddress = 0;
+        address_t m_instructionPointer = 0;
+        data_t m_instruction = 0;
         bool m_hasHalted = false;
 
     public:
-        void SetSerialDevice(ISerialPort* serialDevice) { m_serialDevice = serialDevice; }
-        void SetIOAddress(int const ioAddress) { m_ioAddress = ioAddress; }
+        void SetDataBus(Bus* dataBus) { m_dataBus = dataBus; }
+        void SetIOAddress(address_t const ioAddress) { m_ioAddress = ioAddress; }
 
         bool HasHalted() const { return m_hasHalted; }
 
@@ -33,8 +33,10 @@ namespace aoc::challenges::intcode2019
         void CompareEqual();
         void Halt();
 
-        int GetOpcode() const;
-        int GetParameterMode(int const parameterOffset) const;
-        int GetParameterAddress(int const parameterOffset) const;
+        data_t GetOpcode() const;
+        data_t GetParameterMode(data_t const parameterOffset) const;
+        address_t GetParameterAddress(data_t const parameterOffset) const;
+        address_t AddressModePosition(data_t parameterOffset) const;
+        address_t AddressModeImmediate(data_t parameterOffset) const;
     };
 }

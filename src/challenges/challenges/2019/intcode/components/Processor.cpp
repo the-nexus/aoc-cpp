@@ -11,7 +11,7 @@ void Processor::Reset()
 
 void Processor::Step()
 {
-    m_serialDevice->ReadData(m_instructionPointer++, m_instruction);
+    m_dataBus->ReadData(m_instructionPointer++, m_instruction);
 
     switch (GetOpcode())
     {
@@ -30,116 +30,116 @@ void Processor::Step()
 
 void Processor::Add()
 {
-    int const parameterAddressA = GetParameterAddress(0);
-    int const parameterAddressB = GetParameterAddress(1);
-    int const resultAddress = GetParameterAddress(2);
+    address_t const parameterAddressA = GetParameterAddress(0);
+    address_t const parameterAddressB = GetParameterAddress(1);
+    address_t const resultAddress = GetParameterAddress(2);
     m_instructionPointer += 3;
 
-    int parameterA, parameterB;
-    m_serialDevice->ReadData(parameterAddressA, parameterA);
-    m_serialDevice->ReadData(parameterAddressB, parameterB);
+    data_t parameterA, parameterB;
+    m_dataBus->ReadData(parameterAddressA, parameterA);
+    m_dataBus->ReadData(parameterAddressB, parameterB);
 
-    int const result = parameterA + parameterB;
-    m_serialDevice->WriteData(resultAddress, result);
+    data_t const result = parameterA + parameterB;
+    m_dataBus->WriteData(resultAddress, result);
 }
 
 void Processor::Multiply()
 {
-    int const parameterAddressA = GetParameterAddress(0);
-    int const parameterAddressB = GetParameterAddress(1);
-    int const resultAddress = GetParameterAddress(2);
+    address_t const parameterAddressA = GetParameterAddress(0);
+    address_t const parameterAddressB = GetParameterAddress(1);
+    address_t const resultAddress = GetParameterAddress(2);
     m_instructionPointer += 3;
 
-    int parameterA, parameterB;
-    m_serialDevice->ReadData(parameterAddressA, parameterA);
-    m_serialDevice->ReadData(parameterAddressB, parameterB);
+    data_t parameterA, parameterB;
+    m_dataBus->ReadData(parameterAddressA, parameterA);
+    m_dataBus->ReadData(parameterAddressB, parameterB);
 
-    int const result = parameterA * parameterB;
-    m_serialDevice->WriteData(resultAddress, result);
+    data_t const result = parameterA * parameterB;
+    m_dataBus->WriteData(resultAddress, result);
 }
 
 void Processor::Input()
 {
-    int const parameterAddress = GetParameterAddress(0);
+    address_t const parameterAddress = GetParameterAddress(0);
     m_instructionPointer += 1;
 
-    int data;
-    m_serialDevice->ReadData(m_ioAddress, data);
-    m_serialDevice->WriteData(parameterAddress, data);
+    data_t data;
+    m_dataBus->ReadData(m_ioAddress, data);
+    m_dataBus->WriteData(parameterAddress, data);
 }
 
 void Processor::Output()
 {
-    int const parameterAddress = GetParameterAddress(0);
+    address_t const parameterAddress = GetParameterAddress(0);
     m_instructionPointer += 1;
 
-    int data;
-    m_serialDevice->ReadData(parameterAddress, data);
-    m_serialDevice->WriteData(m_ioAddress, data);
+    data_t data;
+    m_dataBus->ReadData(parameterAddress, data);
+    m_dataBus->WriteData(m_ioAddress, data);
 }
 
 void Processor::JumpIfNotZero()
 {
-    int const parameterAddress = GetParameterAddress(0);
-    int const destinationAddress = GetParameterAddress(1);
+    address_t const parameterAddress = GetParameterAddress(0);
+    address_t const destinationAddress = GetParameterAddress(1);
     m_instructionPointer += 2;
 
-    int parameter;
-    m_serialDevice->ReadData(parameterAddress, parameter);
+    data_t parameter;
+    m_dataBus->ReadData(parameterAddress, parameter);
 
     if (parameter != 0)
     {
-        int destination;
-        m_serialDevice->ReadData(destinationAddress, destination);
-        m_instructionPointer = destination;
+        data_t destination;
+        m_dataBus->ReadData(destinationAddress, destination);
+        m_instructionPointer = static_cast<address_t>(destination);
     }
 }
 
 void Processor::JumpIfZero()
 {
-    int const parameterAddress = GetParameterAddress(0);
-    int const destinationAddress = GetParameterAddress(1);
+    address_t const parameterAddress = GetParameterAddress(0);
+    address_t const destinationAddress = GetParameterAddress(1);
     m_instructionPointer += 2;
 
-    int parameter;
-    m_serialDevice->ReadData(parameterAddress, parameter);
+    data_t parameter;
+    m_dataBus->ReadData(parameterAddress, parameter);
 
     if (parameter == 0)
     {
-        int destination;
-        m_serialDevice->ReadData(destinationAddress, destination);
-        m_instructionPointer = destination;
+        data_t destination;
+        m_dataBus->ReadData(destinationAddress, destination);
+        m_instructionPointer = static_cast<address_t>(destination);
     }
 }
 
 void Processor::CompareLess()
 {
-    int const parameterAddressA = GetParameterAddress(0);
-    int const parameterAddressB = GetParameterAddress(1);
-    int const resultAddress = GetParameterAddress(2);
+    address_t const parameterAddressA = GetParameterAddress(0);
+    address_t const parameterAddressB = GetParameterAddress(1);
+    address_t const resultAddress = GetParameterAddress(2);
     m_instructionPointer += 3;
 
-    int parameterA, parameterB;
-    m_serialDevice->ReadData(parameterAddressA, parameterA);
-    m_serialDevice->ReadData(parameterAddressB, parameterB);
+    data_t parameterA, parameterB;
+    m_dataBus->ReadData(parameterAddressA, parameterA);
+    m_dataBus->ReadData(parameterAddressB, parameterB);
 
-    int const result = parameterA < parameterB ? 1 : 0;
-    m_serialDevice->WriteData(resultAddress, result);
+    data_t const result = parameterA < parameterB ? 1 : 0;
+    m_dataBus->WriteData(resultAddress, result);
 }
 
 void Processor::CompareEqual()
 {
-    int const parameterAddressA = GetParameterAddress(0);
-    int const parameterAddressB = GetParameterAddress(1);
-    int const resultAddress = GetParameterAddress(2);
+    address_t const parameterAddressA = GetParameterAddress(0);
+    address_t const parameterAddressB = GetParameterAddress(1);
+    address_t const resultAddress = GetParameterAddress(2);
     m_instructionPointer += 3;
 
-    int parameterA, parameterB;
-    m_serialDevice->ReadData(parameterAddressA, parameterA);
-    m_serialDevice->ReadData(parameterAddressB, parameterB);
+    data_t parameterA, parameterB;
+    m_dataBus->ReadData(parameterAddressA, parameterA);
+    m_dataBus->ReadData(parameterAddressB, parameterB);
 
-    int const result = parameterA == parameterB ? 1 : 0;
-    m_serialDevice->WriteData(resultAddress, result);
+    data_t const result = parameterA == parameterB ? 1 : 0;
+    m_dataBus->WriteData(resultAddress, result);
 }
 
 void Processor::Halt()
@@ -147,15 +147,15 @@ void Processor::Halt()
     m_hasHalted = true;
 }
 
-int Processor::GetOpcode() const
+data_t Processor::GetOpcode() const
 {
     return m_instruction % 100;
 }
 
-int Processor::GetParameterMode(int const parameterOffset) const
+data_t Processor::GetParameterMode(data_t const parameterOffset) const
 {
-    int divider = 100;
-    for (int i = 0; i < parameterOffset; ++i)
+    data_t divider = 100;
+    for (data_t i = 0; i < parameterOffset; ++i)
     {
         divider *= 10;
     }
@@ -163,23 +163,27 @@ int Processor::GetParameterMode(int const parameterOffset) const
     return (m_instruction / divider) % 10;
 }
 
-int Processor::GetParameterAddress(int const parameterOffset) const
+address_t Processor::GetParameterAddress(data_t const parameterOffset) const
 {
-    int parameterAddress;
+    data_t destination;
     switch (GetParameterMode(parameterOffset))
     {
-    case 0: // Position Mode
-        m_serialDevice->ReadData(m_instructionPointer + parameterOffset, parameterAddress);
-        break;
-
-    case 1: // Immediate Mode
-        parameterAddress = m_instructionPointer + parameterOffset;
-        break;
-
-    default: // ???
-        m_serialDevice->ReadData(m_instructionPointer + parameterOffset, parameterAddress);
-        break;
+    case 0: return AddressModePosition(parameterOffset);
+    case 1: return AddressModeImmediate(parameterOffset);
+    default: break;
     }
 
-    return parameterAddress;
+    return AddressModePosition(parameterOffset);
+}
+
+address_t Processor::AddressModePosition(data_t parameterOffset) const
+{
+    data_t addressData;
+    m_dataBus->ReadData(m_instructionPointer + static_cast<address_t>(parameterOffset), addressData);
+    return static_cast<address_t>(addressData);
+}
+
+address_t Processor::AddressModeImmediate(data_t parameterOffset) const
+{
+    return m_instructionPointer + static_cast<address_t>(parameterOffset);
 }

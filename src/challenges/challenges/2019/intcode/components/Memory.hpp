@@ -5,13 +5,13 @@
 #include <memory>
 #include <vector>
 
-#include "challenges/2019/intcode/components/ISerialPort.hpp"
+#include "challenges/2019/intcode/components/BusClient.hpp"
 
 namespace aoc::challenges::intcode2019
 {
-    class Memory final : public ISerialPort
+    class Memory final : public BusClient
     {
-        std::vector<int> m_data;
+        std::vector<data_t> m_data;
 
     public:
         Memory() = default;
@@ -19,10 +19,10 @@ namespace aoc::challenges::intcode2019
 
         size_t GetSize() const { return m_data.size(); }
 
-        void ReadData(int const address, int& outData) override;
-        void WriteData(int const address, int const data) override;
+        void ReadData(address_t const address, data_t& outData) override;
+        void WriteData(address_t const address, data_t const data) override;
 
         void Format();
-        void Flash(std::vector<int> const& data);
+        void Flash(std::vector<data_t> const& data);
     };
 }

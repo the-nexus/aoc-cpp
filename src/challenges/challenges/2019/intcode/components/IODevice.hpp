@@ -4,27 +4,27 @@
 #include <deque>
 #include <optional>
 
-#include "challenges/2019/intcode/components/ISerialPort.hpp"
+#include "challenges/2019/intcode/components/BusClient.hpp"
 
 namespace aoc::challenges::intcode2019
 {
-    class IODevice final : public ISerialPort
+    class IODevice final : public BusClient
     {
-        std::deque<int> m_inputQueue;
-        std::deque<int> m_outputQueue;
-        int m_address = 0;
+        std::deque<data_t> m_inputQueue;
+        std::deque<data_t> m_outputQueue;
+        address_t m_address = 0;
 
     public:
 
-        void ReadData(int const address, int& outData) override;
-        void WriteData(int const address, int const data) override;
+        void ReadData(address_t const address, data_t& outData) override;
+        void WriteData(address_t const address, data_t const data) override;
 
-        void PushInputData(int const data);
-        std::optional<int> PopOutputData();
+        void PushInputData(data_t const data);
+        std::optional<data_t> PopOutputData();
 
         void Reset();
 
-        void SetAddress(int const address) { m_address = address; }
-        int GetAddress() const { return m_address; }
+        void SetAddress(address_t const address) { m_address = address; }
+        address_t GetAddress() const { return m_address; }
     };
 }

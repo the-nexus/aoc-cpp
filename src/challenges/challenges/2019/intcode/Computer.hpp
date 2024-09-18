@@ -22,11 +22,11 @@ namespace aoc::challenges::intcode2019
     public:
         Computer(std::string const& programStr);
 
-        void WriteData(int const address, int const data);
-        void ReadData(int const address, int& outData);
+        void WriteData(address_t const address, data_t const data);
+        void ReadData(address_t const address, data_t& outData);
 
-        void PushInputData(int const data);
-        std::optional<int> PopOutputData();
+        void PushInputData(data_t const data);
+        std::optional<data_t> PopOutputData();
 
         void Reset();
         void Step();

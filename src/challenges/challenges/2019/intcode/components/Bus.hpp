@@ -3,19 +3,21 @@
 
 #include <vector>
 
-#include "challenges/2019/intcode/components/ISerialPort.hpp"
+#include "challenges/2019/intcode/CommonDefinitions.hpp"
 
 namespace aoc::challenges::intcode2019
 {
-    class Bus final : public ISerialPort
+    class BusClient;
+
+    class Bus final
     {
-        std::vector<ISerialPort*> m_connectedSerialDevices;
+        std::vector<BusClient*> m_connectedClients;
 
     public:
-        void ReadData(int const address, int& outData) override;
-        void WriteData(int const address, int const data) override;
+        void ReadData(address_t const address, data_t& outData);
+        void WriteData(address_t const address, data_t const data);
 
-        void ConnectSerialDevice(ISerialPort* serialDevice);
-        void DisconnectSerialDevice(ISerialPort* serialDevice);
+        void ConnectClient(BusClient* client);
+        void DisconnectClient(BusClient* client);
     };
 }

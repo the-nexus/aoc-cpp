@@ -3,30 +3,32 @@
 
 #include <algorithm>
 
+#include "challenges/2019/intcode/components/BusClient.hpp"
+
 using namespace aoc::challenges::intcode2019;
 
-void Bus::ReadData(int const address, int& outData)
+void Bus::ReadData(address_t const address, data_t& outData)
 {
-    for (ISerialPort* serialDevice : m_connectedSerialDevices)
+    for (BusClient* client : m_connectedClients)
     {
-        serialDevice->ReadData(address, outData);
+        client->ReadData(address, outData);
     }
 }
 
-void Bus::WriteData(int const address, int const data)
+void Bus::WriteData(address_t const address, data_t const data)
 {
-    for (ISerialPort* serialDevice : m_connectedSerialDevices)
+    for (BusClient* client : m_connectedClients)
     {
-        serialDevice->WriteData(address, data);
+        client->WriteData(address, data);
     }
 }
 
-void Bus::ConnectSerialDevice(ISerialPort* serialDevice)
+void Bus::ConnectClient(BusClient* client)
 {
-    m_connectedSerialDevices.push_back(serialDevice);
+    m_connectedClients.push_back(client);
 }
 
-void Bus::DisconnectSerialDevice(ISerialPort* serialDevice)
+void Bus::DisconnectClient(BusClient* client)
 {
-    std::remove(std::begin(m_connectedSerialDevices), std::end(m_connectedSerialDevices), serialDevice);
+    std::remove(std::begin(m_connectedClients), std::end(m_connectedClients), client);
 }
