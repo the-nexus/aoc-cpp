@@ -40,5 +40,5 @@ void Bus::ConnectClient(BusClient* client)
 
 void Bus::DisconnectClient(BusClient* client)
 {
-    std::remove(std::begin(m_connectedClients), std::end(m_connectedClients), client);
+    std::erase(m_connectedClients, client);
 }

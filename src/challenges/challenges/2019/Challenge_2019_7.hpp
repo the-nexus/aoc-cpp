@@ -45,9 +45,30 @@ namespace aoc::challenges
     private:
         DataT FindBestSignal(std::vector<DataT>& outBestPhases, bool const isFeedbackLoop)
         {
+            std::vector<DataT> const programData = ComputerT::CompileProgram(GetInputLine(0));
+
             std::vector<ComputerT> computers;
+            //computers.reserve(5);
+
+            computers.emplace_back(programData);
+            computers.emplace_back(programData);
+            computers.emplace_back(programData);
+            computers.emplace_back(programData);
+            computers.emplace_back(programData);
+
             std::vector<PipeT> dataPipes;
-            AssembleNetwork(computers, dataPipes, isFeedbackLoop);
+            dataPipes.resize(isFeedbackLoop ? 5 : 6);
+
+            computers[0].SetInputPipe(&dataPipes[0]);
+            computers[0].SetOutputPipe(&dataPipes[1]);
+            computers[1].SetInputPipe(&dataPipes[1]);
+            computers[1].SetOutputPipe(&dataPipes[2]);
+            computers[2].SetInputPipe(&dataPipes[2]);
+            computers[2].SetOutputPipe(&dataPipes[3]);
+            computers[3].SetInputPipe(&dataPipes[3]);
+            computers[3].SetOutputPipe(&dataPipes[4]);
+            computers[4].SetInputPipe(&dataPipes[4]);
+            computers[4].SetOutputPipe(isFeedbackLoop ? &dataPipes[0] : &dataPipes[5]);
 
             DataT bestSignal = 0;
             std::vector<DataT> phases = outBestPhases;
@@ -71,24 +92,6 @@ namespace aoc::challenges
             while (std::next_permutation(std::begin(phases), std::end(phases)));
 
             return bestSignal;
-        }
-
-        void AssembleNetwork(std::vector<ComputerT>& outComputers, std::vector<PipeT>& outDataPipes, bool const isFeedbackLoop) const
-        {
-            std::vector<DataT> const programData = ComputerT::CompileProgram(GetInputLine(0));
-            outComputers = { { programData }, { programData }, { programData }, { programData }, { programData } };
-            outDataPipes.resize(isFeedbackLoop ? 5 : 6);
-
-            outComputers[0].SetInputPipe(&outDataPipes[0]);
-            outComputers[0].SetOutputPipe(&outDataPipes[1]);
-            outComputers[1].SetInputPipe(&outDataPipes[1]);
-            outComputers[1].SetOutputPipe(&outDataPipes[2]);
-            outComputers[2].SetInputPipe(&outDataPipes[2]);
-            outComputers[2].SetOutputPipe(&outDataPipes[3]);
-            outComputers[3].SetInputPipe(&outDataPipes[3]);
-            outComputers[3].SetOutputPipe(&outDataPipes[4]);
-            outComputers[4].SetInputPipe(&outDataPipes[4]);
-            outComputers[4].SetOutputPipe(isFeedbackLoop ? &outDataPipes[0] : &outDataPipes[5]);
         }
 
         static void InitializeComputers(std::vector<DataT> const& phases, std::vector<ComputerT>& computers, std::vector<PipeT>& dataPipes)
