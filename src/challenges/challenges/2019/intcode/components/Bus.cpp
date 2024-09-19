@@ -7,12 +7,22 @@
 
 using namespace aoc::challenges::intcode2019;
 
-void Bus::ReadData(address_t const address, data_t& outData)
+void Bus::Reset()
 {
     for (BusClient* client : m_connectedClients)
     {
-        client->ReadData(address, outData);
+        client->Reset();
     }
+}
+
+bool Bus::ReadData(address_t const address, data_t& outData)
+{
+    bool hasReadAnything = false;
+    for (BusClient* client : m_connectedClients)
+    {
+        hasReadAnything |= client->ReadData(address, outData);
+    }
+    return hasReadAnything;
 }
 
 void Bus::WriteData(address_t const address, data_t const data)

@@ -5,6 +5,8 @@ using namespace aoc::challenges::intcode2019;
 
 void Processor::Reset()
 {
+    m_dataBus->Reset();
+
     m_instructionPointer = 0;
     m_hasHalted = false;
 }
@@ -60,12 +62,17 @@ void Processor::Multiply()
 
 void Processor::Input()
 {
+    data_t inputData;
+    if (m_dataBus->ReadData(m_ioPortAddress, inputData))
+    {
+        --m_instruction;
+        return;
+    }
+
     address_t const parameterAddress = GetParameterAddress(0);
     m_instructionPointer += 1;
 
-    data_t data;
-    m_dataBus->ReadData(m_ioAddress, data);
-    m_dataBus->WriteData(parameterAddress, data);
+    m_dataBus->WriteData(parameterAddress, inputData);
 }
 
 void Processor::Output()
@@ -73,9 +80,9 @@ void Processor::Output()
     address_t const parameterAddress = GetParameterAddress(0);
     m_instructionPointer += 1;
 
-    data_t data;
-    m_dataBus->ReadData(parameterAddress, data);
-    m_dataBus->WriteData(m_ioAddress, data);
+    data_t outputData;
+    m_dataBus->ReadData(parameterAddress, outputData);
+    m_dataBus->WriteData(m_ioPortAddress, outputData);
 }
 
 void Processor::JumpIfNotZero()

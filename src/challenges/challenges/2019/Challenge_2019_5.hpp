@@ -3,6 +3,7 @@
 
 #include "challenges/Challenge.hpp"
 #include "challenges/2019/intcode/Computer.hpp"
+#include "challenges/2019/intcode/io/IOQueue.hpp"
 
 namespace aoc::challenges
 {
@@ -17,8 +18,13 @@ namespace aoc::challenges
 
         void RunPartOne(std::ostream& outAnswer) override
         {
-            intcode2019::Computer computer { GetInputLine(0) };
-            computer.PushInputData(1);
+            intcode2019::Computer computer = { intcode2019::Computer::CompileProgram(GetInputLine(0)) };
+
+            intcode2019::IOQueue dataIn, dataOut;
+            computer.SetInputPipe(&dataIn);
+            computer.SetOutputPipe(&dataOut);
+
+            dataIn.WriteData(1);
 
             while (!computer.HasHalted())
             {
@@ -26,18 +32,20 @@ namespace aoc::challenges
             }
 
             int diagnosticCode = 0;
-            while (std::optional<int> const outputData = computer.PopOutputData())
-            {
-                diagnosticCode = outputData.value();
-            }
+            while (dataOut.ReadData(diagnosticCode)) {}
 
             outAnswer << diagnosticCode;
         }
 
         void RunPartTwo(std::ostream& outAnswer) override 
         {
-            intcode2019::Computer computer { GetInputLine(0) };
-            computer.PushInputData(5);
+            intcode2019::Computer computer = { intcode2019::Computer::CompileProgram(GetInputLine(0)) };
+
+            intcode2019::IOQueue dataIn, dataOut;
+            computer.SetInputPipe(&dataIn);
+            computer.SetOutputPipe(&dataOut);
+
+            dataIn.WriteData(5);
 
             while (!computer.HasHalted())
             {
@@ -45,10 +53,7 @@ namespace aoc::challenges
             }
 
             int diagnosticCode = 0;
-            if (std::optional<int> const outputData = computer.PopOutputData())
-            {
-                diagnosticCode = outputData.value();
-            }
+            while (dataOut.ReadData(diagnosticCode)) {}
 
             outAnswer << diagnosticCode;
         }

@@ -8,7 +8,9 @@ namespace aoc::challenges::intcode2019
     class BusClient
     {
     public:
-        virtual void ReadData(address_t const address, data_t& outData) = 0;
+        virtual ~BusClient() = default;
+        virtual void Reset() = 0;
+        virtual bool ReadData(address_t const address, data_t& outData) = 0;
         virtual void WriteData(address_t const address, data_t const data) = 0;
     };
 }

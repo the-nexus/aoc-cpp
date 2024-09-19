@@ -9,12 +9,13 @@ namespace aoc::challenges::intcode2019
 {
     class BusClient;
 
-    class Bus final
+    class Bus
     {
         std::vector<BusClient*> m_connectedClients;
 
     public:
-        void ReadData(address_t const address, data_t& outData);
+        void Reset();
+        bool ReadData(address_t const address, data_t& outData);
         void WriteData(address_t const address, data_t const data);
 
         void ConnectClient(BusClient* client);

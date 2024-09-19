@@ -17,7 +17,7 @@ namespace aoc::challenges
 
         void RunPartOne(std::ostream& outAnswer) override
         {
-            intcode2019::Computer computer = { GetInputLine(0) };
+            intcode2019::Computer computer = { intcode2019::Computer::CompileProgram(GetInputLine(0)) };
             computer.WriteData(1, 12);
             computer.WriteData(2, 2);
 
@@ -33,7 +33,8 @@ namespace aoc::challenges
 
         void RunPartTwo(std::ostream& outAnswer) override 
         {
-            intcode2019::Computer computer = { GetInputLine(0) };
+            intcode2019::Computer computer = { intcode2019::Computer::CompileProgram(GetInputLine(0)) };
+
             for (int noun = 0; noun <= 99; ++noun)
             {
                 for (int verb = 0; verb <= 99; ++verb)

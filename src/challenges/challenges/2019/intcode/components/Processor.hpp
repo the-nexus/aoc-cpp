@@ -8,19 +8,19 @@ namespace aoc::challenges::intcode2019
     class Processor
     {
         Bus* m_dataBus = nullptr;
-        address_t m_ioAddress = 0;
+        address_t m_ioPortAddress = 0;
         address_t m_instructionPointer = 0;
         data_t m_instruction = 0;
         bool m_hasHalted = false;
 
     public:
-        void SetDataBus(Bus* dataBus) { m_dataBus = dataBus; }
-        void SetIOAddress(address_t const ioAddress) { m_ioAddress = ioAddress; }
-
-        bool HasHalted() const { return m_hasHalted; }
-
         void Reset();
         void Step();
+
+        void SetDataBus(Bus* dataBus) { m_dataBus = dataBus; }
+        void SetIOPortAddress(address_t const ioPortAddress) { m_ioPortAddress = ioPortAddress; }
+
+        bool HasHalted() const { return m_hasHalted; }
 
     private:
         void Add();

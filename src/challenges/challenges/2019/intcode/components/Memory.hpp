@@ -17,12 +17,13 @@ namespace aoc::challenges::intcode2019
         Memory() = default;
         Memory(size_t const size);
 
-        size_t GetSize() const { return m_data.size(); }
-
-        void ReadData(address_t const address, data_t& outData) override;
+        void Reset() override {} // Will be noise, just like real RAM
+        bool ReadData(address_t const address, data_t& outData) override;
         void WriteData(address_t const address, data_t const data) override;
 
-        void Format();
+        void Resize(size_t const size);
         void Flash(std::vector<data_t> const& data);
+
+        size_t GetSize() const { return m_data.size(); }
     };
 }
