@@ -24,7 +24,7 @@ namespace aoc::challenges
             unsigned int safeReportCount = 0u;
             for (std::vector<unsigned int> const& report : reports)
             {
-                if (IsSafeReport(report))
+                if (IsSafeReport(report, 0u))
                 {
                     ++safeReportCount;
                 }
@@ -35,7 +35,19 @@ namespace aoc::challenges
 
         void RunPartTwo(std::ostream& outAnswer) override 
         {
-            Super::RunPartTwo(outAnswer);
+            std::vector<std::vector<unsigned int>> reports;
+            AssembleReports(reports);
+
+            unsigned int safeReportCount = 0u;
+            for (std::vector<unsigned int> const& report : reports)
+            {
+                if (IsSafeReport(report, 1u))
+                {
+                    ++safeReportCount;
+                }
+            }
+
+            outAnswer << safeReportCount;
         }
 
         void AssembleReports(std::vector<std::vector<unsigned int>>& outReports)
@@ -65,32 +77,47 @@ namespace aoc::challenges
             }
         }
 
-        bool IsSafeReport(std::vector<unsigned int> const& report) const
+        bool IsSafeReport(std::vector<unsigned int> const& report, unsigned int const maxAllowedAberrations) const
         {
+            if (report.size() == 0u)
+            {
+                return false;
+            }
+
             auto const startIt = std::cbegin(report);
             auto const endIt = std::cend(report);
-            if (startIt == endIt)
-            {
-                return false;
-            }
-
             auto const nextIt = startIt + 1;
-            if (nextIt == endIt)
+
+            if (AreAllLevelsIncreasing(nextIt, endIt, *startIt, maxAllowedAberrations))
+            {
+                return true;
+            }
+
+            if (AreAllLevelsDecreasing(nextIt, endIt, *startIt, maxAllowedAberrations))
+            {
+                return true;
+            }
+
+            if (maxAllowedAberrations == 0u || report.size() == 1u)
             {
                 return false;
             }
 
-            if (*startIt < *nextIt)
+            if (AreAllLevelsIncreasing(nextIt + 1, endIt, *nextIt, maxAllowedAberrations - 1u))
             {
-                return AreAllLevelsIncreasing(nextIt, endIt, *startIt);
+                return true;
             }
-            else
+
+            if (AreAllLevelsDecreasing(nextIt + 1, endIt, *nextIt, maxAllowedAberrations - 1u))
             {
-                return AreAllLevelsDecreasing(nextIt, endIt, *startIt);
+                return true;
             }
+
+            return false;
+
         }
 
-        bool AreAllLevelsIncreasing(auto const& startIt, auto const& endIt, unsigned int const lastLevel) const
+        bool AreAllLevelsIncreasing(auto const& startIt, auto const& endIt, unsigned int const lastLevel, unsigned int const maxAllowedAberrations) const
         {
             if (startIt == endIt)
             {
@@ -98,16 +125,31 @@ namespace aoc::challenges
             }
 
             unsigned int const currentLevel = *startIt;
+            if (currentLevel <= lastLevel)
+            {
+                if (maxAllowedAberrations > 0u)
+                {
+                    return AreAllLevelsIncreasing(startIt + 1, endIt, lastLevel, maxAllowedAberrations - 1u);
+                }
+
+                return false;
+            }
+
             unsigned int const delta = currentLevel - lastLevel;
             if (delta < 1u || delta > 3u)
             {
+                if (maxAllowedAberrations > 0u)
+                {
+                    return AreAllLevelsIncreasing(startIt + 1, endIt, lastLevel, maxAllowedAberrations - 1u);
+                }
+
                 return false;
             }
 
-            return AreAllLevelsIncreasing(startIt + 1, endIt, currentLevel);
+            return AreAllLevelsIncreasing(startIt + 1, endIt, currentLevel, maxAllowedAberrations);
         }
 
-        bool AreAllLevelsDecreasing(auto const& startIt, auto const& endIt, unsigned int const lastLevel) const
+        bool AreAllLevelsDecreasing(auto const& startIt, auto const& endIt, unsigned int const lastLevel, unsigned int const maxAllowedAberrations) const
         {
             if (startIt == endIt)
             {
@@ -115,13 +157,28 @@ namespace aoc::challenges
             }
 
             unsigned int const currentLevel = *startIt;
-            unsigned int const delta = lastLevel - currentLevel;
-            if (delta < 1u || delta > 3u)
+            if (currentLevel >= lastLevel)
             {
+                if (maxAllowedAberrations > 0u)
+                {
+                    return AreAllLevelsDecreasing(startIt + 1, endIt, lastLevel, maxAllowedAberrations - 1u);
+                }
+
                 return false;
             }
 
-            return AreAllLevelsDecreasing(startIt + 1, endIt, currentLevel);
+            unsigned int const delta = lastLevel - currentLevel;
+            if (delta < 1u || delta > 3u)
+            {
+                if (maxAllowedAberrations > 0u)
+                {
+                    return AreAllLevelsDecreasing(startIt + 1, endIt, lastLevel, maxAllowedAberrations - 1u);
+                }
+
+                return false;
+            }
+
+            return AreAllLevelsDecreasing(startIt + 1, endIt, currentLevel, maxAllowedAberrations);
         }
     };
 }
