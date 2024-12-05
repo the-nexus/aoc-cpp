@@ -21,19 +21,8 @@ namespace aoc::challenges
         void RunPartOne(std::ostream& outAnswer) override
         {
             size_t constexpr padding = 3u;
-            size_t const lineCount = GetInputLines().size();
-            size_t const columnCount = GetInputLine(0).size();
-
-            core::Grid<char> crossword = { lineCount + 2u * padding, columnCount + 2u * padding };
-            crossword.SetAll('.');
-
-            for (size_t lineIndex = 0u; lineIndex < lineCount; ++lineIndex)
-            {
-                for (size_t columnIndex = 0u; columnIndex < columnCount; ++columnIndex)
-                {
-                    crossword.WriteAt(lineIndex + padding, columnIndex + padding) = GetInputLines()[lineIndex][columnIndex];
-                }
-            }
+            core::Grid<char> crossword;
+            InitializeCrosswordGrid(crossword, padding);
 
             size_t occurenceCount = 0u;
             for (size_t lineIndex = padding; lineIndex < crossword.GetLineCount() - padding; ++lineIndex)
@@ -49,7 +38,42 @@ namespace aoc::challenges
 
         void RunPartTwo(std::ostream& outAnswer) override 
         {
-            Super::RunPartTwo(outAnswer);
+            size_t constexpr padding = 3u;
+            core::Grid<char> crossword;
+            InitializeCrosswordGrid(crossword, padding);
+
+            size_t occurenceCount = 0u;
+            for (size_t lineIndex = padding; lineIndex < crossword.GetLineCount() - padding; ++lineIndex)
+            {
+                for (size_t columnIndex = padding; columnIndex < crossword.GetColumnCount() - padding; ++columnIndex)
+                {
+                    if (IsCrossMAS(crossword, lineIndex, columnIndex))
+                    {
+                        ++occurenceCount;
+                    }
+                }
+            }
+
+            outAnswer << occurenceCount;
+        }
+
+        void InitializeCrosswordGrid(core::Grid<char>& outCrossword, size_t const padding) const
+        {
+            std::vector<std::string> const& lines = GetInputLines();
+            size_t const lineCount = lines.size();
+            size_t const columnCount = lines[0].size();
+
+            outCrossword = { lineCount + 2u * padding, columnCount + 2u * padding };
+            outCrossword.SetAll('.');
+
+            for (size_t lineIndex = 0u; lineIndex < lineCount; ++lineIndex)
+            {
+                std::string const& line = lines[lineIndex];
+                for (size_t columnIndex = 0u; columnIndex < columnCount; ++columnIndex)
+                {
+                    outCrossword.WriteAt(lineIndex + padding, columnIndex + padding) = line[columnIndex];
+                }
+            }
         }
 
         size_t CountAllXMAS(core::Grid<char> const& crossword, size_t const lineIndex, size_t const columnIndex) const
@@ -126,6 +150,32 @@ namespace aoc::challenges
             }
 
             return count;
+        }
+
+        bool IsCrossMAS(core::Grid<char> const& crossword, size_t const lineIndex, size_t const columnIndex)
+        {
+            if (crossword.ReadAt(lineIndex, columnIndex) != 'A')
+            {
+                return false;
+            }
+
+            // First diagonal
+            bool isFirstDiagonalMAS = crossword.ReadAt(lineIndex - 1u, columnIndex - 1u) == 'M' && crossword.ReadAt(lineIndex + 1u, columnIndex + 1u) == 'S';
+            bool isFirstDiagonalSAM = crossword.ReadAt(lineIndex - 1u, columnIndex - 1u) == 'S' && crossword.ReadAt(lineIndex + 1u, columnIndex + 1u) == 'M';
+            if (!isFirstDiagonalMAS && !isFirstDiagonalSAM)
+            {
+                return false;
+            }
+
+            // Second diagonal
+            bool isSecondDiagonalMAS = crossword.ReadAt(lineIndex - 1u, columnIndex + 1u) == 'M' && crossword.ReadAt(lineIndex + 1u, columnIndex - 1u) == 'S';
+            bool isSecondDiagonalSAM = crossword.ReadAt(lineIndex - 1u, columnIndex + 1u) == 'S' && crossword.ReadAt(lineIndex + 1u, columnIndex - 1u) == 'M';
+            if (!isSecondDiagonalMAS && !isSecondDiagonalSAM)
+            {
+                return false;
+            }
+
+            return true;
         }
     };
 }
