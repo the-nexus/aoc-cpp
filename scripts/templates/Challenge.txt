@@ -19,7 +19,7 @@ namespace aoc::challenges
             Super::RunPartOne(outAnswer);
         }
 
-        void RunPartTwo(std::ostream& outAnswer) override 
+        void RunPartTwo(std::ostream& outAnswer) override
         {
             Super::RunPartTwo(outAnswer);
         }

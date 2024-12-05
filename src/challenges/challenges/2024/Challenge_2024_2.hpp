@@ -33,7 +33,7 @@ namespace aoc::challenges
             outAnswer << safeReportCount;
         }
 
-        void RunPartTwo(std::ostream& outAnswer) override 
+        void RunPartTwo(std::ostream& outAnswer) override
         {
             std::vector<std::vector<unsigned int>> reports;
             AssembleReports(reports);

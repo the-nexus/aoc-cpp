@@ -34,7 +34,7 @@ namespace aoc::challenges
             outAnswer << diagnosticCode;
         }
 
-        void RunPartTwo(std::ostream& outAnswer) override 
+        void RunPartTwo(std::ostream& outAnswer) override
         {
             intcode2019::Computer computer { GetInputLine(0) };
             computer.PushInputData(5);

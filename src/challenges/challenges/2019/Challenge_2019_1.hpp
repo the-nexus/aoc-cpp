@@ -26,7 +26,7 @@ namespace aoc::challenges
             outAnswer << totalFuel;
         }
 
-        void RunPartTwo(std::ostream& outAnswer) override 
+        void RunPartTwo(std::ostream& outAnswer) override
         {
             unsigned int totalFuel = 0;
             for (std::string const& inputLine : GetInputLines())

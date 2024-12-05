@@ -31,7 +31,7 @@ namespace aoc::challenges
             outAnswer << frequency;
         }
 
-        void RunPartTwo(std::ostream& outAnswer) override 
+        void RunPartTwo(std::ostream& outAnswer) override
         {
             std::vector<std::string> const& inputLines = GetInputLines();
             size_t inputLineIndex = 0;

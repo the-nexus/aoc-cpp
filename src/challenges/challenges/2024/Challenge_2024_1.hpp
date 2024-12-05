@@ -44,7 +44,7 @@ namespace aoc::challenges
             outAnswer << differenceSum;
         }
 
-        void RunPartTwo(std::ostream& outAnswer) override 
+        void RunPartTwo(std::ostream& outAnswer) override
         {
             std::vector<unsigned int> leftIDs, rightIDs;
             AssembleLists(leftIDs, rightIDs);

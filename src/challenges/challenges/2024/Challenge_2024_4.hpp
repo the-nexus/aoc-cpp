@@ -36,7 +36,7 @@ namespace aoc::challenges
             outAnswer << occurenceCount;
         }
 
-        void RunPartTwo(std::ostream& outAnswer) override 
+        void RunPartTwo(std::ostream& outAnswer) override
         {
             size_t constexpr padding = 3u;
             core::Grid<char> crossword;

@@ -31,7 +31,7 @@ namespace aoc::challenges
             outAnswer << result;
         }
 
-        void RunPartTwo(std::ostream& outAnswer) override 
+        void RunPartTwo(std::ostream& outAnswer) override
         {
             intcode2019::Computer computer = { GetInputLine(0) };
             for (int noun = 0; noun <= 99; ++noun)
