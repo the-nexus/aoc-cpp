@@ -13,22 +13,22 @@ namespace aoc::challenges
     {
         using Super = Challenge<2024, 6>;
 
-        static std::array<std::pair<int, int>, 4u> constexpr _directionOffsets = {{
+        static std::array<std::pair<int, int>, 4u> constexpr sm_directionOffsets = {{
             { -1, 0 },  // Up
             { 0, 1 },   // Right
             { 1, 0 },   // Down
             { 0, -1 }   // Left
         }};
 
-        static std::array<char, 4u> constexpr _directionTokens = {{
+        static std::array<char, 4u> constexpr sm_directionTokens = {{
             '^',    // Up
             '>',    // Right
             'v',    // Down
             '<'     // Left
         }};
 
-        static char constexpr _obstacleToken = '#';
-        static char constexpr _emptyToken = ' ';
+        static char constexpr sm_obstacleToken = '#';
+        static char constexpr sm_emptyToken = ' ';
 
     public:
         Challenge_2024_6(std::vector<std::string>&& inputLines)
@@ -48,22 +48,22 @@ namespace aoc::challenges
             while (IsPositionInRoomBounds(room, currentPosition))
             {
                 char const token = room.ReadAt(currentPosition.first, currentPosition.second);
-                if (token == _obstacleToken)
+                if (token == sm_obstacleToken)
                 {
-                    std::pair<int, int> const& facingDirectionOffset = _directionOffsets[facingDirectionIndex];
+                    std::pair<int, int> const& facingDirectionOffset = sm_directionOffsets[facingDirectionIndex];
                     currentPosition.first -= facingDirectionOffset.first;
                     currentPosition.second -= facingDirectionOffset.second;
                     facingDirectionIndex = (facingDirectionIndex + 1u) % 4u;
                     continue;
                 }
 
-                if (token == _emptyToken)
+                if (token == sm_emptyToken)
                 {
                     ++distinctPositionCount;
-                    room.WriteAt(currentPosition.first, currentPosition.second) = _directionTokens[facingDirectionIndex];
+                    room.WriteAt(currentPosition.first, currentPosition.second) = sm_directionTokens[facingDirectionIndex];
                 }
 
-                std::pair<int, int> const& facingDirectionOffset = _directionOffsets[facingDirectionIndex];
+                std::pair<int, int> const& facingDirectionOffset = sm_directionOffsets[facingDirectionIndex];
                 currentPosition.first += facingDirectionOffset.first;
                 currentPosition.second += facingDirectionOffset.second;
             }
@@ -84,27 +84,26 @@ namespace aoc::challenges
             while (IsPositionInRoomBounds(room, currentPosition))
             {
                 char const token = room.ReadAt(currentPosition.first, currentPosition.second);
-                if (token == _obstacleToken)
+                if (token == sm_obstacleToken)
                 {
-                    std::pair<int, int> const& facingDirectionOffset = _directionOffsets[facingDirectionIndex];
+                    std::pair<int, int> const& facingDirectionOffset = sm_directionOffsets[facingDirectionIndex];
                     currentPosition.first -= facingDirectionOffset.first;
                     currentPosition.second -= facingDirectionOffset.second;
                     facingDirectionIndex = (facingDirectionIndex + 1u) % 4u;
                     continue;
                 }
 
-                if (token == _emptyToken)
+                if (token == sm_emptyToken)
                 {
-                    room.WriteAt(currentPosition.first, currentPosition.second) = _directionTokens[facingDirectionIndex];
+                    room.WriteAt(currentPosition.first, currentPosition.second) = sm_directionTokens[facingDirectionIndex];
                 }
 
-                if (CanPathMerge(room, currentPosition, (facingDirectionIndex + 1u) % 4u))
+                if (SimulateNewObstacle(room, currentPosition, facingDirectionIndex))
                 {
-                    std::cout << currentPosition.first + _directionOffsets[facingDirectionIndex].first << ", "<< currentPosition.second + _directionOffsets[facingDirectionIndex].second << "\n";
                     ++loopOptionCount;
                 }
 
-                std::pair<int, int> const& facingDirectionOffset = _directionOffsets[facingDirectionIndex];
+                std::pair<int, int> const& facingDirectionOffset = sm_directionOffsets[facingDirectionIndex];
                 currentPosition.first += facingDirectionOffset.first;
                 currentPosition.second += facingDirectionOffset.second;
             }
@@ -118,18 +117,18 @@ namespace aoc::challenges
             outRoom.Resize(lines.size(), lines[0].size());
             outRoom.ForEach([&lines, &outStartingPosition](char& item, size_t const lineIndex, size_t const columnIndex) {
                 char const token = lines[lineIndex][columnIndex];
-                if (token == _obstacleToken)
+                if (token == sm_obstacleToken)
                 {
-                    item = _obstacleToken;
+                    item = sm_obstacleToken;
                 }
                 else
                 {
-                    if (token == _directionTokens[0])
+                    if (token == sm_directionTokens[0])
                     {
                         outStartingPosition = { static_cast<int>(lineIndex), static_cast<int>(columnIndex) };
                     }
 
-                    item = _emptyToken;
+                    item = sm_emptyToken;
                 }
             });
         }
@@ -142,26 +141,56 @@ namespace aoc::challenges
                 position.second < static_cast<int>(room.GetColumnCount());
         }
 
-        static bool CanPathMerge(core::Grid<char> const& room, std::pair<int, int> position, size_t const directionIndex)
+        static bool SimulateNewObstacle(core::Grid<char> const& initialRoom, std::pair<int, int> currentPosition, size_t facingDirectionIndex)
         {
-            std::pair<int, int> const& directionOffset = _directionOffsets[directionIndex];
-            char const directionToken = _directionTokens[directionIndex];
+            std::pair<int, int> const newObstaclePosition = {
+                currentPosition.first + sm_directionOffsets[facingDirectionIndex].first,
+                currentPosition.second + sm_directionOffsets[facingDirectionIndex].second
+            };
 
-            while (IsPositionInRoomBounds(room, position))
+            if (!IsPositionInRoomBounds(initialRoom, newObstaclePosition))
             {
-                char const token = room.ReadAt(position.first, position.second);
-                if (token == _obstacleToken)
-                {
-                    break;
-                }
+                // Would be placing an obstacle out of bounds
+                return false;
+            }
 
-                if (token == directionToken)
+            if (initialRoom.ReadAt(newObstaclePosition.first, newObstaclePosition.second) != sm_emptyToken)
+            {
+                // This means there is either already an obstacle there, or we're creating a paradox as we've already moved here
+                return false;
+            }
+
+            core::Grid<char> room = initialRoom;
+            room.WriteAt(newObstaclePosition.first, newObstaclePosition.second) = sm_obstacleToken;
+
+            facingDirectionIndex = (facingDirectionIndex + 1u) % 4u;
+
+            while (IsPositionInRoomBounds(room, currentPosition))
+            {
+                char const token = room.ReadAt(currentPosition.first, currentPosition.second);
+                if (token == sm_directionTokens[facingDirectionIndex])
                 {
+                    // We reached an already explored path! Therefore loop!
                     return true;
                 }
 
-                position.first += directionOffset.first;
-                position.second += directionOffset.second;
+                if (token == sm_obstacleToken)
+                {
+                    std::pair<int, int> const& facingDirectionOffset = sm_directionOffsets[facingDirectionIndex];
+                    currentPosition.first -= facingDirectionOffset.first;
+                    currentPosition.second -= facingDirectionOffset.second;
+                    facingDirectionIndex = (facingDirectionIndex + 1u) % 4u;
+                    continue;
+                }
+
+                if (token == sm_emptyToken)
+                {
+                    room.WriteAt(currentPosition.first, currentPosition.second) = sm_directionTokens[facingDirectionIndex];
+                }
+
+                std::pair<int, int> const& facingDirectionOffset = sm_directionOffsets[facingDirectionIndex];
+                currentPosition.first += facingDirectionOffset.first;
+                currentPosition.second += facingDirectionOffset.second;
             }
 
             return false;
