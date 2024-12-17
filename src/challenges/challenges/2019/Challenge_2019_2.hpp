@@ -12,7 +12,7 @@ namespace aoc::challenges
 
     public:
         Challenge_2019_2(std::vector<std::string>&& inputLines)
-            : Super(std::move(inputLines)) 
+            : Super(std::move(inputLines))
         {}
 
         void RunPartOne(std::ostream& outAnswer) override

@@ -11,7 +11,7 @@ namespace aoc::challenges
 
     public:
         Challenge_##__YEAR__##_##__DAY__##(std::vector<std::string>&& inputLines)
-            : Super(std::move(inputLines)) 
+            : Super(std::move(inputLines))
         {}
 
         void RunPartOne(std::ostream& outAnswer) override

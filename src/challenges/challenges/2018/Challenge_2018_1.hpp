@@ -16,7 +16,7 @@ namespace aoc::challenges
 
     public:
         Challenge_2018_1(std::vector<std::string>&& inputLines)
-            : Super(std::move(inputLines)) 
+            : Super(std::move(inputLines))
         {}
 
         void RunPartOne(std::ostream& outAnswer) override
