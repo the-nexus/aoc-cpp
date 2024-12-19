@@ -16,8 +16,6 @@ namespace aoc::challenges
         using Coordinates = std::pair<size_t, size_t>;
 
         static size_t constexpr _gridSize = 71u;
-        static size_t constexpr _uniquePositionCount = _gridSize * _gridSize;
-        static size_t constexpr _corruptedTileValue = std::numeric_limits<size_t>::max();
         static Coordinates constexpr _startPosition = { 0u, 0u };
         static Coordinates constexpr _endPosition = { _gridSize - 1u, _gridSize - 1u };
 
@@ -28,147 +26,147 @@ namespace aoc::challenges
 
         void RunPartOne(std::ostream& outAnswer) override
         {
-            std::vector<Coordinates> corruptedPositions;
-            ReadCorruptedCoordinates(corruptedPositions);
+            std::vector<Coordinates> obstacles;
+            ReadObstacles(obstacles);
 
-            core::Grid<size_t> tileGrid = { _gridSize, _gridSize };
-            tileGrid.SetAll(_uniquePositionCount);
-
-            size_t const maxIndex = corruptedPositions.size() < 1024u ? corruptedPositions.size() : 1024u;
-            for (size_t corruptedPositionIndex = 0u; corruptedPositionIndex < maxIndex; ++corruptedPositionIndex)
+            std::set<Coordinates> localObstacles;
+            size_t const maxObstacleCount = obstacles.size() < 1024u ? obstacles.size() : 1024u;
+            for (size_t obstacleIndex = 0u; obstacleIndex < maxObstacleCount; ++obstacleIndex)
             {
-                Coordinates const& corruptedPosition = corruptedPositions[corruptedPositionIndex];
-                tileGrid.WriteAt(corruptedPosition.first, corruptedPosition.second) = _corruptedTileValue;
+                localObstacles.emplace(obstacles[obstacleIndex]);
             }
 
-            outAnswer << MeasureShortestPath(tileGrid);
+            std::vector<Coordinates> path;
+            if (!FindAnyPath(_startPosition, _endPosition, localObstacles, path))
+            {
+                outAnswer << "No path found";
+                return;
+            }
+
+            outAnswer << path.size() - 1u;
         }
 
         void RunPartTwo(std::ostream& outAnswer) override
         {
-            std::vector<Coordinates> corruptedPositions;
-            ReadCorruptedCoordinates(corruptedPositions);
+            std::vector<Coordinates> obstacles;
+            ReadObstacles(obstacles);
 
-            core::Grid<size_t> tileGrid = { _gridSize, _gridSize };
-            tileGrid.SetAll(_uniquePositionCount);
+            std::set<Coordinates> localObstacles;
+            std::vector<Coordinates> path;
 
-            size_t steps = 0u;
-            for (; steps < corruptedPositions.size(); ++steps)
+            if (!FindAnyPath(_startPosition, _endPosition, localObstacles, path))
             {
-                std::cout << steps << '\n';
-                if (MeasureShortestPath(tileGrid) >= _uniquePositionCount)
-                {
-                    break;
-                }
-
-                Coordinates const& corruptedPosition = corruptedPositions[steps];
-                tileGrid.WriteAt(corruptedPosition.first, corruptedPosition.second) = _corruptedTileValue;
+                outAnswer << "No path found";
+                return;
             }
 
-            outAnswer << steps;
+            for (size_t obstacleIndex = 0u; obstacleIndex < obstacles.size(); ++obstacleIndex)
+            {
+                localObstacles.emplace(obstacles[obstacleIndex]);
+
+                if (std::find(std::cbegin(path), std::cend(path), obstacles[obstacleIndex]) != std::cend(path))
+                {
+                    path.clear();
+                    if (!FindAnyPath(_startPosition, _endPosition, localObstacles, path))
+                    {
+                        outAnswer << obstacles[obstacleIndex].first << ',' << obstacles[obstacleIndex].second;
+                        return;
+                    }
+                }
+            }
+
+            outAnswer << "No path found";
         }
 
-        void ReadCorruptedCoordinates(std::vector<Coordinates>& outCorruptedPositions) const
+        void ReadObstacles(std::vector<Coordinates>& outObstacles) const
         {
             std::vector<std::string> const& lines = GetInputLines();
-            outCorruptedPositions.resize(lines.size());
+            outObstacles.resize(lines.size());
+
             for (size_t lineIndex = 0u; lineIndex < lines.size(); ++lineIndex)
             {
                 std::string const& line = lines[lineIndex];
                 size_t const separatorIndex = line.find(',');
 
-                Coordinates& position = outCorruptedPositions[lineIndex];
-                position.first = std::stoul(line.substr(0u, separatorIndex));
-                position.second = std::stoul(line.substr(separatorIndex + 1u));
+                Coordinates& obstacle = outObstacles[lineIndex];
+                obstacle.first = std::stoul(line.substr(0u, separatorIndex));
+                obstacle.second = std::stoul(line.substr(separatorIndex + 1u));
             }
         }
 
-        static size_t MeasureShortestPath(core::Grid<size_t> tileGrid)
+        static bool FindAnyPath(Coordinates const& start, Coordinates const& end, std::set<Coordinates> const& obstacles, std::vector<Coordinates>& outPath)
         {
-            std::set<Coordinates> exploredCoordinates;
-            std::vector<Coordinates> coordinatesToExplore;
-            coordinatesToExplore.reserve(_uniquePositionCount);
-            coordinatesToExplore.push_back(_startPosition);
-
-            tileGrid.WriteAt(_startPosition.first, _startPosition.second) = 0u;
-
-            auto tryRegisterForExploration = [&](Coordinates&& newPosition, size_t const realCost)
+            std::set<Coordinates> explored;
+            if (!FindAnyPath(start, end, obstacles, outPath, explored))
             {
-                if (exploredCoordinates.find(newPosition) != std::cend(exploredCoordinates))
-                {
-                    // Already explored, ignore it
-                    return;
-                }
-
-                size_t& tileRealCost = tileGrid.WriteAt(newPosition.first, newPosition.second);
-                if (tileRealCost > _uniquePositionCount)
-                {
-                    // Corrupted memory, a.k.a "walls", ignore it
-                    return;
-                }
-
-                if (tileRealCost > realCost)
-                {
-                    tileRealCost = realCost;
-                }
-
-                if (std::find(std::cbegin(coordinatesToExplore), std::cend(coordinatesToExplore), newPosition) == std::cend(coordinatesToExplore))
-                {
-                    coordinatesToExplore.emplace_back(newPosition);
-                }
-            };
-
-            while (!coordinatesToExplore.empty())
-            {
-                if (coordinatesToExplore.back() == _endPosition)
-                {
-                    // We've reached the end!
-                    break;
-                }
-
-                Coordinates const currentPosition = coordinatesToExplore.back();
-                exploredCoordinates.emplace(std::move(coordinatesToExplore.back()));
-                coordinatesToExplore.pop_back();
-
-                size_t const realCost = tileGrid.ReadAt(currentPosition.first, currentPosition.second);
-                size_t const nextRealCost = realCost + 1u;
-
-                if (currentPosition.first > 0u)
-                {
-                    tryRegisterForExploration({ currentPosition.first - 1u, currentPosition.second }, nextRealCost);
-                }
-
-                if (currentPosition.second > 0u)
-                {
-                    tryRegisterForExploration({ currentPosition.first, currentPosition.second - 1u }, nextRealCost);
-                }
-
-                if (currentPosition.first < _gridSize - 1u)
-                {
-                    tryRegisterForExploration({ currentPosition.first + 1u, currentPosition.second }, nextRealCost);
-                }
-
-                if (currentPosition.second < _gridSize - 1u)
-                {
-                    tryRegisterForExploration({ currentPosition.first, currentPosition.second + 1u }, nextRealCost);
-                }
-
-                std::sort(std::begin(coordinatesToExplore), std::end(coordinatesToExplore), [&](Coordinates const& lhs, Coordinates const& rhs)
-                {
-                    size_t const lhsTotalCost = tileGrid.ReadAt(lhs.first, lhs.second) + GetManhattanDistance(lhs, _endPosition);
-                    size_t const rhsTotalCost = tileGrid.ReadAt(rhs.first, rhs.second) + GetManhattanDistance(rhs, _endPosition);
-                    return lhsTotalCost > rhsTotalCost;
-                });
+                return false;
             }
 
-            return tileGrid.ReadAt(_endPosition.first, _endPosition.second);
+            std::reverse(std::begin(outPath), std::end(outPath));
+            return true;
         }
 
-        static size_t GetManhattanDistance(Coordinates const& lhs, Coordinates const& rhs)
+        static bool FindAnyPath(Coordinates const& current, Coordinates const& end, std::set<Coordinates> const& obstacles, std::vector<Coordinates>& outPath, std::set<Coordinates>& explored)
         {
-            size_t const deltaFirst = rhs.first > lhs.first ? rhs.first - lhs.first : lhs.first - rhs.first;
-            size_t const deltaSecond = rhs.second > lhs.second ? rhs.second - lhs.second : lhs.second - rhs.second;
-            return deltaFirst + deltaSecond;
+            if (current == end)
+            {
+                outPath.push_back(current);
+                return true;
+            }
+
+            if (obstacles.find(current) != std::cend(obstacles))
+            {
+                return false;
+            }
+
+            if (explored.find(current) != std::cend(explored))
+            {
+                return false;
+            }
+
+            explored.emplace(current);
+
+            if (current.first < _gridSize - 1u)
+            {
+                Coordinates const next = { current.first + 1u, current.second };
+                if (FindAnyPath(next, end, obstacles, outPath, explored))
+                {
+                    outPath.push_back(current);
+                    return true;
+                }
+            }
+
+            if (current.second < _gridSize - 1u)
+            {
+                Coordinates const next = { current.first, current.second + 1u };
+                if (FindAnyPath(next, end, obstacles, outPath, explored))
+                {
+                    outPath.push_back(current);
+                    return true;
+                }
+            }
+
+            if (current.first > 0u)
+            {
+                Coordinates const next = { current.first - 1u, current.second };
+                if (FindAnyPath(next, end, obstacles, outPath, explored))
+                {
+                    outPath.push_back(current);
+                    return true;
+                }
+            }
+
+            if (current.second > 0u)
+            {
+                Coordinates const next = { current.first, current.second - 1u};
+                if (FindAnyPath(next, end, obstacles, outPath, explored))
+                {
+                    outPath.push_back(current);
+                    return true;
+                }
+            }
+
+            return false;
         }
     };
 }
