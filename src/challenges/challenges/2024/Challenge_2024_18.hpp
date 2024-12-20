@@ -37,7 +37,7 @@ namespace aoc::challenges
             }
 
             std::vector<Coordinates> path;
-            if (!FindAnyPath(_startPosition, _endPosition, localObstacles, path))
+            if (!FindShortestPath(_startPosition, _endPosition, localObstacles, path))
             {
                 outAnswer << "No path found";
                 return;
@@ -54,7 +54,7 @@ namespace aoc::challenges
             std::set<Coordinates> localObstacles;
             std::vector<Coordinates> path;
 
-            if (!FindAnyPath(_startPosition, _endPosition, localObstacles, path))
+            if (!FindShortestPath(_startPosition, _endPosition, localObstacles, path))
             {
                 outAnswer << "No path found";
                 return;
@@ -92,6 +92,124 @@ namespace aoc::challenges
                 obstacle.first = std::stoul(line.substr(0u, separatorIndex));
                 obstacle.second = std::stoul(line.substr(separatorIndex + 1u));
             }
+        }
+
+        static bool FindShortestPath(Coordinates const& start, Coordinates const& end, std::set<Coordinates> const& obstacles, std::vector<Coordinates>& outPath)
+        {
+            outPath.clear();
+
+            std::set<std::pair<Coordinates, Coordinates>> parentings;
+            if (!FindShortestPath(start, end, obstacles, parentings))
+            {
+                return false;
+            }
+
+            outPath.reserve(parentings.size());
+            outPath.emplace_back(end);
+
+            while (outPath.back() != start)
+            {
+                Coordinates const& current = outPath.back();
+                auto const it = std::find_if(std::cbegin(parentings), std::end(parentings), [&current](std::pair<Coordinates, Coordinates> const& parenting)
+                {
+                    return parenting.first == current;
+                });
+
+                if (it == std::cend(parentings))
+                {
+                    outPath.clear();
+                    return false;
+                }
+
+                outPath.push_back(it->second);
+            }
+
+            return true;
+        }
+
+        static bool FindShortestPath(Coordinates const& start, Coordinates const& end, std::set<Coordinates> const& obstacles, std::set<std::pair<Coordinates, Coordinates>>& outParentings)
+        {
+            using CoordinatesToExplore = std::tuple<Coordinates, Coordinates, size_t, size_t>;
+
+            std::set<Coordinates> explored = obstacles;
+            std::vector<CoordinatesToExplore> toExplore;
+            toExplore.reserve(_gridSize * _gridSize * 4u);
+            toExplore.emplace_back(start, start, 0u, GetManhattanDistance(start, end));
+
+            while (!toExplore.empty())
+            {
+                Coordinates const current = std::get<0>(toExplore.back());
+                if (explored.contains(current))
+                {
+                    toExplore.pop_back();
+                    continue;
+                }
+
+                outParentings.emplace(current, std::get<1>(toExplore.back()));
+
+                if (current == end)
+                {
+                    return true;
+                }
+
+                size_t const nextCost = std::get<2>(toExplore.back()) + 1u;
+                explored.emplace(current);
+                toExplore.pop_back();
+
+                if (current.first > 0u)
+                {
+                    Coordinates const next = { current.first - 1u, current.second };
+                    if (!explored.contains(next))
+                    {
+                        size_t const heuristicCost = GetManhattanDistance(next, current);
+                        toExplore.emplace_back(next, current, nextCost, nextCost + heuristicCost);
+                    }
+                }
+
+                if (current.second > 0u)
+                {
+                    Coordinates const next = { current.first, current.second - 1u };
+                    if (!explored.contains(next))
+                    {
+                        size_t const heuristicCost = GetManhattanDistance(next, current);
+                        toExplore.emplace_back(next, current, nextCost, nextCost + heuristicCost);
+                    }
+                }
+
+                if (current.first < _gridSize - 1u)
+                {
+                    Coordinates const next = { current.first + 1u, current.second };
+                    if (!explored.contains(next))
+                    {
+                        size_t const heuristicCost = GetManhattanDistance(next, current);
+                        toExplore.emplace_back(next, current, nextCost, nextCost + heuristicCost);
+                    }
+                }
+
+                if (current.second < _gridSize - 1u)
+                {
+                    Coordinates const next = { current.first, current.second + 1u };
+                    if (!explored.contains(next))
+                    {
+                        size_t const heuristicCost = GetManhattanDistance(next, current);
+                        toExplore.emplace_back(next, current, nextCost, nextCost + heuristicCost);
+                    }
+                }
+
+                std::sort(std::begin(toExplore), std::end(toExplore), [](CoordinatesToExplore const& lhs, CoordinatesToExplore const& rhs)
+                {
+                    return std::get<3>(lhs) > std::get<3>(rhs);
+                });
+            }
+
+            return false;
+        }
+
+        static size_t GetManhattanDistance(Coordinates const& lhs, Coordinates const& rhs)
+        {
+            size_t const deltaFirst = lhs.first > rhs.first ? lhs.first - rhs.first : rhs.first - lhs.first;
+            size_t const deltaSecond = lhs.second > rhs.second ? lhs.second - rhs.second : rhs.second - lhs.second;
+            return deltaFirst + deltaSecond;
         }
 
         static bool FindAnyPath(Coordinates const& start, Coordinates const& end, std::set<Coordinates> const& obstacles, std::vector<Coordinates>& outPath)
