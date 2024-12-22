@@ -36,7 +36,7 @@ namespace aoc::challenges
 
             for (std::string const& line : GetInputLines())
             {
-                monkeys.emplace_back(std::async(monkeyTask, std::stoull(line)));
+                monkeys.emplace_back(std::async(monkeyTask, std::stoul(line)));
             }
 
             for (std::future<void> const& monkey : monkeys)
