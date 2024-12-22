@@ -6,12 +6,14 @@
 #include <future>
 #include <mutex>
 #include <map>
+#include <set>
 
 namespace aoc::challenges
 {
     class Challenge_2024_22 final : public Challenge<2024, 22>
     {
         using Super = Challenge<2024, 22>;
+        using Sequence = std::tuple<int, int, int, int>;
 
     public:
         Challenge_2024_22(std::vector<std::string>&& inputLines)
@@ -20,28 +22,29 @@ namespace aoc::challenges
 
         void RunPartOne(std::ostream& outAnswer) override
         {
-            std::mutex sumMutex;
-            unsigned long long sum = 0;
-            auto monkeyTask = [&sum, &sumMutex](unsigned int const initialSecretNumber)
+            std::vector<std::string> const& lines = GetInputLines();
+
+            std::vector<std::future<void>> allSecretNumbersTasks;
+            allSecretNumbersTasks.reserve(lines.size());
+
+            std::vector<std::vector<unsigned int>> allSecretNumbers;
+            allSecretNumbers.resize(lines.size());
+
+            for (size_t taskIndex = 0u; taskIndex < lines.size(); ++taskIndex)
             {
-                std::vector<unsigned int> secretNumbers;
-                GenerateSecretNumbers(initialSecretNumber, secretNumbers);
+                auto task = [](unsigned int const initialSecretNumber, std::vector<unsigned int>& outSecretNumbers)
+                {
+                    GenerateSecretNumbers(initialSecretNumber, outSecretNumbers);
+                };
 
-                std::lock_guard<std::mutex> lock(sumMutex);
-                sum += secretNumbers.back();
-            };
-
-            std::vector<std::future<void>> monkeys;
-            monkeys.reserve(GetInputLines().size());
-
-            for (std::string const& line : GetInputLines())
-            {
-                monkeys.emplace_back(std::async(monkeyTask, std::stoul(line)));
+                allSecretNumbersTasks.emplace_back(std::async(task, std::stoul(lines[taskIndex]), std::ref(allSecretNumbers[taskIndex])));
             }
 
-            for (std::future<void> const& monkey : monkeys)
+            unsigned long long sum = 0;
+            for (size_t taskIndex = 0u; taskIndex < allSecretNumbersTasks.size(); ++taskIndex)
             {
-                monkey.wait();
+                allSecretNumbersTasks[taskIndex].wait();
+                sum += allSecretNumbers[taskIndex].back();
             }
 
             outAnswer << sum;
